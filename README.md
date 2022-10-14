@@ -7,15 +7,6 @@ It currently contains 2 files.
 - If theres any problem, feel free to post an ***issue*** about it!
 - *Hey! If your looking through this file somewhere outside of GitHub, don't ask why this exists. Git is cool.*
 
-## How can i test it?
-- Some recommended programs for that are:
-
-	> `7-Zip`
-	> `WinRAR`
-	> `GunZIP`
-
-- Please note that i personally compile this via Terminal, but you can simply zip it via File Managers or whatever else.
-
-## Current versions
-- Workshop: **v1.0b**.
-- Mappers: **v0**.
+## Compilation
+> Recommended programs: `7-Zip`, or `WinRAR`.
+- You can simply zip it via File Managers or whatever else.

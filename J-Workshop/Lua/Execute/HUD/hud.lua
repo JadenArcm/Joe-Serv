@@ -45,6 +45,8 @@ local function drawTimer(v, player)
 	local flags = V_SNAPTOTOP | V_SNAPTORIGHT | V_HUDTRANS | V_PERPLAYER
 
 	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (640 * FRACUNIT), x)
+
+	local exitTics = joeVars.autoTimer - leveltime
 	local info = joeFuncs.getCountdown(player.realtime)
 
 	local patch = "JOE_TIME" .. (((player.realtime % TICRATE) * 235) / 1000)
@@ -52,7 +54,7 @@ local function drawTimer(v, player)
 
 	//
 
-	if ((gametyperules & GTR_FRIENDLY) and ((joeVars.autoTimer - leveltime) < (60 * TICRATE)) and ((leveltime / 5) & 1)) or (info.flashing) then
+	if ((gametyperules & GTR_FRIENDLY) and (exitTics < (60 * TICRATE)) and ((leveltime / 5) & 1)) or (info.flashing) then
 		color = v.getColormap(TC_RAINBOW, SKINCOLOR_RED)
 	end
 
@@ -125,7 +127,7 @@ local function drawInformation(v, player)
 
 	if (player.exiting) and (players_needed) then
 		for stplyr in players.iterate do
-			if (stplyr.spectator) or (player.bot) then continue end
+			if (stplyr.spectator) or (stplyr.bot) then continue end
 			if (stplyr.lives < 0) then continue end
 		
 			if not (stplyr.exiting) or not (stplyr.pflags & PF_FINISHED) then

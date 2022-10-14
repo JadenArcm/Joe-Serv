@@ -35,7 +35,7 @@ local function getPingPatch(v, player)
 
 	//
 
-	local ping_values = {{10, 3}, {9, 2}, {6, 1}, {3, 0}}
+	local ping_values = {{9, 3}, {7, 2}, {5, 1}, {2, 0}}
 	local patch = 4
 	
 	//
@@ -183,7 +183,7 @@ local function drawNetInfo(v)
 			v.drawString(anim, (175 * FRACUNIT), "\x82Point Limit: \x80" .. pointlimit, V_ALLOWLOWERCASE, "thin-fixed")
 		end
 
-		v.drawString(anim, (185 * FRACUNIT), string.format("%cTime %s: %c%s", timer_color, timer_option, 0x80, joeFuncs.getTimer(info.tics)), V_ALLOWLOWERCASE, "thin-fixed")
+		v.drawString(anim, (185 * FRACUNIT), string.format("%cTime %s: \x80%s", timer_color, timer_option, joeFuncs.getTimer(info.tics)), V_ALLOWLOWERCASE, "thin-fixed")
 
 		//
 	else
