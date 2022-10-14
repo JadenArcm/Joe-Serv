@@ -11,7 +11,7 @@ local function drawNotification(v)
 	
 	//
 	
-	joeVars.autoTicker = ((leveltime > TICRATE) and (leveltime <= (4 * TICRATE))) and min($ + 2, TICRATE) or max(0, $ - 1)
+	joeVars.autoTicker = ((leveltime > TICRATE) and (leveltime <= (4 * TICRATE))) and min($ + 1, TICRATE) or max(0, $ - 1)
 	
 	//
 	
