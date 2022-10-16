@@ -10,7 +10,7 @@ local function playerVars(player)
 	//
 
 	player.hp = {}
-	player.hp.max = 25
+	player.hp.max = 30
 	player.hp.delay = 0
 	player.hp.enabled = false
 	player.hp.current = player.hp.max

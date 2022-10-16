@@ -1,17 +1,11 @@
 //
 
 local damagetypes = {
+	[DMG_NUKE] = 20,
 	[DMG_WATER] = 10,
 	[DMG_FIRE] = 7,
 	[DMG_ELECTRIC] = 5,
 	[DMG_SPIKE] = 3,
-	[DMG_NUKE] = 20,
-
-	[DMG_INSTAKILL] = INT8_MAX,
-	[DMG_DROWNED] = INT8_MAX,
-	[DMG_SPACEDROWN] = INT8_MAX,
-	[DMG_DEATHPIT] = INT8_MAX,
-	[DMG_CRUSHED] = INT8_MAX
 }
 
 //
@@ -58,6 +52,8 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 	if (player.pflags & PF_GODMODE) then return end
 	
 	if (player.powers[pw_super] > 0) or (player.powers[pw_flashing] > 0) or (player.powers[pw_invulnerability] > 0) then return false end
+	
+	if (dmgtype == DMG_INSTAKILL) or (dmgtype == DMG_DROWNED) or (dmgtype == DMG_SPACEDROWN) or (dmgtype == DMG_DEATHPIT) or (dmgtype == DMG_CRUSHED) then return true end
 	if player.powers[pw_shield] then return nil end
 	
 	//
@@ -66,7 +62,7 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 		player.hp.current = max(0, $ - damage)	
 		player.hp.delay = TICRATE * 5
 
-		player.powers[pw_flashing] = 60
+		player.powers[pw_flashing] = P_RandomRange(10, TICRATE)
 		mo.state = S_PLAY_PAIN
 
 		S_StartSound(mo, sfx_jhurt)
@@ -79,7 +75,7 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 		end
 	end
 
-	if (player.hp.current == 5) then
+	if (player.hp.current == (player.hp.max / 3)) then
 		S_StartSound(nil, sfx_jwarn, player)
 	end
 

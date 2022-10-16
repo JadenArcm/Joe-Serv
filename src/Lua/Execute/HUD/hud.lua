@@ -92,7 +92,7 @@ local function drawLives(v, player)
 	local scale = FRACUNIT / 3
 	
 	local colormap = joeFuncs.getSkincolor(v, player, false)
-	local health_color = (player.pflags & PF_GODMODE) and 131 or (((player.hp.current <= 5) and 36) or ((player.hp.current <= 10) and 73) or 113)
+	local health_color = (player.pflags & PF_GODMODE) and 131 or (((player.hp.current <= (player.hp.max / 3)) and 36) or ((player.hp.current <= (player.hp.max / 2)) and 73) or 113)
 
 	//
 	
@@ -104,8 +104,10 @@ local function drawLives(v, player)
 		
 		v.drawString(anim - (3 * FRACUNIT), y + FRACUNIT, joeFuncs.getPlayerName(player, 1) .. (G_GametypeUsesLives() and ("\x80 | " .. player_lives) or ""), flags | V_ALLOWLOWERCASE, "small-fixed-right")
 
-		v.drawScaled(anim - (30 * FRACUNIT), y + (6 * FRACUNIT), FRACUNIT, v.cachePatch("JOE_HBAR"), flags, nil)
-		joeFuncs.drawFill(v, anim - (29 * FRACUNIT), y + (7 * FRACUNIT), player.hp.current * FRACUNIT, FRACUNIT, health_color, flags)
+		joeFuncs.drawFill(v, anim - (35 * FRACUNIT), y + (6 * FRACUNIT), (player.hp.max + 2) * FRACUNIT, 3 * FRACUNIT, 31, flags)
+		
+		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.max * FRACUNIT, FRACUNIT, 27, flags)
+		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.current * FRACUNIT, FRACUNIT, health_color, flags)
 		
 		//
 	else
@@ -144,7 +146,7 @@ local function drawInformation(v, player)
 	if (player.exiting) and (players_needed) then
 		for stplyr in players.iterate do
 			if (stplyr.spectator) or (stplyr.bot) then continue end
-			if (stplyr.lives < 0) then continue end
+			if (stplyr.lives <= 0) then continue end
 		
 			if not (stplyr.exiting) or not (stplyr.pflags & PF_FINISHED) then
 				players_finished = $ + 1
@@ -250,7 +252,7 @@ local function drawHUD(v, player)
 
 	//
 
-	if (leveltime > 25) and not (joeVars.scoresKey) then
+	if (leveltime > 20) and not (joeVars.scoresKey) then
 		joeVars.HUDTicker = min($ + 1, TICRATE)
 	end
 
