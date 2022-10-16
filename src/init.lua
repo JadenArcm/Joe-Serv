@@ -41,7 +41,10 @@ folder = "Execute/Gameplay"
 dofolder("commands.lua")
 dofolder("emblems.lua")
 dofolder("autoexit.lua")
-dofolder("player_effects.lua")
+
+folder = "Execute/Gameplay/Player"
+dofolder("effects.lua")
+dofolder("health.lua")
 
 //
 

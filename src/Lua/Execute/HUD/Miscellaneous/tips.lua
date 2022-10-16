@@ -10,6 +10,7 @@ local tipTexts = {
 	"Wanna be super for no reason? Use \x82" .. "togglesuper" .. "\x80. You also need some \x83" .. "emeralds" .. "\x80.",
 	"There's a time limit on every level. It either \x85" .. "restarts" .. "\x80 or \x85" .. "skips" .. "\x80 the current level.",
 	"You can be bigger (or smaller) than normal! Just use \x82" .. "setscale" .. "\x80. You can use decimals too.",
+	"You don't like losing rings? \x82" .. "togglehealth" .. "\x80 is the solution!",
 	"Be respectful to others. You will be either \x85" .. "muted" .. "\x80, \x85" .. "kicked" .. "\x80, or \x85" .. "banned" .. "\x80 if doing otherwise.",
 	"You don't like names on top of players? Disable it with \x87" .. "joe_nametags" .. "\x80.",
 	"Are you bored? Don't know what to do? Search some emblems with \x87" .. "joe_emblemradar" .. "\x80!"

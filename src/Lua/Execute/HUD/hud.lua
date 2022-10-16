@@ -89,19 +89,35 @@ local function drawLives(v, player)
 	local yoffs = G_GametypeUsesLives() and 1 or 3
 
 	local patch = v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A)
-	local colormap = joeFuncs.getSkincolor(v, player, false)
-
 	local scale = FRACUNIT / 3
+	
+	local colormap = joeFuncs.getSkincolor(v, player, false)
+	local health_color = (player.pflags & PF_GODMODE) and 131 or (((player.hp.current <= 5) and 36) or ((player.hp.current <= 10) and 73) or 113)
 
 	//
 	
 	v.drawScaled(anim, y, scale, v.cachePatch("STLIVEBK"), flags, nil)
 	v.drawScaled(anim, y, scale, patch, flags, colormap)
 
-	v.drawString(anim - (3 * FRACUNIT), y + (yoffs * FRACUNIT), joeFuncs.getPlayerName(player, 1), flags | V_ALLOWLOWERCASE, "small-fixed-right")
-	
-	if G_GametypeUsesLives() then
-		v.drawString(anim - (3 * FRACUNIT), y + (5 * FRACUNIT), player_lives, flags | V_ALLOWLOWERCASE, "small-fixed-right") 
+	if (player.hp.enabled) then
+		//
+		
+		v.drawString(anim - (3 * FRACUNIT), y + FRACUNIT, joeFuncs.getPlayerName(player, 1) .. (G_GametypeUsesLives() and ("\x80 | " .. player_lives) or ""), flags | V_ALLOWLOWERCASE, "small-fixed-right")
+
+		v.drawScaled(anim - (30 * FRACUNIT), y + (6 * FRACUNIT), FRACUNIT, v.cachePatch("JOE_HBAR"), flags, nil)
+		joeFuncs.drawFill(v, anim - (29 * FRACUNIT), y + (7 * FRACUNIT), player.hp.current * FRACUNIT, FRACUNIT, health_color, flags)
+		
+		//
+	else
+		//
+
+		v.drawString(anim - (3 * FRACUNIT), y + (yoffs * FRACUNIT), joeFuncs.getPlayerName(player, 1), flags | V_ALLOWLOWERCASE, "small-fixed-right")
+
+		if G_GametypeUsesLives() then
+			v.drawString(anim - (3 * FRACUNIT), y + (5 * FRACUNIT), player_lives, flags | V_ALLOWLOWERCASE, "small-fixed-right") 
+		end
+		
+		//
 	end
 	
 	//

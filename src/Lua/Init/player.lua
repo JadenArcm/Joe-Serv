@@ -6,6 +6,14 @@ local function playerVars(player)
 	player.chat = {}
 	player.chat.muted = false
 	player.chat.reason = ""
+
+	//
+
+	player.hp = {}
+	player.hp.max = 25
+	player.hp.delay = 0
+	player.hp.enabled = false
+	player.hp.current = player.hp.max
 	
 	//
 	
@@ -41,5 +49,23 @@ local function playerInit()
 	//
 end
 addHook("PreThinkFrame", playerInit)
+
+//
+
+local function spawnInit(player)
+	//
+
+	if (gamestate ~= GS_LEVEL) then return end
+	if not joeFuncs.isValid(player) then return end
+
+	//
+
+	if (player.jinit == nil) then
+		playerVars(player)
+	end
+
+	//
+end
+addHook("PlayerSpawn", spawnInit)
 
 //

@@ -393,6 +393,18 @@ local commandInfo = {
 			CONS_Printf(player, "You are no" .. ((player.force.colorize) and "w\x82 colorized" or " longer\x82 colorized") .. "\x80.")
 		end
 	},
+
+	{
+		name = "togglehealth",
+		admin = false,
+
+		func = function(player)
+			if not inLevel(player) then return end
+
+			player.hp.enabled = not $
+			CONS_Printf(player, "The health system has been \x82" .. ((player.hp.enabled) and "enabled" or "disabled") .. "\x80.")
+		end
+	},
 	
 	{
 		name = "togglesuper",
@@ -530,7 +542,7 @@ local commandInfo = {
 }
 
 for _, cmd in ipairs(commandInfo) do
-	COM_AddCommand(cmd.name, cmd.func, (cmd.admin == true) and CMD_ADMIN or 0)
+	COM_AddCommand(cmd.name, cmd.func, (cmd.admin) and COM_ADMIN or 0)
 end
 
 //
