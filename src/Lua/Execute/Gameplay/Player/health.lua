@@ -5,7 +5,7 @@ local damagetypes = {
 	[DMG_WATER] = 10,
 	[DMG_FIRE] = 7,
 	[DMG_ELECTRIC] = 5,
-	[DMG_SPIKE] = 3,
+	[DMG_SPIKE] = 3
 }
 
 //
@@ -62,20 +62,22 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 		player.hp.current = max(0, $ - damage)	
 		player.hp.delay = TICRATE * 5
 
-		player.powers[pw_flashing] = P_RandomRange(10, TICRATE)
+		player.powers[pw_flashing] = P_RandomRange(30, 60)
 		mo.state = S_PLAY_PAIN
-
-		S_StartSound(mo, sfx_jhurt)
 
 		P_SetObjectMomZ(mo, 6 * FRACUNIT, false)
 		P_InstaThrust(mo, mo.angle + ANGLE_180, 10 * mo.scale)
 
-		if (player == displayplayer) then
-			P_StartQuake(12 * FRACUNIT, 8)
+		if (player.hp.current) then
+			S_StartSound(mo, sfx_jhurt)
+
+			if (player == displayplayer) then
+				P_StartQuake(12 * FRACUNIT, 8)
+			end
 		end
 	end
 
-	if (player.hp.current == (player.hp.max / 3)) then
+	if (player.hp.current == (player.hp.max / 4)) then
 		S_StartSound(nil, sfx_jwarn, player)
 	end
 
