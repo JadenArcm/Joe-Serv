@@ -9,11 +9,83 @@ local scoreColors = {
 
 //
 
+local matchWeapons = {
+	[-2] = {patch = "CURWEAP"},
+	[-1] = {patch = "RINGIND"},
+	[0]  = {power = pw_infinityring, weapon = 0, max = 800, patch = "INFNIND"},
+
+	{power = pw_automaticring, weapon = RW_AUTO,    max = 400, patch = "AUTOIND"},
+	{power = pw_bouncering,    weapon = RW_BOUNCE,  max = 100, patch = "BNCEIND"},
+	{power = pw_scatterring,   weapon = RW_SCATTER, max = 50,  patch = "SCATIND"},
+	{power = pw_grenadering,   weapon = RW_GRENADE, max = 100, patch = "GRENIND"},
+	{power = pw_explosionring, weapon = RW_EXPLODE, max = 50,  patch = "BOMBIND"},
+	{power = pw_railring,	   weapon = RW_RAIL, 	max = 50,  patch = "RAILIND"}
+}
+
+local function drawWeapon(v, player, x, y, scale, flags, weapon)
+	//
+
+	local offs = {player.weapondelay, 0, 16}
+	local alpha = max(1, min(offs[1], 8)) << V_ALPHASHIFT
+	local flash = (leveltime % 8 < 4)
+	
+	local ring_selection = (not player.powers[pw_infinityring]) and -1 or 0
+	local ring_amount = player.powers[pw_infinityring] and (player.powers[pw_infinityring] .. " (\x82" .. player.rings .. "\x80)") or player.rings
+	
+	local text_flags = ((player.powers[matchWeapons[weapon].power] >= matchWeapons[weapon].max) and V_YELLOWMAP) or ((not (player.ringweapons & matchWeapons[weapon].weapon)) and V_ORANGEMAP) or 0
+	local global_flags = ((not (player.ringweapons & matchWeapons[weapon].weapon)) or (not player.powers[matchWeapons[weapon].power])) and V_60TRANS or 0
+	
+	local tring_flags = ((not ring_amount) and flash) and V_REDMAP or 0
+	local ring_flags = (not ring_amount) and V_60TRANS or 0
+	
+	//
+	
+	while (offs[1]) do
+		if (offs[1] > offs[3]) then
+			offs[2] = $ + offs[3]
+			
+			offs[1] = $ - offs[3]
+			offs[1] = $ / 2
+			
+			if (offs[3] > 1) then
+				offs[3] = $ / 2
+			end
+		else
+			offs[2] = $ + offs[1]
+			break
+		end
+	end
+	
+	//
+
+	if not (weapon) then
+		v.drawScaled(x, y, scale, v.cachePatch(matchWeapons[ring_selection].patch), flags | ring_flags, nil)
+		v.drawString(x + (12 * FRACUNIT), y + (FRACUNIT / 2), ring_amount, flags | ring_flags | tring_flags, "thin-fixed")
+	else
+		v.drawScaled(x, y, scale, v.cachePatch(matchWeapons[weapon].patch), flags | global_flags, nil)
+		v.drawString(x + (12 * FRACUNIT), y + (FRACUNIT / 2), player.powers[matchWeapons[weapon].power], flags | text_flags | global_flags, "thin-fixed")
+	end
+
+	//
+	
+	if (player.currentweapon == weapon) then
+		v.drawScaled((x - FRACUNIT) - FixedMul((offs[2] / 2) * FRACUNIT, scale), y - FRACUNIT, scale, v.cachePatch(matchWeapons[-2].patch), flags | alpha, nil)
+	
+		if (player.ammoremovaltimer) and flash then
+			v.drawString(x + (4 * FRACUNIT), y + (2 * FRACUNIT), "-" .. player.ammoremoval, flags | V_REDMAP, "small-fixed-center")
+		end
+	end
+	
+	//
+end
+
+//
+
 local function drawScoreRings(v, player)
 	//
 	
 	local x, y = (9 * FRACUNIT), (5 * FRACUNIT)
-	local flags = V_SNAPTOTOP | V_SNAPTOLEFT | V_PERPLAYER | (player.spectator and V_HUDTRANSHALF or V_HUDTRANS)
+	local flags = V_SNAPTOTOP | V_SNAPTOLEFT | V_PERPLAYER | ((player.spectator) and V_HUDTRANSHALF or V_HUDTRANS)
 
 	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, -(640 * FRACUNIT), x)
 	
@@ -32,8 +104,10 @@ local function drawScoreRings(v, player)
 
 	//
 
-	v.drawScaled(anim, y + (20 * FRACUNIT), FRACUNIT, v.cachePatch(ring_patch), flags, ring_color)
-	joeFuncs.drawNum(v, anim + (24 * FRACUNIT), y + (23 * FRACUNIT), player.rings, flags, "JOE_BNUM", "left", 7)
+	if not G_RingSlingerGametype() then
+		v.drawScaled(anim, y + (20 * FRACUNIT), FRACUNIT, v.cachePatch(ring_patch), flags, ring_color)
+		joeFuncs.drawNum(v, anim + (24 * FRACUNIT), y + (23 * FRACUNIT), player.rings, flags, "JOE_BNUM", "left", 7)
+	end
 
 	//
 end
@@ -45,6 +119,8 @@ local function drawTimer(v, player)
 	local flags = V_SNAPTOTOP | V_SNAPTORIGHT | V_HUDTRANS | V_PERPLAYER
 
 	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (640 * FRACUNIT), x)
+	
+	//
 
 	local exitTics = joeVars.autoTimer - leveltime
 	local info = joeFuncs.getCountdown(player.realtime)
@@ -85,6 +161,8 @@ local function drawLives(v, player)
 
 	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (640 * FRACUNIT), x)
 
+	//
+
 	local player_lives = ((player.lives == INFLIVES) or (netgame and (CV_FindVar("cooplives").value == 0))) and '\x16' or ("\x82x\x80" .. max(0, min(player.lives, 99)))
 	local yoffs = G_GametypeUsesLives() and 1 or 3
 
@@ -124,86 +202,23 @@ local function drawLives(v, player)
 	//
 end
 
-local function drawInformation(v, player)
+local function drawRingslingerWeapons(v, player)
 	//
-
-	local x, y = 160, 190
-	local flags = V_SNAPTOBOTTOM | V_ALLOWLOWERCASE | V_HUDTRANSHALF | V_PERPLAYER
 	
-	local players_finished = 0
-	local players_needed = G_IsSpecialStage(gamemap) and 4 or CV_FindVar("playersforexit").value
-
-	//
-
-	local function drawText(str)
-		v.drawString(x, y, str, flags, "thin-center")
-		y = $ - 9
-	end
-
-	//
-
-	if (player.exiting) and (players_needed) then
-		for stplyr in players.iterate do
-			if (stplyr.spectator) or (stplyr.bot) then continue end
-			if (stplyr.lives <= 0) then continue end
+	if (player.spectator) then return end
 		
-			if not (stplyr.exiting) or not (stplyr.pflags & PF_FINISHED) then
-				players_finished = $ + 1
-			end
-		end
-		
-		if (players_needed ~= 4) then
-			players_finished = $ * CV_FindVar("playersforexit").value
-
-			if (players_finished & 3) then
-				players_finished = $ + 4
-			end
-
-			players_finished = $ / 4
-		end
-		
-		if (players_finished) then
-			drawText("\x82" .. players_finished .. "\x80 Player" .. ((players_finished == 1) and "" or "s") .. " left.")
-		end
-	end
-
 	//
 
-	if (player.spectator) then
-		if G_IsSpecialStage(gamemap) then
-			drawText("Wait for the stage to end.")
+	local x, y = (13 * FRACUNIT), (29 * FRACUNIT)
+	local flags = V_SNAPTOTOP | V_SNAPTOLEFT | V_PERPLAYER
 
-		elseif G_PlatformGametype() and G_GametypeUsesCoopLives() then
-			if (player.lives < 0) and (CV_FindVar("cooplives").value == 2) then
-				drawText("You'll steal a life on respawn...")
-			else
-				drawText("Waiting to respawn...")	
-			end
-
-		elseif G_GametypeHasSpectators() then
-			drawText("[\x82" .. "FIRE" .. "\x80] Join to the game")
-		end
-
-		drawText("[\x82" .. "SPIN" .. "\x80] Lower")
-		drawText("[\x82" .. "JUMP" .. "\x80] Rise")
-	end
-
+	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, -(640 * FRACUNIT), x)
+	local scale = FRACUNIT / 2
+	
 	//
 
-	if (gametyperules & GTR_RESPAWNDELAY) and ((player.playerstate == PST_DEAD) and player.lives) then
-		local respawntime = CV_FindVar("respawndelay").value - (player.deadtimer / TICRATE)
-
-		if (respawntime > 0) and not (player.spectator)
-			drawText("Respawning in \x82" .. respawntime .. "\x80...")
-		else
-			drawText("[\x82" .. "JUMP" .. "\x80] Respawn")
-		end
-	end
-
-	//
-
-	if (player.spectator) then
-		drawText("\x86" .. "- Spectator Mode -")
+	for i = 0, 6 do
+		drawWeapon(v, player, anim, y + ((i * FRACUNIT) * 11), scale, flags, i)
 	end
 
 	//
@@ -245,7 +260,7 @@ local function drawHUD(v, player)
 	
 	//
 	
-	for _, i in ipairs({"time", "rings", "lives", "score", "textspectator"}) do
+	for _, i in ipairs({"time", "rings", "lives", "score", "weaponrings", "textspectator"}) do
 		hud.disable(i)
 	end
 
@@ -265,7 +280,12 @@ local function drawHUD(v, player)
 	drawTimer(v, player)
 	drawLives(v, player)
 
-	drawInformation(v, player)
+	//
+	
+	if G_RingSlingerGametype() or (G_TagGametype() and (player.pflags & PF_TAGIT)) then
+		drawRingslingerWeapons(v, player)
+	end
+
 	drawFirstPerson(v, player)
 
 	//

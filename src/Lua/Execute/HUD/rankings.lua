@@ -171,7 +171,7 @@ local function drawNetInfo(v)
 
 	//
 
-	if G_RingSlingerGametype() then
+	if (gametyperules & GTR_RINGSLINGER) then
 		//
 		
 		local info = joeFuncs.getCountdown(leveltime)
