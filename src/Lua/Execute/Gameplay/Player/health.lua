@@ -1,13 +1,18 @@
 //
 
 local damagetypes = {
-	[DMG_NUKE] = 20,
+	[DMG_NUKE] = 25,
 	[DMG_WATER] = 10,
 	[DMG_FIRE] = 7,
 	[DMG_ELECTRIC] = 5,
-	[DMG_SPIKE] = 3
-}
+	[DMG_SPIKE] = 3,
 
+	[DMG_INSTAKILL] = INT8_MAX,
+	[DMG_DROWNED] = INT8_MAX,
+	[DMG_SPACEDROWN] = INT8_MAX,
+	[DMG_CRUSHED] = INT8_MAX,
+	[DMG_DEATHPIT] = INT8_MAX
+}
 //
 
 local function handleHealth(player)
@@ -62,12 +67,14 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 		player.hp.current = max(0, $ - damage)	
 		player.hp.delay = TICRATE * 5
 
-		player.powers[pw_flashing] = P_RandomRange(30, 60)
+		P_ResetPlayer(player)
 		mo.state = S_PLAY_PAIN
 
-		P_SetObjectMomZ(mo, 6 * FRACUNIT, false)
+		P_SetObjectMomZ(mo, (mo.eflags & MFE_UNDERWATER) and (3 * FRACUNIT) or (6 * FRACUNIT), false)
 		P_InstaThrust(mo, mo.angle + ANGLE_180, 10 * mo.scale)
 
+		player.powers[pw_flashing] = P_RandomRange(TICRATE, TICRATE * 2)
+		
 		if (player.hp.current) then
 			S_StartSound(mo, sfx_jhurt)
 
