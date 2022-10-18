@@ -39,10 +39,10 @@ end
 
 local function drawEmblemRadar(v, player)
 	//
-	
+
 	if not joeFuncs.isValid(player.realmo) then return end
 	if not (netgame or multiplayer) then return end
-	
+
 	if not (joeVars.emblemRadar.value) then return end
 	if not (#joeVars.emblemInfo) then return end
 

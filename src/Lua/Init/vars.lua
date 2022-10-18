@@ -46,33 +46,33 @@ joeVars.emblemRadar = CV_RegisterVar({name = "joe_emblemradar", defaultvalue = "
 
 local function resetVars()
 	//
-	
+
 	joeVars.scoresKey = false
 	joeVars.scoresTicker = 0
-		
+
 	//
-	
+
 	joeVars.autoTicker = 0
 	joeVars.autoTimer = joeVars.autoExit.value * (60 * TICRATE)
 
 	//
 
 	joeVars.HUDTicker = 0
-		
+
 	//
-	
+
 	joeVars.totalEmblems = 0
 	joeVars.collectedEmblems = 0
 	joeVars.emblemTicker = 0
 	joeVars.emblemInfo = {}
-	
+
 	//
 end
 addHook("MapLoad", resetVars)
 
 //
 
-local function syncVars(net)	
+local function syncVars(net)
 	//
 
 	joeVars.tipText = net($)
@@ -86,12 +86,12 @@ local function syncVars(net)
 	joeVars.autoTimer = net($)
 
 	//
-	
+
 	joeVars.totalEmblems = net($)
 	joeVars.collectedEmblems = net($)
 	joeVars.emblemTicker = net($)
 	joeVars.emblemInfo = net($)
-	
+
 	//
 end
 addHook("NetVars", syncVars)

@@ -2,14 +2,14 @@
 
 local handleTAB = {
 	//
-	
+
 	Down = function(key)
 		if (key.num == input.gameControlToKeyNum(GC_SCORES)) then
 			joeVars.scoresKey = true
 			return true
 		end
 	end,
-	
+
 	//
 
 	Up = function(key)
@@ -18,7 +18,7 @@ local handleTAB = {
 			return true
 		end
 	end
-	
+
 	//
 }
 addHook("KeyUp", handleTAB.Up)
@@ -37,21 +37,21 @@ local function getPingPatch(v, player)
 
 	local ping_values = {{9, 3}, {7, 2}, {5, 1}, {2, 0}}
 	local patch = 4
-	
+
 	//
-	
+
 	for i = 1, #ping_values do
 		if (player.cmd.latency < ping_values[i][1]) then
 			patch = ping_values[i][2]
 		end
 	end
-	
+
 	if (player.quittime > 0) then
 		patch = 4
 	end
-	
+
 	//
-	
+
 	return v.cachePatch("JOE_PING" .. patch)
 
 	//
@@ -89,10 +89,10 @@ local function drawPlayers(v)
 		//
 
 		local gflags = (((player.playerstate == PST_DEAD) or (player.quittime > 0)) and V_TRANSLUCENT or 0) | flags
-		
+
 		local score_string = player.score
 		local life_string = ""
- 
+
 		//
 
 		if (gametyperules & GTR_RACE) then
@@ -121,7 +121,7 @@ local function drawPlayers(v)
 		v.drawScaled(anim, y, skins[player.skin].highresscale, v.getSprite2Patch(player.skin, SPR2_LIFE, false, A), gflags, joeFuncs.getSkincolor(v, player, true))
 
 		v.drawString(anim - (12 * FRACUNIT), y - (2 * FRACUNIT), score_string .. life_string, V_ALLOWLOWERCASE | gflags, "small-fixed-right")
-		
+
 		//
 
 		if G_TagGametype() and (player.pflags & PF_TAGIT) then
@@ -129,7 +129,7 @@ local function drawPlayers(v)
 		elseif (player.pflags & PF_FINISHED) then
 			v.drawScaled(anim + (2 * FRACUNIT), y - (2 * FRACUNIT), FRACUNIT / 2, v.cachePatch("ICON_FIN"), flags, nil)
 		end
-		
+
 		v.drawScaled(anim - (10 * FRACUNIT), y - (12 * FRACUNIT), FRACUNIT / 2, getPingPatch(v, player), flags, nil)
 
 		//
@@ -173,9 +173,9 @@ local function drawNetInfo(v)
 
 	if (gametyperules & GTR_RINGSLINGER) then
 		//
-		
+
 		local info = joeFuncs.getCountdown(leveltime)
-		
+
 		local timer_option = (info.countdown) and "Left" or "Elapsed"
 		local timer_color = (info.flashing) and 0x85 or 0x82
 
@@ -201,29 +201,29 @@ local function drawNetInfo(v)
 		end
 
 		//
-		
+
 		if (joeVars.totalEmblems ~= 0) then
 			//
-			
+
 			table.sort(joeVars.emblemInfo, function(a, b) return (a[2].angle + 1) < (b[2].angle + 1) end)
 
 			for i, mo in ipairs(joeVars.emblemInfo) do
 				local frame = string.char((mo[1].frame & FF_FRAMEMASK) + 65)
 				local patch = (not mo[1].health) and v.cachePatch("GOTIT" .. frame) or v.cachePatch("NEEDIT")
-				
+
 				local color_flash = SKINCOLOR_SUPERGOLD1 + abs(((leveltime >> 1) % 9) - 4)
 				local color = (joeVars.collectedEmblems >= joeVars.totalEmblems) and v.getColormap(TC_RAINBOW, color_flash) or v.getColormap(TC_DEFAULT, mo[1].color)
-			
+
 				v.drawScaled(anim + ((14 * FRACUNIT) * (i - 1)), (184 * FRACUNIT), FRACUNIT / 2, patch, V_SNAPTOBOTTOM | flags, color)
 			end
-	
+
 			//
 		else
 			//
-			
+
 			v.drawScaled(anim, (184 * FRACUNIT), FRACUNIT / 2, v.cachePatch("GOTITX"), V_SNAPTOBOTTOM | flags, v.getColormap(TC_RAINBOW, SKINCOLOR_JET))
 			v.drawString(anim + (16 * FRACUNIT), (186 * FRACUNIT), "No emblems?", V_SNAPTOBOTTOM | V_ALLOWLOWERCASE | flags, "small-fixed")
-			
+
 			//
 		end
 
@@ -256,7 +256,7 @@ local function drawCoopInfo(v)
 		fa = FixedAngle(spin)
 		x = (305 << 15) + (48 * cos(fa))
 		y = (186 << 15) + (48 * sin(fa))
-		
+
 		spin = $ + ((360 * FRACUNIT) / 7)
 
 		if (emeralds & (EMERALD1 << i)) then
@@ -277,7 +277,7 @@ local function drawScores(v)
 	if (leveltime <= 47) then return end
 
 	//
-	
+
 	joeVars.scoresTicker = (joeVars.scoresKey) and min($ + 2, TICRATE) or max(0, $ - 2)
 
 	//
