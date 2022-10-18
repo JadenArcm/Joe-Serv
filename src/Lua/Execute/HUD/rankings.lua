@@ -193,7 +193,7 @@ local function drawNetInfo(v)
 			local patch = v.cachePatch("TEMER" .. (i + 1))
 			local gflags = V_TRANSLUCENT
 
-			if (emeralds & (EMERALD1 << i)) then
+			if (emeralds & (1 << i)) then
 				gflags = 0
 			end
 

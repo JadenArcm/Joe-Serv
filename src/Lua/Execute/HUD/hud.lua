@@ -10,7 +10,6 @@ local scoreColors = {
 //
 
 local matchWeapons = {
-	[-2] = {patch = "CURWEAP"},
 	[-1] = {patch = "RINGIND"},
 	[0]  = {power = pw_infinityring, weapon = 0, max = 800, patch = "INFNIND"},
 
@@ -26,16 +25,15 @@ local function drawWeapon(v, player, x, y, scale, flags, weapon)
 	//
 
 	local offs = {player.weapondelay, 0, 16}
-	local alpha = max(1, min(offs[1], 8)) << V_ALPHASHIFT
-	local flash = (leveltime % 8 < 4)
+	local alpha = max(1, min(offs[1], 6)) << V_ALPHASHIFT
 	
 	local ring_selection = (not player.powers[pw_infinityring]) and -1 or 0
 	local ring_amount = player.powers[pw_infinityring] and (player.powers[pw_infinityring] .. " (\x82" .. player.rings .. "\x80)") or player.rings
 	
-	local text_flags = ((player.powers[matchWeapons[weapon].power] >= matchWeapons[weapon].max) and V_YELLOWMAP) or ((not (player.ringweapons & matchWeapons[weapon].weapon)) and V_ORANGEMAP) or 0
+	local text_flags = ((player.powers[matchWeapons[weapon].power] >= matchWeapons[weapon].max) and V_YELLOWMAP) or ((not player.powers[matchWeapons[weapon].power]) and V_ORANGEMAP) or 0
 	local global_flags = ((not (player.ringweapons & matchWeapons[weapon].weapon)) or (not player.powers[matchWeapons[weapon].power])) and V_60TRANS or 0
 	
-	local tring_flags = ((not ring_amount) and flash) and V_REDMAP or 0
+	local tring_flags = ((not ring_amount) and (leveltime % 8 < 4)) and V_REDMAP or 0
 	local ring_flags = (not ring_amount) and V_60TRANS or 0
 	
 	//
@@ -69,9 +67,9 @@ local function drawWeapon(v, player, x, y, scale, flags, weapon)
 	//
 	
 	if (player.currentweapon == weapon) then
-		v.drawScaled((x - FRACUNIT) - FixedMul((offs[2] / 2) * FRACUNIT, scale), y - FRACUNIT, scale, v.cachePatch(matchWeapons[-2].patch), flags | alpha, nil)
+		v.drawScaled((x - FRACUNIT) - FixedMul((offs[2] / 2) * FRACUNIT, scale), y - FRACUNIT, scale, v.cachePatch("CURWEAP"), flags | alpha, nil)
 	
-		if (player.ammoremovaltimer) and flash then
+		if (player.ammoremovaltimer) and (leveltime % 8 < 4) then
 			v.drawString(x + (4 * FRACUNIT), y + (2 * FRACUNIT), "-" .. player.ammoremoval, flags | V_REDMAP, "small-fixed-center")
 		end
 	end
@@ -224,6 +222,40 @@ local function drawRingslingerWeapons(v, player)
 	//
 end
 
+local function drawPowerstones(v, player)
+	//
+
+	if (player.spectator) then return end
+
+	//
+
+	local x, y = (275 * FRACUNIT), (42 * FRACUNIT)
+	local flags = V_SNAPTOTOP | V_SNAPTORIGHT | V_PERPLAYER
+
+	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (640 * FRACUNIT), x)
+
+	//
+
+	for i = 0, 6 do
+		local patch = v.cachePatch("TEMER" .. (i + 1))
+		local colormap = nil
+		local alpha = V_HUDTRANSHALF
+
+		if (player.powers[pw_emeralds] & (1 << i)) then
+			alpha = V_HUDTRANS
+		end
+
+		if All7Emeralds(player.powers[pw_emeralds]) or (player.powers[pw_invulnerability] and (player.powers[pw_sneakers] == player.powers[pw_invulnerability])) then
+			alpha = V_HUDTRANS
+			colormap = v.getColormap(TC_RAINBOW, skins[player.skin].supercolor + abs(((leveltime >> 1) % 9) - 4))
+		end
+
+		v.drawScaled(x + ((5 * FRACUNIT) * i), y, FRACUNIT / 2, patch, flags | alpha, colormap)
+	end
+
+	//
+end
+
 local function drawFirstPerson(v, player)
 	//
 
@@ -284,6 +316,10 @@ local function drawHUD(v, player)
 	
 	if G_RingSlingerGametype() or (G_TagGametype() and (player.pflags & PF_TAGIT)) then
 		drawRingslingerWeapons(v, player)
+	end
+
+	if (gametyperules & GTR_POWERSTONES) then
+		drawPowerstones(v, player)
 	end
 
 	drawFirstPerson(v, player)
