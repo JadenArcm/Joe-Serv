@@ -245,7 +245,7 @@ local function drawPowerstones(v, player)
 			alpha = V_HUDTRANS
 		end
 
-		if All7Emeralds(player.powers[pw_emeralds]) or (player.powers[pw_invulnerability] and (player.powers[pw_sneakers] == player.powers[pw_invulnerability])) then
+		if player.powers[pw_super] or (player.powers[pw_invulnerability] and (player.powers[pw_sneakers] == player.powers[pw_invulnerability])) then
 			alpha = V_HUDTRANS
 			colormap = v.getColormap(TC_RAINBOW, skins[player.skin].supercolor + abs(((leveltime >> 1) % 9) - 4))
 		end

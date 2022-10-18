@@ -13,32 +13,36 @@ local damagetypes = {
 	[DMG_CRUSHED] = INT8_MAX,
 	[DMG_DEATHPIT] = INT8_MAX
 }
+
 //
 
-local function handleHealth(player)
+local function healHealth(special, toucher)
 	//
 
-	if not (player.hp.enabled) then return end
-	
-	if not joeFuncs.isValid(player.mo) then return end
-	if (player.playerstate ~= PST_LIVE) or (player.spectator) then return end
-	if (player.pflags & PF_GODMODE) then return end
+	local player = toucher.player
 
 	//
 
-	player.hp.delay = max(0, $ - 1)
+	if not joeFuncs.isValid(special) then return end
 
-	if not (player.hp.delay) and ((leveltime % (TICRATE * 3)) == 0) then
-		player.hp.current = min($ + 1, player.hp.max)
-		
-		if not (player.hp.current >= player.hp.max) then
-			S_StartSoundAtVolume(nil, sfx_jheal, 90, player)
+	if not joeFuncs.isValid(toucher) then return end
+	if not joeFuncs.isValid(player) then return end
+
+	//
+
+	if (player.hp.enabled) then
+		if (special.type == MT_RING) or (special.type == MT_COIN) then
+			player.hp.current = min($ + 1, player.hp.max)
+		end
+
+		if (special.type == MT_COOPEMBLEM) then
+			player.hp.current = min($ + 15, player.hp.max)
 		end
 	end
 
 	//
 end
-addHook("PlayerThink", handleHealth)
+addHook("TouchSpecial", healHealth)
 
 //
 
@@ -109,7 +113,6 @@ local function setHealth(player)
 
 	if (player.hp.enabled) then
 		player.hp.current = player.hp.max
-		player.hp.delay = 0
 	end
 
 	//
