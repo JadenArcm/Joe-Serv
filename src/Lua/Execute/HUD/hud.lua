@@ -271,15 +271,20 @@ local function drawFirstPerson(v, player)
 
 	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (400 * FRACUNIT), y)
 
+	//
+
 	local spr2, spr2flip = v.getSprite2Patch(player.skin, player.realmo.sprite2, (player.powers[pw_super] > 0), player.realmo.frame, 8, player.realmo.rollangle)
 	local spr, sprflip = v.getSpritePatch(player.realmo.sprite, player.realmo.frame, 8, player.realmo.rollangle)
 
-	local color = joeFuncs.getSkincolor(v, player, false)
+	local sprites = {{spr2, spr2flip}, {spr, sprflip}}
 	local mode = (player.realmo.sprite == SPR_PLAY) and 1 or 2
+
+	local scale = {skin = (skins[player.skin].highresscale / 2), x = player.realmo.spritexscale, y = player.realmo.spriteyscale}
+	local color = joeFuncs.getSkincolor(v, player, false)
 
 	//
 
-	v.drawScaled(x, anim, (skins[player.skin].highresscale / 2), ({spr2, spr})[mode], (({spr2flip, sprflip})[mode] and V_FLIP or 0) | flags, color)
+	v.drawStretched(x, anim, FixedMul(scale.x, scale.skin), FixedMul(scale.y, scale.skin), sprites[mode][1], (sprites[mode][2] and V_FLIP or 0) | flags, color)
 
 	//
 end

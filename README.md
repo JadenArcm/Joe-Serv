@@ -5,7 +5,7 @@ It currently contains 2 files.
 ## Notes
 - Since this is a repository, you can compile this if you REALLY wanna test this.
 - If theres any problem, feel free to post an ***issue*** about it!
-- *Hey! If your looking through this file somewhere outside of GitHub, don't ask why this exists. Git is cool.*
+- *Hey! If your looking through this file somewhere outside of GitLab, don't ask why this exists. Git is cool.*
 
 ## Compilation
 > Recommended programs: `7-Zip`, or `WinRAR`.
