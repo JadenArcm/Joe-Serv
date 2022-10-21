@@ -62,11 +62,9 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 
 	if not joeFuncs.isValid(mo) then return end
 	if (player.playerstate ~= PST_LIVE) or (player.spectator) then return end
-	if (player.pflags & PF_GODMODE) then return end
-
+	
+	if (player.pflags & PF_GODMODE) then return false end
 	if (player.powers[pw_super] > 0) or (player.powers[pw_flashing] > 0) or (player.powers[pw_invulnerability] > 0) then return false end
-
-	if (dmgtype == DMG_INSTAKILL) or (dmgtype == DMG_DROWNED) or (dmgtype == DMG_SPACEDROWN) or (dmgtype == DMG_DEATHPIT) or (dmgtype == DMG_CRUSHED) then return true end
 	if player.powers[pw_shield] then return nil end
 
 	//
