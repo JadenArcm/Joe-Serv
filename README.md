@@ -1,4 +1,4 @@
-# Joe's Shop?
+# Joe's Workshop?
 This is a repository that stores addons for a SRB2 Server, which is `Joe's Bizarre Server`.
 It currently contains 2 files.
 
