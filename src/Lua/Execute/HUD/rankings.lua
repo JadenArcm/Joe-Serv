@@ -35,14 +35,14 @@ local function getPingPatch(v, player)
 
 	//
 
-	local ping_values = {{9, 3}, {7, 2}, {5, 1}, {2, 0}}
-	local patch = 4
+	local ping_values = {2, 5, 7, 9}
+	local patch = 0
 
 	//
 
 	for i = 1, #ping_values do
-		if (player.cmd.latency < ping_values[i][1]) then
-			patch = ping_values[i][2]
+		if (player.cmd.latency >= ping_values[i]) then
+			patch = min(i + 1, 3)
 		end
 	end
 
@@ -100,7 +100,7 @@ local function drawPlayers(v)
 				score_string = "\x83" .. "FIN" .. "\x80"
 			else
 				if (circuitmap) then
-					score_string = "Lap " .. player.laps + 1
+					score_string = "Lap " .. (player.laps + 1)
 				else
 					score_string = joeFuncs.getTimer(player.realtime)
 				end
@@ -191,7 +191,7 @@ local function drawNetInfo(v)
 
 		for i = 0, 6 do
 			local patch = v.cachePatch("TEMER" .. (i + 1))
-			local gflags = V_TRANSLUCENT
+			local gflags = V_70TRANS
 
 			if (emeralds & (1 << i)) then
 				gflags = 0

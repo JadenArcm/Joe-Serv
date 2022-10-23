@@ -22,11 +22,7 @@ local function float2Fixed(float)
 	end
 
 	if not string.find(float, "^-?%d+%.%d+$") then
-		if tonumber(float) then
-			return (tonumber(float) * FRACUNIT)
-		else
-			return nil
-		end
+		return tonumber(float) and (tonumber(float) * FRACUNIT) or nil
 	end
 
 	local decPlace = string.find(float, "%.")
@@ -39,11 +35,7 @@ local function float2Fixed(float)
 		decNumber = $ / 10
 	end
 
-	if string.find(float, "^-") then
-		return (whole - decNumber)
-	else
-		return (whole + decNumber)
-	end
+	return string.find(float, "^-") and (whole - decNumber) or (whole + decNumber)
 end
 
 //
@@ -69,7 +61,7 @@ local commandInfo = {
 			if not inLevel(player) then return end
 
 			local skin = P_RandomRange(0, #skins - 1)
-			local color = P_RandomRange(1, #skincolors - 1)
+			local color = P_RandomRange(1, SKINCOLOR_SUPERSILVER1 - 1)
 
 			local bot_name = skins[skin].realname .. " " .. P_RandomByte()
 			local skin_name = skins[skin].name
@@ -413,7 +405,12 @@ local commandInfo = {
 		func = function(player)
 			if not inLevel(player) then return end
 
-			if not All7Emeralds(emeralds) then
+			if (gametyperules & GTR_RINGSLINGER) and not All7Emeralds(player.powers[pw_emeralds]) then
+				printError(player, "You need all of the \x87" .. "Powerstones" .. "\x80 to use this.")
+				return
+			end
+
+			if (gametyperules & GTR_FRIENDLY) and not All7Emeralds(emeralds) then
 				printError(player, "You need all of the \x83" .. "Chaos Emeralds" .. "\x80 to use this.")
 				return
 			end
@@ -427,8 +424,7 @@ local commandInfo = {
 				player.rings = $ + 50
 				player.charflags = $ | SF_SUPER
 
-				player.powers[pw_super] = 1
-				player.mo.state = S_PLAY_SUPER_TRANS1
+				P_DoSuperTransformation(player, false)
 
 				P_FlashPal(player, PAL_WHITE, 5)
 				S_StartSound(player.mo, sfx_supert)
@@ -436,7 +432,7 @@ local commandInfo = {
 				player.rings = 0
 				player.powers[pw_flashing] = TICRATE
 
-				P_FlashPal(player, PAL_WHITE, 5)
+				P_FlashPal(player, PAL_WHITE, 10)
 				S_StartSound(player.mo, sfx_s3k66)
 			end
 		end
@@ -470,7 +466,7 @@ local commandInfo = {
 				local target = joeFuncs.getPlayer(node)
 
 				if (target == -1) then
-					printError(player, "Seems like that player is already dead. Sorry!")
+					printError(player, "That player doesn't exist. Please double-check.")
 					return
 				end
 
@@ -504,7 +500,7 @@ local commandInfo = {
 				return
 			end
 
-			if G_RingSlingerGametype() and not joeFuncs.isServerOrAdmin(player) then
+			if (gametyperules & GTR_RINGSLINGER) and not joeFuncs.isServerOrAdmin(player) then
 				printError(player, "You can't use this in this gametype. Sorry!")
 				return
 			end

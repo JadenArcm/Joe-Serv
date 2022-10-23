@@ -120,7 +120,7 @@ joeFuncs.mapToScreen = function(v, player, mo)
 	sx = FixedMul(tan($), calculation * FRACUNIT) + (160 * FRACUNIT)
 	sy = (FixedDiv(cam[3] - mo[3], y_distance) * calculation) + (100 * FRACUNIT) + (tan(cam[5]) * calculation)
 
-	local t_distance = max(0, R_PointToDist(mo[1], mo[2]) - (2048 * FRACUNIT / 2)) * 20
+	local t_distance = max(0, y_distance - (2048 * FRACUNIT / 2)) * 20
 	sf = min(9, (t_distance / FRACUNIT) / 2048) << V_ALPHASHIFT
 
 	//

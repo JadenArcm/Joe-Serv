@@ -18,9 +18,8 @@ local function drawNametags(v, player)
 		if (target == player) then continue end
 
 		if (R_PointToDist2(mo.x, mo.y, target.mo.x, target.mo.y) > searchDist) then continue end
-		if not P_CheckSight(mo, target.mo) then continue end
-
-		local zoffs = P_MobjFlip(target.mo) * (P_GetPlayerHeight(target) + FixedMul(18 * FRACUNIT, target.mo.scale))
+		
+		local zoffs = P_MobjFlip(target.mo) * (P_GetPlayerHeight(target) + (16 * target.mo.scale))
 		local screen = joeFuncs.mapToScreen(v, player, {target.mo.x, target.mo.y, target.mo.z + zoffs})
 
 		if (screen.visible) then

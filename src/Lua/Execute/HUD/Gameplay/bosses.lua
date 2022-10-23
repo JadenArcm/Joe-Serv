@@ -47,7 +47,7 @@ local function drawBosses(v, player)
 			local boss_name = bossNames[boss.type] or "Unknown Boss"
 			local boss_health = boss.health .. " / " .. boss.info.spawnhealth
 
-			local zoffs = P_MobjFlip(boss) * (boss.height + FixedMul(40 * FRACUNIT, boss.scale))
+			local zoffs = P_MobjFlip(boss) * (boss.height + (40 * boss.scale))
 			local screen = joeFuncs.mapToScreen(v, player, {boss.x, boss.y, boss.z + zoffs})
 
 			if (screen.visible) then
