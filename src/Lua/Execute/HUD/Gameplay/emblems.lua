@@ -62,10 +62,10 @@ local function drawEmblemRadar(v, player)
 	//
 
 	for i, mo in ipairs(joeVars.emblemInfo) do
-		local emblem_flags = (mo[1].health) and V_HUDTRANS or V_HUDTRANSHALF
+		local emblem_flags = (mo.health) and V_HUDTRANS or V_HUDTRANSHALF
 		local offs = ((i - 1) * 20) - ((#joeVars.emblemInfo - 1) * 10)
 
-		drawEmblemIcon(v, x + (offs * FRACUNIT), anim, emblem_flags | flags, {mo[1], player.realmo})
+		drawEmblemIcon(v, x + (offs * FRACUNIT), anim, emblem_flags | flags, {mo, player.realmo})
 	end
 
 	//

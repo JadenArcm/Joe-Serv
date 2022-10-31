@@ -97,7 +97,7 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 	//
 
 	if not (player.hp.current) then
-		P_KillMobj(mo)
+		P_KillMobj(mo, nil, nil, dmgtype)
 	end
 
 	//

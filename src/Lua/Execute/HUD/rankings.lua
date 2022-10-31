@@ -35,7 +35,7 @@ local function getPingPatch(v, player)
 
 	//
 
-	local ping_values = {2, 5, 7, 9}
+	local ping_values = {3, 5, 7, 9}
 	local patch = 0
 
 	//
@@ -205,14 +205,14 @@ local function drawNetInfo(v)
 		if (joeVars.totalEmblems ~= 0) then
 			//
 
-			table.sort(joeVars.emblemInfo, function(a, b) return (a[2].angle + 1) < (b[2].angle + 1) end)
+			table.sort(joeVars.emblemInfo, function(a, b) return (a.orig < b.orig) end)
 
 			for i, mo in ipairs(joeVars.emblemInfo) do
-				local frame = string.char((mo[1].frame & FF_FRAMEMASK) + 65)
-				local patch = (not mo[1].health) and v.cachePatch("GOTIT" .. frame) or v.cachePatch("NEEDIT")
+				local frame = string.char((mo.frame & FF_FRAMEMASK) + 65)
+				local patch = (not mo.health) and v.cachePatch("GOTIT" .. frame) or v.cachePatch("NEEDIT")
 
 				local color_flash = SKINCOLOR_SUPERGOLD1 + abs(((leveltime >> 1) % 9) - 4)
-				local color = (joeVars.collectedEmblems >= joeVars.totalEmblems) and v.getColormap(TC_RAINBOW, color_flash) or v.getColormap(TC_DEFAULT, mo[1].color)
+				local color = (joeVars.collectedEmblems >= joeVars.totalEmblems) and v.getColormap(TC_RAINBOW, color_flash) or v.getColormap(TC_DEFAULT, mo.color)
 
 				v.drawScaled(anim + ((14 * FRACUNIT) * (i - 1)), (184 * FRACUNIT), FRACUNIT / 2, patch, V_SNAPTOBOTTOM | flags, color)
 			end

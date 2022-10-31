@@ -289,6 +289,7 @@ local commandInfo = {
 				return
 			end
 
+			if (target.pflags & PF_GODMODE) then target.pflags = $ &~ PF_GODMODE end
 			P_KillMobj(target.mo, nil, nil)
 		end
 	},

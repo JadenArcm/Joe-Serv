@@ -30,9 +30,9 @@ joeVars.emblemInfo = {}
 
 joeVars.chatSounds = {
 	normal = sfx_radio,
-	failure = sfx_s258,
+	failure = sfx_s1b1,
 	event = sfx_s25a,
-	teams = sfx_ding,
+	teams = sfx_s257,
 	private = sfx_s3k92
 }
 
