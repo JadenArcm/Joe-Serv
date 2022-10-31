@@ -10,8 +10,12 @@ local function playerEffects(player)
 	player.pflags = (player.force.god) and ($ | PF_GODMODE) or ($ &~ PF_GODMODE)
 	player.pflags = (player.force.noclip) and ($ | PF_NOCLIP) or ($ &~ PF_NOCLIP)
 
-	player.mo.colorized = (player.force.colorize)
+	//
 
+	if (player.force.colorize) and not (player.mo.colorized) then
+		player.mo.colorized = true
+	end
+	
 	//
 end
 addHook("PlayerThink", playerEffects)

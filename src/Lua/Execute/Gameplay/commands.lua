@@ -383,6 +383,8 @@ local commandInfo = {
 			if not inLevel(player) then return end
 
 			player.force.colorize = not $
+			player.realmo.colorized = not $
+
 			CONS_Printf(player, "You are no" .. ((player.force.colorize) and "w\x82 colorized" or " longer\x82 colorized") .. "\x80.")
 		end
 	},
