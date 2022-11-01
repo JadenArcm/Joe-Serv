@@ -1,11 +1,17 @@
 //
 
-freeslot("S_COOPEMBLEM", "MT_COOPEMBLEM")
+freeslot(
+	"S_COOPEMBLEM", "MT_COOPEMBLEM",
+	
+	"S_STOCKEXPLOSION", "SPR_JEXP",
+	
+	"sfx_jjoin", "sfx_jleave", "sfx_jkick", "sfx_jfail",
+	"sfx_jtip",
 
-freeslot("sfx_jjoin", "sfx_jleave", "sfx_jkick", "sfx_jfail")
-freeslot("sfx_jtip")
+	"sfx_jhurt", "sfx_jwarn", "sfx_jheal",
 
-freeslot("sfx_jhurt", "sfx_jwarn", "sfx_jheal")
+	"sfx_jexpl", "sfx_jslip", "sfx_jsplat", "sfx_jfall"
+)
 
 //
 
@@ -18,6 +24,10 @@ mobjinfo[MT_COOPEMBLEM] = {
 	height = 30 * FRACUNIT,
 	flags = MF_SPECIAL | MF_NOGRAVITY | MF_NOCLIPHEIGHT
 }
+
+//
+
+states[S_STOCKEXPLOSION] = {SPR_JEXP, A | FF_ANIMATE, 17, nil, 16, 1, S_NULL}
 
 //
 
@@ -35,5 +45,12 @@ sfxinfo[sfx_jtip].caption = "A tip arrived"
 sfxinfo[sfx_jhurt].caption = "Hurt"
 sfxinfo[sfx_jwarn].caption = "Low on health"
 sfxinfo[sfx_jheal].caption = "Heal"
+
+//
+
+sfxinfo[sfx_jexpl].caption = "Explosion"
+sfxinfo[sfx_jslip].caption = "Cartoon sound"
+sfxinfo[sfx_jsplat].caption = "Crushed"
+sfxinfo[sfx_jfall].caption = "AAAAAAA"
 
 //

@@ -45,6 +45,7 @@ dofolder("autoexit.lua")
 folder = "Execute/Gameplay/Player"
 dofolder("effects.lua")
 dofolder("health.lua")
+dofolder("deaths.lua")
 
 //
 

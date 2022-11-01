@@ -8,12 +8,24 @@ local function playerVars(player)
 	player.chat.reason = ""
 
 	//
+	
+	player.deaths = {}
+	player.deaths["normal"] = false
+	
+	player.deaths["fire"] = false
+	player.deaths["electric"] = false
+
+	player.deaths["drowned"] = false
+	player.deaths["crushed"] = false
+	player.deaths["deathpit"] = false
+
+	//
 
 	player.hp = {}
 	player.hp.max = 30
 	player.hp.enabled = false
 	player.hp.current = player.hp.max
-
+	
 	//
 
 	player.force = {}
