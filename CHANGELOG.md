@@ -1,3 +1,9 @@
+## *v1.0c* - (31/10/2022)
+
+- Funny Deaths returns.
+- Fixed a bug with colorizing, Metal Mario will be happy again.
+- Co-op Emblems now do a little bounce!
+
 ## *v1.0b* - (10/10/2022)
 
 - A health system. (Toggled via the **togglehealth** command)

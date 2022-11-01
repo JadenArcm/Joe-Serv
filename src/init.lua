@@ -8,8 +8,8 @@
 rawset(_G, "joeFuncs", {})
 rawset(_G, "joeVars", {})
 
-local version = "v1.0b"
-local date 	  = "October 10th, 2022"
+local version = "v1.0c"
+local date 	  = "October 31st, 2022"
 local helpers = "-Scorbun- and Furry"
 
 //
