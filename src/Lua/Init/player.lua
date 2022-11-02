@@ -13,6 +13,7 @@ local function playerVars(player)
 	player.deaths["normal"] = false
 	
 	player.deaths["fire"] = false
+	player.deaths["spikes"] = false
 	player.deaths["electric"] = false
 
 	player.deaths["drowned"] = false

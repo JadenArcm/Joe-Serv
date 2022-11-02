@@ -14,6 +14,7 @@ local function drawNametags(v, player)
 	//
 
 	for target in players.iterate do
+		if not joeFuncs.isValid(target.mo) then continue end
 		if (target.spectator) then continue end
 		if (target == player) then continue end
 

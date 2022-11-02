@@ -75,23 +75,33 @@ local function deathLogic(player)
 		end
 
 		if (leveltime % 25) then
-			local fire = P_SpawnMobjFromMobj(mo, P_RandomRange(-40, 40) * FRACUNIT, P_RandomRange(-40, 40) * FRACUNIT, P_RandomRange(-10, 20) * FRACUNIT, MT_THOK)
+			local fire = P_SpawnMobjFromMobj(mo, P_RandomRange(-40, 40) * FRACUNIT, P_RandomRange(-40, 40) * FRACUNIT, P_RandomRange(-40, 40) * FRACUNIT, MT_THOK)
 			fire.fuse = 20
+			fire.flags = $ | (MF_NOGRAVITY)
+
 			fire.state = S_SPINDUST_FIRE1
 			fire.blendmode = AST_ADD
 		
-			P_SetScale(fire, mo.scale * 2)
-			P_SetObjectMomZ(fire, FRACUNIT * 2, true)
+			P_SetScale(fire, mo.scale / 2)
+			P_SetObjectMomZ(fire, FRACUNIT / 2, true)
 		end
+	end
+
+	if player.deaths["spikes"] then
+		mo.spritexoffset = P_RandomRange(-2, 2) * FRACUNIT
+		mo.spriteyoffset = P_RandomRange(-2, 2) * FRACUNIT
+
+		mo.state = S_PLAY_DRWN
+		mo.rollangle = FixedAngle(P_RandomRange(-8, 8) * FRACUNIT)
 	end
 
 	if player.deaths["electric"] then
 		if (mo.fuse > 1) then
-			mo.spritexoffset = P_RandomRange(-14, 14) * FRACUNIT
-			mo.spriteyoffset = P_RandomRange(-14, 14) * FRACUNIT
+			mo.spritexoffset = P_RandomRange(-12, 12) * FRACUNIT
+			mo.spriteyoffset = P_RandomRange(-8, 8) * FRACUNIT
 
 			mo.color = ({SKINCOLOR_YELLOW, SKINCOLOR_JET, SKINCOLOR_ORANGE, SKINCOLOR_ICY})[P_RandomRange(1, 4)]
-			mo.rollangle = $ + ANG30
+			mo.rollangle = FixedAngle(P_RandomRange(-15, 15) * FRACUNIT)
 			
 			if not P_RandomRange(0, 6) then
 				S_StartSound(mo, sfx_s3k79, nil)
@@ -180,6 +190,18 @@ local function deathToggles(mo, _, _, dmgtype)
 	local player = mo.player
 
 	//
+
+	if (dmgtype == DMG_SPIKE) then
+		player.deaths["spikes"] = true
+
+		mo.fuse = -1
+		mo.flags = $ | (MF_NOGRAVITY)
+
+		mo.momx, mo.momy = $1 / 4, $2 / 4
+		P_SetObjectMomZ(mo, FRACUNIT * 7, false)
+
+		S_StartSound(mo, sfx_spkdth, nil)
+	end
 	
 	if (dmgtype == DMG_FIRE) then
 		player.deaths["fire"] = true
@@ -219,7 +241,7 @@ local function deathToggles(mo, _, _, dmgtype)
 
 		mo.momx, mo.momy = 0, 0
 
-		S_StartSound(mo, sfx_s1b2, nil)
+		S_StartSound(mo, (player.charflags & SF_MACHINE) and sfx_fizzle or sfx_s1b2, nil)
 	end
 
 	if (dmgtype == DMG_CRUSHED) then
@@ -244,7 +266,7 @@ local function deathToggles(mo, _, _, dmgtype)
 
 	//
 
-	if (dmgtype == DMG_INSTAKILL) or (dmgtype == DMG_SPIKE) or (dmgtype == 0) then
+	if (dmgtype == DMG_INSTAKILL) or (dmgtype == DMG_WATER) or (dmgtype == DMG_NUKE) or (dmgtype == 0) then
 		player.deaths["normal"] = true
 		
 		mo.flags = $ | (MF_NOGRAVITY) &~ (MF_NOCLIP | MF_NOCLIPHEIGHT)
