@@ -1,5 +1,7 @@
 //
 
+local scroller = {delay = TICRATE, pos = 0, direction = 1}
+
 local handleTAB = {
 	//
 
@@ -68,6 +70,9 @@ local function drawPlayers(v)
 	local player_list = {}
 	local anim = joeFuncs.getEasing("outexpo", joeVars.scoresTicker, (640 * FRACUNIT), x)
 
+	local scaledwidth = v.width() / v.dupx()
+	local scaledheight = v.height() / v.dupy()
+	
 	//
 
 	for player in players.iterate do
@@ -88,6 +93,7 @@ local function drawPlayers(v)
 	for i, player in ipairs(player_list) do
 		//
 
+		local py = (y - ((scroller.pos >> 1) * FRACUNIT)) + ((i - 1) * (20 * FRACUNIT))
 		local gflags = (((player.playerstate == PST_DEAD) or (player.quittime > 0)) and V_TRANSLUCENT or 0) | flags
 
 		local score_string = player.score
@@ -117,31 +123,42 @@ local function drawPlayers(v)
 
 		//
 
-		v.drawString(anim - (12 * FRACUNIT), y - (10 * FRACUNIT), string.sub(joeFuncs.getPlayerName(player, 1), 0, 15), V_ALLOWLOWERCASE | gflags, "thin-fixed-right")
-		v.drawScaled(anim, y, skins[player.skin].highresscale, v.getSprite2Patch(player.skin, SPR2_LIFE, false, A), gflags, joeFuncs.getSkincolor(v, player, true))
+		v.drawString(anim - (12 * FRACUNIT), py - (10 * FRACUNIT), string.sub(joeFuncs.getPlayerName(player, 1), 0, 15), V_ALLOWLOWERCASE | gflags, "thin-fixed-right")
+		v.drawScaled(anim, py, skins[player.skin].highresscale, v.getSprite2Patch(player.skin, SPR2_LIFE, false, A), gflags, joeFuncs.getSkincolor(v, player, true))
 
-		v.drawString(anim - (12 * FRACUNIT), y - (2 * FRACUNIT), score_string .. life_string, V_ALLOWLOWERCASE | gflags, "small-fixed-right")
+		v.drawString(anim - (12 * FRACUNIT), py - (2 * FRACUNIT), score_string .. life_string, V_ALLOWLOWERCASE | gflags, "small-fixed-right")
 
 		//
 
 		if G_TagGametype() and (player.pflags & PF_TAGIT) then
-			v.drawScaled(anim + (2 * FRACUNIT), y - (2 * FRACUNIT), FRACUNIT / 2, v.cachePatch("ICON_TAG"), flags, nil)
+			v.drawScaled(anim + (2 * FRACUNIT), py - (2 * FRACUNIT), FRACUNIT / 2, v.cachePatch("ICON_TAG"), flags, nil)
 		elseif (player.pflags & PF_FINISHED) then
-			v.drawScaled(anim + (2 * FRACUNIT), y - (2 * FRACUNIT), FRACUNIT / 2, v.cachePatch("ICON_FIN"), flags, nil)
+			v.drawScaled(anim + (2 * FRACUNIT), py - (2 * FRACUNIT), FRACUNIT / 2, v.cachePatch("ICON_FIN"), flags, nil)
 		end
 
-		v.drawScaled(anim - (10 * FRACUNIT), y - (12 * FRACUNIT), FRACUNIT / 2, getPingPatch(v, player), flags, nil)
+		v.drawScaled(anim - (10 * FRACUNIT), py - (12 * FRACUNIT), FRACUNIT / 2, getPingPatch(v, player), flags, nil)
 
 		//
+	end
 
-		y = $ + (20 * FRACUNIT)
+	//
 
-		if (i > 10) then
-			v.drawString(anim - (148 * FRACUNIT), (194 * FRACUNIT), string.format("There are more players. (\x82+%d\x80)", #player_list - 10), V_ALLOWLOWERCASE | V_SNAPTOBOTTOM, "small-fixed-center")
-			break
+	if (scroller.delay) then
+		scroller.delay = $ - 1
+	elseif (scroller.direction > 0) then
+		if (scroller.pos < ((#player_list * 20) - scaledheight) << 1) then
+			scroller.pos = $ + 1
+		else
+			scroller.delay = TICRATE
+			scroller.direction = -1
 		end
-
-		//
+	else
+		if (scroller.pos > 0) then
+			scroller.pos = $ - 1
+		else
+			scroller.delay = TICRATE
+			scroller.direction = 1
+		end
 	end
 
 	//
