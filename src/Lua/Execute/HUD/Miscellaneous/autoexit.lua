@@ -15,7 +15,7 @@ local function drawNotification(v)
 	
 	//
 	
-	joeFuncs.drawFill(v, 0, anim - (8 * FRACUNIT), width, 22 * FRACUNIT, 31, V_20TRANS | V_SNAPTOLEFT | flags)
+	joeFuncs.drawFill(v, 0, anim - (8 * FRACUNIT), width, 22 * FRACUNIT, 31 | V_20TRANS | V_SNAPTOLEFT | flags)
 	v.drawString(x, anim, "The level will be \x85" .. "skipped" .. "\x80 after \x82" .. joeVars.autoExit.value .. "\x80 minutes.", V_ALLOWLOWERCASE | flags, "thin-fixed-center")
 	
 	//

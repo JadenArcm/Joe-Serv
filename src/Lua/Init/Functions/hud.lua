@@ -10,11 +10,17 @@ end
 
 //
 
-joeFuncs.drawFill = function(v, x, y, width, height, color, flags)
+joeFuncs.drawFill = function(v, x, y, width, height, params)
 	//
 
-	local colors = max(0, min(color, 255))
+	local colors = max(0, (params & 255))
 	local patch = v.cachePatch(string.format("~%03d", colors))
+
+	local flags = params
+
+	//
+
+	width, height = abs($1), abs($2)
 
 	//
 

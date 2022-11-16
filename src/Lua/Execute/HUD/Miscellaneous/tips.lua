@@ -65,7 +65,7 @@ local function drawTips(v)
 	
 	//
 
-	joeFuncs.drawFill(v, 0, anim - (8 * FRACUNIT), width, 22 * FRACUNIT, 31, V_20TRANS | V_SNAPTOLEFT | flags)
+	joeFuncs.drawFill(v, 0, anim - (8 * FRACUNIT), width, 22 * FRACUNIT, 31 | V_20TRANS | V_SNAPTOLEFT | flags)
 	v.drawString(x, anim, joeVars.tipText, V_ALLOWLOWERCASE | flags, "small-fixed-center")
 	
 	//

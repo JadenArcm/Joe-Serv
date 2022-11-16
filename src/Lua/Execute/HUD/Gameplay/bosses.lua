@@ -51,8 +51,8 @@ local function drawBosses(v, player)
 			local screen = joeFuncs.mapToScreen(v, player, {boss.x, boss.y, boss.z + zoffs})
 
 			if (screen.visible) then
-				joeFuncs.drawFill(v, screen.x - (bar_width / 2), screen.y - (2 * FRACUNIT), bar_width, bar_height, 31, screen.flags)
-				joeFuncs.drawFill(v, (screen.x + (2 * FRACUNIT)) - (bar_width / 2), screen.y, bar_health, bar_height - (4 * FRACUNIT), bar_flash, screen.flags)
+				joeFuncs.drawFill(v, screen.x - (bar_width / 2), screen.y - (2 * FRACUNIT), bar_width, bar_height, 31 | screen.flags)
+				joeFuncs.drawFill(v, (screen.x + (2 * FRACUNIT)) - (bar_width / 2), screen.y, bar_health, bar_height - (4 * FRACUNIT), bar_flash | screen.flags)
 
 				v.drawString(screen.x, screen.y - (7 * FRACUNIT), boss_name, screen.flags | V_ALLOWLOWERCASE | V_YELLOWMAP, "small-fixed-center")
 				v.drawString(screen.x, screen.y, boss_health, screen.flags, "thin-fixed-center")

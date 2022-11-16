@@ -182,9 +182,9 @@ local function drawLives(v, player)
 
 		v.drawString(anim - (3 * FRACUNIT), y + FRACUNIT, joeFuncs.getPlayerName(player, 1) .. (G_GametypeUsesLives() and ("\x80 | " .. player_lives) or ""), flags | V_ALLOWLOWERCASE, "small-fixed-right")
 
-		joeFuncs.drawFill(v, anim - (35 * FRACUNIT), y + (6 * FRACUNIT), (player.hp.max + 2) * FRACUNIT, 3 * FRACUNIT, 31, flags)
-		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.max * FRACUNIT, FRACUNIT, 24, flags)
-		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.current * FRACUNIT, FRACUNIT, health_color, flags)
+		joeFuncs.drawFill(v, anim - (35 * FRACUNIT), y + (6 * FRACUNIT), (player.hp.max + 2) * FRACUNIT, 3 * FRACUNIT, 31 | flags)
+		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.max * FRACUNIT, FRACUNIT, 24 | flags)
+		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.current * FRACUNIT, FRACUNIT, health_color | flags)
 
 		//
 	else
