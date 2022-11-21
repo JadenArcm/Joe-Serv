@@ -18,6 +18,7 @@ joeVars.autoTimer = 0
 //
 
 joeVars.HUDTicker = 0
+joeVars.RingTicker = 0
 
 //
 
@@ -58,6 +59,7 @@ local function resetVars()
 	//
 
 	joeVars.HUDTicker = 0
+	joeVars.RingTicker = 0
 
 	//
 

@@ -1,52 +1,47 @@
 //
 
 local damagetypes = {
-	[DMG_WATER] = 10,
-	[DMG_FIRE] = 7,
+	[DMG_WATER]	   = 10,
+	[DMG_FIRE]	   = 7,
 	[DMG_ELECTRIC] = 5,
-	[DMG_SPIKE] = 3,
-	[DMG_NUKE] = 25,
+	[DMG_SPIKE]    = 3,
+	[DMG_NUKE]	   = 25,
 
-	[DMG_INSTAKILL] = INT8_MAX,
-	[DMG_DROWNED] = INT8_MAX,
+	[DMG_INSTAKILL]  = INT8_MAX,
+	[DMG_DROWNED]    = INT8_MAX,
 	[DMG_SPACEDROWN] = INT8_MAX,
-	[DMG_DEATHPIT] = INT8_MAX,
-	[DMG_CRUSHED] = INT8_MAX
+	[DMG_DEATHPIT] 	 = INT8_MAX,
+	[DMG_CRUSHED]    = INT8_MAX
 }
 
 //
 
-local function healHealth(special, toucher)
+local function healHealth(player)
 	//
 
-	local player = toucher.player
-
-	//
-
-	if not joeFuncs.isValid(special) then return end
-
-	if not joeFuncs.isValid(toucher) then return end
 	if not joeFuncs.isValid(player) then return end
+	if not (player.hp.enabled) then return end
 
 	//
 
-	if (player.hp.enabled) then
-		if (special.type == MT_RING) or (special.type == MT_COIN) then
-			player.hp.current = min($ + 1, player.hp.max)
-		end
+	if (player.hp.delay) and (player.playerstate ~= PST_DEAD) then
+		player.hp.delay = max(0, $ - 1)
+	end
 
-		if (special.type == MT_TOKEN) then
-			player.hp.current = min($ + 5, player.hp.max)
-		end
+	if not (player.hp.soundp) and (player.hp.current <= (player.hp.max / 4)) then
+		S_StartSound(nil, sfx_jwarn, player)
+		player.hp.soundp = true
+	end
 
-		if (special.type == MT_COOPEMBLEM) then
-			player.hp.current = min($ + 15, player.hp.max)
-		end
+	//
+
+	if (leveltime % 2) and not (player.hp.delay) then
+		player.hp.current = min($ + (FRACUNIT / 24), player.hp.max)
 	end
 
 	//
 end
-addHook("TouchSpecial", healHealth)
+addHook("PlayerThink", healHealth)
 
 //
 
@@ -62,16 +57,27 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 
 	if not joeFuncs.isValid(mo) then return end
 	if (player.playerstate ~= PST_LIVE) or (player.spectator) then return end
-	
+
 	if (player.pflags & PF_GODMODE) then return false end
-	if (player.powers[pw_super] > 0) or (player.powers[pw_flashing] > 0) or (player.powers[pw_invulnerability] > 0) then return false end
+
+	for _, types in ipairs({DMG_CRUSHED, DMG_DROWNED, DMG_DEATHPIT, DMG_INSTAKILL, DMG_SPACEDROWN}) do
+		if (dmgtype == types) then
+			player.hp.current = 0
+			return true
+		end
+	end
+
+	for _, powers in ipairs({pw_super, pw_invulnerability, pw_flashing}) do
+		if (player.powers[powers] > 0) then return false end
+	end
+
 	if player.powers[pw_shield] then return nil end
 
 	//
 
 	if (damage) then
-		player.hp.current = max(0, $ - damage)
-		player.hp.delay = TICRATE * 5
+		player.hp.current = max(0, $ - (damage * FRACUNIT))
+		player.hp.delay = 5 * TICRATE
 
 		P_ResetPlayer(player)
 		mo.state = S_PLAY_PAIN
@@ -79,7 +85,11 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 		P_SetObjectMomZ(mo, (mo.eflags & MFE_UNDERWATER) and (3 * FRACUNIT) or (6 * FRACUNIT), false)
 		P_InstaThrust(mo, mo.angle + ANGLE_180, 10 * mo.scale)
 
-		player.powers[pw_flashing] = P_RandomRange(TICRATE, TICRATE * 2)
+		player.powers[pw_flashing] = TICRATE + (TICRATE / 2)
+
+		if (player.hp.current >= (player.hp.max / 4)) then
+			player.hp.soundp = false
+		end
 
 		if (player.hp.current) then
 			S_StartSound(mo, sfx_jhurt)
@@ -88,10 +98,6 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 				P_StartQuake(12 * FRACUNIT, 8)
 			end
 		end
-	end
-
-	if (player.hp.current == (player.hp.max / 4)) then
-		S_StartSound(nil, sfx_jwarn, player)
 	end
 
 	//
@@ -115,6 +121,7 @@ local function setHealth(player)
 
 	if (player.hp.enabled) then
 		player.hp.current = player.hp.max
+		player.hp.delay = TICRATE
 	end
 
 	//

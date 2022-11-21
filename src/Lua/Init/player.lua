@@ -8,10 +8,10 @@ local function playerVars(player)
 	player.chat.reason = ""
 
 	//
-	
+
 	player.deaths = {}
 	player.deaths["normal"] = false
-	
+
 	player.deaths["fire"] = false
 	player.deaths["spikes"] = false
 	player.deaths["electric"] = false
@@ -23,10 +23,12 @@ local function playerVars(player)
 	//
 
 	player.hp = {}
-	player.hp.max = 30
+	player.hp.max = 30 * FRACUNIT
+	player.hp.delay = 0
 	player.hp.enabled = false
+	player.hp.soundp = false
 	player.hp.current = player.hp.max
-	
+
 	//
 
 	player.force = {}

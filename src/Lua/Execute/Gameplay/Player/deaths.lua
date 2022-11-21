@@ -12,7 +12,7 @@ local blackListedSkins = {
 
 	["frank"] = true,
 	["dummy"] = true,
-	
+
 	["kirby"] = true,
 	["metaknight"] = true
 }
@@ -38,14 +38,14 @@ addHook("PlayerSpawn", resetVars)
 
 local function deathLogic(player)
 	//
-	
+
 	if not joeFuncs.isValid(player.mo) then return end
 
 	if (player.playerstate ~= PST_DEAD) then return end
 	if (blackListedSkins[player.skin] == true) then return end
-	
+
 	//
-	
+
 	local mo = player.mo
 
 	//
@@ -58,7 +58,7 @@ local function deathLogic(player)
 				mo.flags = $ &~ MF_NOCLIPHEIGHT
 			end
 		end
-		
+
 		if (P_PlayerTouchingSectorSpecial(player, 1, 3) and P_IsObjectOnGround(mo)) then
 			mo.flags = $ | (MF_NOCLIPHEIGHT)
 			mo.momx, mo.momy = 0, 0
@@ -81,7 +81,7 @@ local function deathLogic(player)
 
 			fire.state = S_SPINDUST_FIRE1
 			fire.blendmode = AST_ADD
-		
+
 			P_SetScale(fire, mo.scale / 2)
 			P_SetObjectMomZ(fire, FRACUNIT / 2, true)
 		end
@@ -102,7 +102,7 @@ local function deathLogic(player)
 
 			mo.color = ({SKINCOLOR_YELLOW, SKINCOLOR_JET, SKINCOLOR_ORANGE, SKINCOLOR_ICY})[P_RandomRange(1, 4)]
 			mo.rollangle = FixedAngle(P_RandomRange(-15, 15) * FRACUNIT)
-			
+
 			if not P_RandomRange(0, 6) then
 				S_StartSound(mo, sfx_s3k79, nil)
 			end
@@ -110,7 +110,7 @@ local function deathLogic(player)
 
 		if (mo.fuse == 1) then
 			mo.spritexoffset, mo.spriteyoffset = 0, 0
-			
+
 			mo.state = S_PLAY_PAIN
 			mo.color = SKINCOLOR_CARBON
 			mo.fuse = -1
@@ -125,68 +125,68 @@ local function deathLogic(player)
 			S_StartSound(mo, sfx_s3k51, nil)
 		end
 	end
-	
+
 	//
-	
+
 	if player.deaths["drowned"] then
 		P_SetObjectMomZ(mo, FRACUNIT, false)
 
 		mo.state = S_PLAY_DRWN
 		mo.rollangle = $ + ANG1
 	end
-	
+
 	if player.deaths["crushed"] then
 		mo.state = S_PLAY_DEAD
 		mo.spriteyscale = FRACUNIT / 6
 	end
 
 	if player.deaths["deathpit"] then
-		P_SetObjectMomZ(mo, -(FRACUNIT / 2), true)
+		P_SetObjectMomZ(mo, -FRACUNIT, true)
 
 		mo.state = S_PLAY_PAIN
-		player.drawangle = $ + ANG30
+		player.drawangle = $ + (ANG10 * 5)
 	end
-	
+
 	//
-	
+
 	if player.deaths["normal"] then
 		if (mo.fuse > 1) then
 			P_InstaThrust(mo, (mo.angle + ANGLE_180), -10 * mo.scale)
-		
+
 			mo.state = S_PLAY_PAIN
 			mo.rollangle = $ + ANG15
 			player.drawangle = $ + ANG10
 		end
-		
+
 		if (mo.fuse == 1) then
 			local explosion = P_SpawnMobjFromMobj(mo, 0, 0, 0, MT_THOK)
 			explosion.state = S_STOCKEXPLOSION
 			explosion.fuse = TICRATE
-			
+
 			mo.state = S_INVISIBLE
 			mo.momx, mo.momy, mo.momz = 0, 0, 0
-			
+
 			S_StartSound(mo, sfx_jexpl, nil)
-			
+
 			if (player == displayplayer) then
 				P_FlashPal(player, PAL_WHITE, 5)
 				P_StartQuake(8 * FRACUNIT, 10)
 			end
 		end
 	end
-	
+
 	//
 end
 addHook("PlayerThink", deathLogic)
 
 local function deathToggles(mo, _, _, dmgtype)
 	//
-	
+
 	if not joeFuncs.isValid(mo) then return end
 	if (blackListedSkins[mo.skin] == true) then return end
-	
+
 	//
-	
+
 	local player = mo.player
 
 	//
@@ -202,7 +202,7 @@ local function deathToggles(mo, _, _, dmgtype)
 
 		S_StartSound(mo, sfx_spkdth, nil)
 	end
-	
+
 	if (dmgtype == DMG_FIRE) then
 		player.deaths["fire"] = true
 
@@ -211,7 +211,7 @@ local function deathToggles(mo, _, _, dmgtype)
 
 		mo.colorized = true
 		mo.color = SKINCOLOR_CARBON
-		
+
 		mo.momx, mo.momy = $1 / 4, $2 / 4
 		P_SetObjectMomZ(mo, FRACUNIT * 8, false)
 
@@ -246,10 +246,10 @@ local function deathToggles(mo, _, _, dmgtype)
 
 	if (dmgtype == DMG_CRUSHED) then
 		player.deaths["crushed"] = true
-		
+
 		mo.fuse = -1
 		mo.height, mo.shadowscale = 0, $2 / 2
-		
+
 		S_StartSound(mo, sfx_jsplat, nil)
 	end
 
@@ -268,13 +268,13 @@ local function deathToggles(mo, _, _, dmgtype)
 
 	if (dmgtype == DMG_INSTAKILL) or (dmgtype == DMG_WATER) or (dmgtype == DMG_NUKE) or (dmgtype == 0) then
 		player.deaths["normal"] = true
-		
+
 		mo.flags = $ | (MF_NOGRAVITY) &~ (MF_NOCLIP | MF_NOCLIPHEIGHT)
 		mo.fuse = TICRATE - 5
-		
+
 		mo.momx, mo.momy = $1 / 4, $2 / 4
 		P_SetObjectMomZ(mo, 14 * FRACUNIT, false)
-		
+
 		S_StartSound(mo, sfx_jslip, nil)
 	end
 
@@ -285,7 +285,7 @@ local function deathToggles(mo, _, _, dmgtype)
 			player.lives = max(0, $ - 1)
 		end
 	end
-	
+
 	return true
 
 	//

@@ -61,10 +61,11 @@ local function drawWeapon(v, player, x, y, scale, flags, weapon)
 	if not (weapon) then
 		v.drawScaled(x, y, scale, v.cachePatch(matchWeapons[ring_selection].patch), flags | gflags.rings, nil)
 		v.drawString(x + (12 * FRACUNIT), y + (FRACUNIT / 2), ring_amount, flags | gflags.rings | gflags.ring_text, "thin-fixed")
-	else
-		v.drawScaled(x, y, scale, v.cachePatch(matchWeapons[weapon].patch), flags | gflags.global, nil)
-		v.drawString(x + (12 * FRACUNIT), y + (FRACUNIT / 2), player.powers[matchWeapons[weapon].power], flags | gflags.global | gflags.text, "thin-fixed")
+		return
 	end
+
+	v.drawScaled(x, y, scale, v.cachePatch(matchWeapons[weapon].patch), flags | gflags.global, nil)
+	v.drawString(x + (12 * FRACUNIT), y + (FRACUNIT / 2), player.powers[matchWeapons[weapon].power], flags | gflags.global | gflags.text, "thin-fixed")
 
 	//
 
@@ -178,25 +179,17 @@ local function drawLives(v, player)
 	v.drawScaled(anim, y, scale, patch, flags, colormap)
 
 	if (player.hp.enabled) then
-		//
-
 		v.drawString(anim - (3 * FRACUNIT), y + FRACUNIT, joeFuncs.getPlayerName(player, 1) .. (G_GametypeUsesLives() and ("\x80 | " .. player_lives) or ""), flags | V_ALLOWLOWERCASE, "small-fixed-right")
 
-		joeFuncs.drawFill(v, anim - (35 * FRACUNIT), y + (6 * FRACUNIT), (player.hp.max + 2) * FRACUNIT, 3 * FRACUNIT, 31 | flags)
-		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.max * FRACUNIT, FRACUNIT, 24 | flags)
-		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.current * FRACUNIT, FRACUNIT, health_color | flags)
-
-		//
+		joeFuncs.drawFill(v, anim - (35 * FRACUNIT), y + (6 * FRACUNIT), player.hp.max + (2 * FRACUNIT), 3 * FRACUNIT, 31 | flags)
+		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.max, FRACUNIT, 24 | flags)
+		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.current, FRACUNIT, health_color | flags)
 	else
-		//
-
 		v.drawString(anim - (3 * FRACUNIT), y + (yoffs * FRACUNIT), joeFuncs.getPlayerName(player, 1), flags | V_ALLOWLOWERCASE, "small-fixed-right")
 
 		if G_GametypeUsesLives() then
 			v.drawString(anim - (3 * FRACUNIT), y + (5 * FRACUNIT), player_lives, flags | V_ALLOWLOWERCASE, "small-fixed-right")
 		end
-
-		//
 	end
 
 	//
@@ -205,14 +198,10 @@ end
 local function drawRingslingerWeapons(v, player)
 	//
 
-	if (player.spectator) then return end
-
-	//
-
 	local x, y = (13 * FRACUNIT), (29 * FRACUNIT)
 	local flags = V_SNAPTOTOP | V_SNAPTOLEFT | V_PERPLAYER
 
-	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, -(640 * FRACUNIT), x)
+	local anim = joeFuncs.getEasing("inoutexpo", joeVars.RingTicker, -(640 * FRACUNIT), x)
 	local scale = FRACUNIT / 2
 
 	//
@@ -227,14 +216,10 @@ end
 local function drawPowerstones(v, player)
 	//
 
-	if (player.spectator) then return end
-
-	//
-
 	local x, y = (275 * FRACUNIT), (42 * FRACUNIT)
 	local flags = V_SNAPTOTOP | V_SNAPTORIGHT | V_PERPLAYER
 
-	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (640 * FRACUNIT), x)
+	local anim = joeFuncs.getEasing("inoutexpo", joeVars.RingTicker, (640 * FRACUNIT), x)
 
 	//
 
@@ -307,9 +292,14 @@ local function drawHUD(v, player)
 
 	if (leveltime > 20) and not (joeVars.scoresKey) then
 		joeVars.HUDTicker = min($ + 1, TICRATE)
+		joeVars.RingTicker = (player.spectator) and max(0, $ - 1) or min($ + 1, TICRATE)
 	end
 
 	if (joeVars.scoresKey) then
+		if (joeVars.RingTicker > 0) then
+			joeVars.RingTicker = max(0, $ - 1)
+		end
+
 		joeVars.HUDTicker = max(0, $ - 1)
 	end
 
