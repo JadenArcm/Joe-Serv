@@ -187,6 +187,29 @@ local commandInfo = {
 	},
 
 	{
+		name = "setgravity",
+		admin = true,
+
+		func = function(player, grav)
+			if not inLevel(player) then return end
+
+			if not (grav) then
+				printHelp(player, "setgravity <gravity>", "Changes the current gravity. Negative values are valid too!")
+				return
+			end
+
+			grav = float2Fixed($)
+
+			if (grav == nil) then
+				printError(player, "Seems like you entered a string, and not a number.")
+				return
+			end
+
+			gravity = grav
+		end
+	},
+
+	{
 		name = "goto",
 		admin = true,
 
@@ -408,8 +431,8 @@ local commandInfo = {
 		func = function(player)
 			if not inLevel(player) then return end
 
-			if (gametyperules & GTR_RINGSLINGER) and not All7Emeralds(player.powers[pw_emeralds]) then
-				printError(player, "You need all of the \x87" .. "Powerstones" .. "\x80 to use this.")
+			if (gametyperules & GTR_RINGSLINGER) and (player.rings <= 120) then
+				printError(player, "You need more than \x82" .. "120 Rings" .. "\x80 to use this.")
 				return
 			end
 

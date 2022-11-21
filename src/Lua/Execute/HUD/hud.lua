@@ -61,11 +61,10 @@ local function drawWeapon(v, player, x, y, scale, flags, weapon)
 	if not (weapon) then
 		v.drawScaled(x, y, scale, v.cachePatch(matchWeapons[ring_selection].patch), flags | gflags.rings, nil)
 		v.drawString(x + (12 * FRACUNIT), y + (FRACUNIT / 2), ring_amount, flags | gflags.rings | gflags.ring_text, "thin-fixed")
-		return
+	else
+		v.drawScaled(x, y, scale, v.cachePatch(matchWeapons[weapon].patch), flags | gflags.global, nil)
+		v.drawString(x + (12 * FRACUNIT), y + (FRACUNIT / 2), player.powers[matchWeapons[weapon].power], flags | gflags.global | gflags.text, "thin-fixed")
 	end
-
-	v.drawScaled(x, y, scale, v.cachePatch(matchWeapons[weapon].patch), flags | gflags.global, nil)
-	v.drawString(x + (12 * FRACUNIT), y + (FRACUNIT / 2), player.powers[matchWeapons[weapon].power], flags | gflags.global | gflags.text, "thin-fixed")
 
 	//
 
