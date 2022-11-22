@@ -242,33 +242,42 @@ local function drawPowerstones(v, player)
 	//
 end
 
-local function drawFirstPerson(v, player)
+local function drawDebugInfo(v, player)
 	//
 
-	if (player.spectator) or (camera.chase) then return end
-
-	//
-
-
-	local x, y = (32 * FRACUNIT), (184 * FRACUNIT)
-	local flags = V_SNAPTOBOTTOM | V_SNAPTOLEFT | V_HUDTRANS | V_PERPLAYER
-
-	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (400 * FRACUNIT), y)
+	if not joeVars.ownDebug.value then return end
+	if not joeFuncs.isValid(player.realmo) then return end
 
 	//
 
-	local spr2, spr2flip = v.getSprite2Patch(player.skin, player.realmo.sprite2, (player.powers[pw_super] > 0), player.realmo.frame, 8, player.realmo.rollangle)
-	local spr, sprflip = v.getSpritePatch(player.realmo.sprite, player.realmo.frame, 8, player.realmo.rollangle)
 
-	local sprites = {{spr2, spr2flip}, {spr, sprflip}}
-	local mode = (player.realmo.sprite == SPR_PLAY) and 1 or 2
+	local x, y = (14 * FRACUNIT), (156 * FRACUNIT)
+	local flags = V_SNAPTOBOTTOM | V_SNAPTOLEFT | V_PERPLAYER
 
-	local scale = {skin = (skins[player.skin].highresscale / 2), x = player.realmo.spritexscale, y = player.realmo.spriteyscale}
-	local color = joeFuncs.getSkincolor(v, player, false)
+	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (-640 * FRACUNIT), x)
+	local spec = (player.spectator) and V_60TRANS or 0
+
+	local val = {
+		x = "\x82" .. "X: \x80" .. (player.realmo.x >> FRACBITS),
+		y = "\x82" .. "Y: \x80" .. (player.realmo.y >> FRACBITS),
+		z = "\x82" .. "Z: \x80" .. (player.realmo.z >> FRACBITS),
+
+		angle = "\x83" .. "ANG: \x80" .. (AngleFixed(player.realmo.angle) >> FRACBITS),
+		aim   = "\x83" .. "AIM: \x80" .. (AngleFixed(player.aiming) >> FRACBITS),
+		speed = "\x87" .. "SPD: \x80" .. (FixedHypot(player.speed, player.realmo.momz) >> FRACBITS)
+	}
 
 	//
 
-	v.drawStretched(x, anim, FixedMul(scale.x, scale.skin), FixedMul(scale.y, scale.skin), sprites[mode][1], (sprites[mode][2] and V_FLIP or 0) | flags, color)
+	joeFuncs.drawFill(v, anim - (2 * FRACUNIT), y, 40 * FRACUNIT, 35 * FRACUNIT, 31 | V_20TRANS | flags)
+
+	v.drawString(anim, y + (2 * FRACUNIT), val.x, flags, "small-fixed")
+	v.drawString(anim, y + (7 * FRACUNIT), val.y, flags, "small-fixed")
+	v.drawString(anim, y + (12 * FRACUNIT), val.z, flags, "small-fixed")
+
+	v.drawString(anim, y + (19 * FRACUNIT), val.angle, flags | spec, "small-fixed")
+	v.drawString(anim, y + (24 * FRACUNIT), val.aim, flags | spec, "small-fixed")
+	v.drawString(anim, y + (29 * FRACUNIT), val.speed, flags | spec, "small-fixed")
 
 	//
 end
@@ -318,7 +327,7 @@ local function drawHUD(v, player)
 		drawPowerstones(v, player)
 	end
 
-	drawFirstPerson(v, player)
+	drawDebugInfo(v, player)
 
 	//
 end

@@ -24,7 +24,7 @@ local function healHealth(player)
 
 	//
 
-	if (player.hp.delay) and (player.playerstate ~= PST_DEAD) then
+	if (player.hp.delay) and (player.hp.health) then
 		player.hp.delay = max(0, $ - 1)
 	end
 
@@ -79,11 +79,11 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 		player.hp.current = max(0, $ - (damage * FRACUNIT))
 		player.hp.delay = 5 * TICRATE
 
-		P_ResetPlayer(player)
-		mo.state = S_PLAY_PAIN
-
 		P_SetObjectMomZ(mo, (mo.eflags & MFE_UNDERWATER) and (3 * FRACUNIT) or (6 * FRACUNIT), false)
 		P_InstaThrust(mo, mo.angle + ANGLE_180, 10 * mo.scale)
+
+		P_ResetPlayer(player)
+		mo.state = S_PLAY_PAIN
 
 		player.powers[pw_flashing] = TICRATE + (TICRATE / 2)
 

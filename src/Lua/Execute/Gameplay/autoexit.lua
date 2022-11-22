@@ -23,7 +23,7 @@ local function exitLogic()
 		end
 
 		if (exitTime >= (11 * TICRATE)) then
-			G_SetCustomExitVars(nil, 2)
+			G_SetCustomExitVars(gamemap, 2)
 			G_ExitLevel()
 		end
 
