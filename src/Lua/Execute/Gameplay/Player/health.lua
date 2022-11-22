@@ -24,7 +24,7 @@ local function healHealth(player)
 
 	//
 
-	if (player.hp.delay) and (player.hp.health) then
+	if (player.hp.delay) then
 		player.hp.delay = max(0, $ - 1)
 	end
 
@@ -35,7 +35,7 @@ local function healHealth(player)
 
 	//
 
-	if (leveltime % 2) and not (player.hp.delay) then
+	if not (leveltime % 4) and not (player.hp.delay) and (player.hp.current > 0) then
 		player.hp.current = min($ + (FRACUNIT / 24), player.hp.max)
 	end
 
