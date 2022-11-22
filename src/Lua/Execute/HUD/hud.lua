@@ -157,7 +157,7 @@ local function drawLives(v, player)
 	//
 
 	local x, y = (299 * FRACUNIT), (29 * FRACUNIT)
-	local flags = V_SNAPTORIGHT | V_SNAPTOTOP | V_HUDTRANS | V_PERPLAYER
+	local flags = V_SNAPTORIGHT | V_SNAPTOTOP | V_PERPLAYER | (player.spectator and V_HUDTRANSHALF or V_HUDTRANS)
 
 	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (640 * FRACUNIT), x)
 
@@ -170,7 +170,7 @@ local function drawLives(v, player)
 	local scale = FRACUNIT / 3
 
 	local colormap = joeFuncs.getSkincolor(v, player, false)
-	local health_color = (player.pflags & PF_GODMODE) and 131 or (((player.hp.current <= (player.hp.max / 4)) and 36) or ((player.hp.current <= (player.hp.max / 2)) and 73) or 113)
+	local health_color = (player.spectator and ((leveltime % TICRATE < 17) and 54 or 2)) or ((player.pflags & PF_GODMODE) and 131) or (((player.hp.current <= (player.hp.max / 4)) and 36) or ((player.hp.current <= (player.hp.max / 2)) and 73) or 113)
 
 	//
 
@@ -254,17 +254,17 @@ local function drawDebugInfo(v, player)
 	local x, y = (14 * FRACUNIT), (156 * FRACUNIT)
 	local flags = V_SNAPTOBOTTOM | V_SNAPTOLEFT | V_PERPLAYER
 
-	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (-640 * FRACUNIT), x)
+	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, -(640 * FRACUNIT), x)
 	local spec = (player.spectator) and V_60TRANS or 0
 
 	local val = {
-		x = "\x82" .. "X: \x80" .. (player.realmo.x >> FRACBITS),
-		y = "\x82" .. "Y: \x80" .. (player.realmo.y >> FRACBITS),
-		z = "\x82" .. "Z: \x80" .. (player.realmo.z >> FRACBITS),
+		x = "\x82" .. "X: \x80" .. (player.realmo.x / FRACUNIT),
+		y = "\x82" .. "Y: \x80" .. (player.realmo.y / FRACUNIT),
+		z = "\x82" .. "Z: \x80" .. (player.realmo.z / FRACUNIT),
 
-		angle = "\x83" .. "ANG: \x80" .. (AngleFixed(player.realmo.angle) >> FRACBITS),
-		aim   = "\x83" .. "AIM: \x80" .. (AngleFixed(player.aiming) >> FRACBITS),
-		speed = "\x87" .. "SPD: \x80" .. (FixedHypot(player.speed, player.realmo.momz) >> FRACBITS)
+		angle = "\x83" .. "ANG: \x80" .. (AngleFixed(player.realmo.angle) / FRACUNIT),
+		aim   = "\x83" .. "AIM: \x80" .. (AngleFixed(player.aiming) / FRACUNIT),
+		speed = "\x87" .. "SPD: \x80" .. (FixedHypot(player.speed, player.realmo.momz) / FRACUNIT)
 	}
 
 	//
