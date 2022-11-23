@@ -5,7 +5,7 @@ local emblemInfo = {
 	{B, SKINCOLOR_LAVENDER},
 	{C, SKINCOLOR_RED},
 	{D, SKINCOLOR_ORANGE},
-	{E, SKINCOLOR_GREEN},
+	{E, SKINCOLOR_EMERALD},
 	{F, SKINCOLOR_YELLOW},
 	{G, SKINCOLOR_COBALT}
 }
@@ -28,9 +28,10 @@ local function spawnEmblems()
 		//
 
 		mo.z = mo.floorz + (mt.z * FRACUNIT) + zoffs
-		
+
 		mo.oldz = mo.z
 		mo.orig = mt.angle
+		mo.spawn_v = true
 
 		mo.frame = emblemInfo[mo.orig][1] | (FF_PAPERSPRITE | FF_FULLBRIGHT)
 		mo.color = emblemInfo[mo.orig][2]
@@ -59,7 +60,7 @@ local function emblemThink(mo)
 	mo.shadowscale = (2 * FRACUNIT) / 3
 	mo.angle = $ + FixedAngle(2 * FRACUNIT)
 
-	mo.z = mo.oldz + (12 * abs(cos(leveltime * ANG2)))
+	mo.z = mo.oldz + (12 * abs(cos((leveltime * 2) * ANG2)))
 
 	//
 
@@ -99,7 +100,7 @@ local function touchedEmblem(mo, toucher)
 	//
 
 	return true
-	
+
 	//
 end
 addHook("TouchSpecial", touchedEmblem, MT_COOPEMBLEM)

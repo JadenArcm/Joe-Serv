@@ -72,7 +72,7 @@ local function drawPlayers(v)
 
 	local scaledwidth = v.width() / v.dupx()
 	local scaledheight = v.height() / v.dupy()
-	
+
 	//
 
 	for player in players.iterate do
@@ -208,20 +208,33 @@ local function drawNetInfo(v)
 
 		for i = 0, 6 do
 			local patch = v.cachePatch("TEMER" .. (i + 1))
-			local gflags = V_70TRANS
+			local alpha = V_70TRANS
 
 			if (emeralds & (1 << i)) then
-				gflags = 0
+				alpha = 0
 			end
 
-			v.drawScaled(anim + ((10 * FRACUNIT) * i), (173 * FRACUNIT), FRACUNIT, patch, V_SNAPTOBOTTOM | flags | gflags, nil)
+			v.drawScaled(anim + ((10 * FRACUNIT) * i), 173 * FRACUNIT, FRACUNIT, patch, V_SNAPTOBOTTOM | flags | alpha, nil)
 		end
 
 		//
 
-		if (joeVars.totalEmblems ~= 0) then
-			//
+		if (rawget(_G, "mpemeraldsave") or rawget(_G, "solchars")) and joeFuncs.isValid(consoleplayer) then
+			for i = 0, 6 do
+				local patch = v.cachePatch("TSEM" .. (i + 1))
+				local alpha = V_70TRANS
 
+				if ((netgame) and (mpemeraldsave & (1 << i))) or (consoleplayer.solemeralds & (1 << i)) then
+					alpha = 0
+				end
+
+				v.drawScaled((anim + (6 * FRACUNIT)) + ((9 * FRACUNIT) * i), 169 * FRACUNIT, FRACUNIT, patch, V_SNAPTOBOTTOM | flags | alpha, nil)
+			end
+		end
+
+		//
+
+		if (joeVars.totalEmblems > 0) and (#joeVars.emblemInfo > 0) then
 			table.sort(joeVars.emblemInfo, function(a, b) return (a.orig < b.orig) end)
 
 			for i, mo in ipairs(joeVars.emblemInfo) do
@@ -233,15 +246,9 @@ local function drawNetInfo(v)
 
 				v.drawScaled(anim + ((14 * FRACUNIT) * (i - 1)), (184 * FRACUNIT), FRACUNIT / 2, patch, V_SNAPTOBOTTOM | flags, color)
 			end
-
-			//
 		else
-			//
-
 			v.drawScaled(anim, (184 * FRACUNIT), FRACUNIT / 2, v.cachePatch("GOTITX"), V_SNAPTOBOTTOM | flags, v.getColormap(TC_RAINBOW, SKINCOLOR_JET))
 			v.drawString(anim + (16 * FRACUNIT), (186 * FRACUNIT), "No emblems?", V_SNAPTOBOTTOM | V_ALLOWLOWERCASE | flags, "small-fixed")
-
-			//
 		end
 
 		//
