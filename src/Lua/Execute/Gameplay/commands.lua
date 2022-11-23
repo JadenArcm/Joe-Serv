@@ -9,7 +9,7 @@ local function inLevel(player)
 	return false
 end
 
-local blacklistedMobjs = {MT_COOPEMBLEM, MT_PLAYER}
+local blacklistedMobjs = {MT_EMBLEM, MT_COOPEMBLEM, MT_PLAYER}
 
 //
 
@@ -186,7 +186,7 @@ local commandInfo = {
 
 			for _, types in ipairs(blacklistedMobjs) do
 				if (object_tospawn == types) then
-					printError(player, "That object can't be spawned. Please choose another type.")
+					printError(player, "\x82" .. ("MT_" .. string.upper(object)) .. "\x80 can't be spawned. Please choose another object.")
 					return
 				end
 			end

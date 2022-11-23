@@ -6,13 +6,17 @@ local emblemInfo = {
 	{C, SKINCOLOR_RED},
 	{D, SKINCOLOR_ORANGE},
 	{E, SKINCOLOR_EMERALD},
-	{F, SKINCOLOR_YELLOW},
-	{G, SKINCOLOR_COBALT}
+	{F, SKINCOLOR_GOLD},
+	{G, SKINCOLOR_CERULEAN},
+
+	{L, SKINCOLOR_YELLOW},
+	{M, SKINCOLOR_COBALT},
+	{P, SKINCOLOR_KETCHUP}
 }
 
 //
 
-local function spawnEmblems()
+local function spawnEmblems(nummap)
 	//
 
 	for mt in mapthings.iterate do
@@ -20,10 +24,9 @@ local function spawnEmblems()
 
 		if (mt.type ~= mobjinfo[MT_EMBLEM].doomednum) then continue end
 
-		//
-
 		local mo = P_SpawnMobj(mt.x * FRACUNIT, mt.y * FRACUNIT, 0, MT_COOPEMBLEM)
 		local zoffs = (mt.options & MTF_AMBUSH) and (18 * FRACUNIT) or 0
+		local frame = (mapheaderinfo[nummap].typeoflevel & TOL_NIGHTS) and (mt.angle + 7) or mt.angle
 
 		//
 
@@ -32,8 +35,8 @@ local function spawnEmblems()
 		mo.oldz = mo.z
 		mo.orig = mt.angle
 
-		mo.frame = emblemInfo[mo.orig][1] | (FF_PAPERSPRITE | FF_FULLBRIGHT)
-		mo.color = emblemInfo[mo.orig][2]
+		mo.frame = emblemInfo[frame][1] | (FF_PAPERSPRITE | FF_FULLBRIGHT)
+		mo.color = emblemInfo[frame][2]
 
 		//
 
@@ -59,7 +62,7 @@ local function emblemThink(mo)
 	mo.shadowscale = (2 * FRACUNIT) / 3
 	mo.angle = $ + FixedAngle(2 * FRACUNIT)
 
-	mo.z = mo.oldz + (12 * abs(cos((leveltime * 2) * ANG2)))
+	mo.z = mo.oldz + (14 * abs(cos((leveltime * 2) * ANG2)))
 
 	//
 

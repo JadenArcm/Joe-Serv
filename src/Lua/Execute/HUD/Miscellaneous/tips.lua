@@ -13,6 +13,7 @@ local tipTexts = {
 
 	"You don't like names on top of players? Disable it with \x87" .. "joe_nametags" .. "\x80.",
 	"Are you bored? Don't know what to do? Search some emblems with \x87" .. "joe_emblemradar" .. "\x80!",
+	"You can use commands in chat! Just use the \x87" .. "/cmd <command>" .. "\x80 prefix and call it a day.",
 
 	"\x85" .. "Joe" .. "\x80 is watching you everywhere. No matter what. ALL HAIL \x85" .. "JOE" .. "\x80!",
 	"\x85" .. "Among Us" .. "\x80, is basically life. If you don't like it, you will \x85" .. "SUFFER" .. "\x80."
