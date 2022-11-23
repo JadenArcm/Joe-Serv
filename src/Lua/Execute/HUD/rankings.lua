@@ -228,7 +228,7 @@ local function drawNetInfo(v)
 					alpha = 0
 				end
 
-				v.drawScaled((anim + (6 * FRACUNIT)) + ((9 * FRACUNIT) * i), 169 * FRACUNIT, FRACUNIT, patch, V_SNAPTOBOTTOM | flags | alpha, nil)
+				v.drawScaled((anim + (7 * FRACUNIT)) + ((9 * FRACUNIT) * i), 169 * FRACUNIT, FRACUNIT, patch, V_SNAPTOBOTTOM | flags | alpha, nil)
 			end
 		end
 
@@ -241,10 +241,10 @@ local function drawNetInfo(v)
 				local frame = string.char((mo.frame & FF_FRAMEMASK) + 65)
 				local patch = (not mo.health) and v.cachePatch("GOTIT" .. frame) or v.cachePatch("NEEDIT")
 
-				local color_flash = SKINCOLOR_SUPERGOLD1 + abs(((leveltime >> 1) % 9) - 4)
-				local color = (joeVars.collectedEmblems >= joeVars.totalEmblems) and v.getColormap(TC_RAINBOW, color_flash) or v.getColormap(TC_DEFAULT, mo.color)
+				local eflgs = (joeVars.collectedEmblems >= joeVars.totalEmblems) and V_ADD or 0
+				local color = (joeVars.collectedEmblems >= joeVars.totalEmblems) and TC_RAINBOW or TC_DEFAULT
 
-				v.drawScaled(anim + ((14 * FRACUNIT) * (i - 1)), (184 * FRACUNIT), FRACUNIT / 2, patch, V_SNAPTOBOTTOM | flags, color)
+				v.drawScaled(anim + ((14 * FRACUNIT) * (i - 1)), (184 * FRACUNIT), FRACUNIT / 2, patch, V_SNAPTOBOTTOM | flags | eflgs, v.getColormap(color, mo.color))
 			end
 		else
 			v.drawScaled(anim, (184 * FRACUNIT), FRACUNIT / 2, v.cachePatch("GOTITX"), V_SNAPTOBOTTOM | flags, v.getColormap(TC_RAINBOW, SKINCOLOR_JET))

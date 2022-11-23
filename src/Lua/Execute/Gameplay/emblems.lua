@@ -31,7 +31,6 @@ local function spawnEmblems()
 
 		mo.oldz = mo.z
 		mo.orig = mt.angle
-		mo.spawn_v = true
 
 		mo.frame = emblemInfo[mo.orig][1] | (FF_PAPERSPRITE | FF_FULLBRIGHT)
 		mo.color = emblemInfo[mo.orig][2]
