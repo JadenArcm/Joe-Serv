@@ -224,7 +224,7 @@ local function drawNetInfo(v)
 				local patch = v.cachePatch("TSEM" .. (i + 1))
 				local alpha = V_70TRANS
 
-				if ((netgame) and (mpemeraldsave & (1 << i))) or (consoleplayer.solemeralds & (1 << i)) then
+				if ((netgame) and (mpemeraldsave & (1 << i))) or (consoleplayer.solemeralds and (consoleplayer.solemeralds & (1 << i))) then
 					alpha = 0
 				end
 
@@ -306,7 +306,7 @@ local function drawScores(v)
 
 	//
 
-	v.fadeScreen(0xFA00, min(joeVars.scoresTicker, 10))
+	v.fadeScreen(0xFF00, min(joeVars.scoresTicker, 24))
 
 	if (netgame or multiplayer) then
 		drawNetInfo(v)

@@ -14,6 +14,8 @@ local emblemInfo = {
 	{P, SKINCOLOR_KETCHUP}
 }
 
+local MAXSPINV = (2 * FRACUNIT)
+
 //
 
 local function spawnEmblems(nummap)
@@ -34,6 +36,7 @@ local function spawnEmblems(nummap)
 
 		mo.oldz = mo.z
 		mo.orig = mt.angle
+		mo.spinang = 0
 
 		mo.frame = emblemInfo[frame][1] | (FF_PAPERSPRITE | FF_FULLBRIGHT)
 		mo.color = emblemInfo[frame][2]
@@ -59,16 +62,25 @@ local function emblemThink(mo)
 
 	//
 
-	mo.shadowscale = (2 * FRACUNIT) / 3
-	mo.angle = $ + FixedAngle(2 * FRACUNIT)
-
-	mo.z = mo.oldz + (14 * abs(cos((leveltime * 2) * ANG2)))
-
-	//
+	if (mo.spinang > 0) then
+		mo.spinang = max(MAXSPINV, $ - (FRACUNIT / 3))
+	end
 
 	if not (mo.health) then
 		mo.frame = $ | FF_TRANS50
 	end
+
+	if (joeVars.collectedEmblems >= joeVars.totalEmblems) then
+		mo.frame = $ &~ FF_TRANS50
+		mo.blendmode = AST_ADD
+	end
+
+	//
+
+	mo.shadowscale = (2 * FRACUNIT) / 3
+	mo.angle = $ + FixedAngle((mo.spinang > 0) and mo.spinang or MAXSPINV)
+
+	mo.z = mo.oldz + (14 * abs(cos((leveltime * 2) * ANG2)))
 
 	//
 end
@@ -85,7 +97,9 @@ local function touchedEmblem(mo, toucher)
 	//
 
 	joeVars.collectedEmblems = $ + 1
+
 	mo.health = 0
+	mo.spinang = TICRATE * FRACUNIT
 
 	//
 
