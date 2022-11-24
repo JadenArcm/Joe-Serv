@@ -22,8 +22,6 @@ joeFuncs.drawFill = function(v, x, y, width, height, params)
 
 	width, height = abs($1), abs($2)
 
-	//
-
 	v.drawCropped(x, y, width, height, patch, flags, nil, 0, 0, FRACUNIT, FRACUNIT)
 
 	//
@@ -31,13 +29,13 @@ end
 
 //
 
-joeFuncs.drawNum = function(v, x, y, number, flags, font, align, space, pad)
+joeFuncs.drawNum = function(v, x, y, number, flags, params) -- {params}: font, space, pad, align
 	//
 
-	font = $ or "STTNUM"
-	flags = $ or 0
-	space = $ or 0
-	pad = $ or 0
+	local font  = (params) and params.font  or "STTNUM"
+	local space = (params) and params.space or 0
+	local pad   = (params) and params.pad   or 0
+	local align = (params) and params.align or "left"
 
 	local newx = x
 	local alignx = 0
@@ -126,7 +124,7 @@ joeFuncs.mapToScreen = function(v, player, mo)
 	sx = FixedMul(tan($), calculation * FRACUNIT) + (160 * FRACUNIT)
 	sy = (FixedDiv(cam[3] - mo[3], y_distance) * calculation) + (100 * FRACUNIT) + (tan(cam[5]) * calculation)
 
-	local t_distance = max(0, y_distance - (2048 * FRACUNIT / 2)) * 20
+	local t_distance = max(0, y_distance - ((2048 * FRACUNIT) / 2)) * 20
 	sf = min(9, (t_distance / FRACUNIT) / 2048) << V_ALPHASHIFT
 
 	//

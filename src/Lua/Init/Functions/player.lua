@@ -18,7 +18,7 @@ joeFuncs.getPlayer = function(node)
 	if tonumber(node) then
 		local num = tonumber(node)
 
-		if (num < 0) or (num >= #players) then
+		if (num < 0) or (num >= (#players - 1)) then
 			return -1
 		end
 
@@ -53,7 +53,7 @@ joeFuncs.getPlayerName = function(player, flags)
 	//
 
 	if (player == server) and not (player.realmo) then
-		return "\x82" .. "Server"
+		return "\x82" .. "[SERVER]"
 	end
 
 	//

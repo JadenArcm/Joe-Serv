@@ -6,7 +6,7 @@ joeVars.scoresTicker = 0
 //
 
 joeVars.tipText = ""
-joeVars.tipTimer = (TICRATE * 8)
+joeVars.tipTimer = (TICRATE * 15)
 joeVars.tipDelay = 0
 joeVars.tipTicker = 0
 
@@ -40,7 +40,7 @@ joeVars.chatSounds = {
 //
 
 joeVars.autoExit = CV_RegisterVar({name = "joe_autoexit", defaultvalue = "5", flags = CV_NETVAR, possiblevalue = {MIN = 5, MAX = 60}})
-joeVars.nameTags = CV_RegisterVar({name = "joe_nametags", defaultvalue = "On", flags = 0, possiblevalue = CV_OnOff})
+joeVars.nameTags = CV_RegisterVar({name = "joe_nametags", defaultvalue = "Off", flags = 0, possiblevalue = CV_OnOff})
 joeVars.emblemRadar = CV_RegisterVar({name = "joe_emblemradar", defaultvalue = "Off", flags = 0, possiblevalue = CV_OnOff})
 
 joeVars.ownDebug = CV_RegisterVar({name = "joe_owndebug", defaultvalue = "Off", flags = 0, possiblevalue = CV_OnOff})

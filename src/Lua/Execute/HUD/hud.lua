@@ -100,13 +100,13 @@ local function drawScoreRings(v, player)
 	//
 
 	v.drawScaled(anim, y, FRACUNIT, v.cachePatch(score_patch), flags, v.getColormap(TC_DEFAULT, score_color))
-	joeFuncs.drawNum(v, anim + (24 * FRACUNIT), y + (3 * FRACUNIT), player.score, flags, "JOE_BNUM", "left", 7)
+	joeFuncs.drawNum(v, anim + (24 * FRACUNIT), y + (3 * FRACUNIT), player.score, flags, {font = "JOE_BNUM", space = 7})
 
 	//
 
 	if not G_RingSlingerGametype() then
 		v.drawScaled(anim, y + (20 * FRACUNIT), FRACUNIT, v.cachePatch(ring_patch), flags, ring_color)
-		joeFuncs.drawNum(v, anim + (24 * FRACUNIT), y + (23 * FRACUNIT), player.rings, flags, "JOE_BNUM", "left", 7)
+		joeFuncs.drawNum(v, anim + (24 * FRACUNIT), y + (23 * FRACUNIT), player.rings, flags, {font = "JOE_BNUM", space = 7})
 	end
 
 	//
@@ -139,15 +139,15 @@ local function drawTimer(v, player)
 	v.drawScaled(anim, y - (3 * FRACUNIT), FRACUNIT, v.cachePatch(patch), flags, color)
 
 	if (CV_FindVar("timerres").value == 3) then
-		joeFuncs.drawNum(v, anim - (8 * FRACUNIT), y, info.tics, flags, "JOE_BNUM", "right", 7)
+		joeFuncs.drawNum(v, anim - (8 * FRACUNIT), y, info.tics, flags, {font = "JOE_BNUM", space = 7, align = "right"})
 	else
-		joeFuncs.drawNum(v, anim - (51 * FRACUNIT), y, G_TicsToMinutes(info.tics, true), flags, "JOE_BNUM", "right", 7)
+		joeFuncs.drawNum(v, anim - (51 * FRACUNIT), y, G_TicsToMinutes(info.tics, true), flags, {font = "JOE_BNUM", space = 7, align = "right"})
 
 		v.drawScaled(anim - (52 * FRACUNIT), y, FRACUNIT, v.cachePatch("JOE_COLON"), flags, nil)
-		joeFuncs.drawNum(v, anim - (30 * FRACUNIT), y, G_TicsToSeconds(info.tics), flags, "JOE_BNUM", "right", 7, 2)
+		joeFuncs.drawNum(v, anim - (30 * FRACUNIT), y, G_TicsToSeconds(info.tics), flags, {font = "JOE_BNUM", space = 7, pad = 2, align = "right"})
 
 		v.drawScaled(anim - (30  * FRACUNIT), y, FRACUNIT, v.cachePatch("JOE_PERIO"), flags | V_HUDTRANS, nil)
-		joeFuncs.drawNum(v, anim - (8 * FRACUNIT), y, G_TicsToCentiseconds(info.tics), flags, "JOE_BNUM", "right", 7, 2)
+		joeFuncs.drawNum(v, anim - (8 * FRACUNIT), y, G_TicsToCentiseconds(info.tics), flags, {font = "JOE_BNUM", space = 7, pad = 2, align = "right"})
 	end
 
 	//

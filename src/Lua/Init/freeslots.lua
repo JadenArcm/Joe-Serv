@@ -2,14 +2,12 @@
 
 freeslot(
 	"S_COOPEMBLEM", "MT_COOPEMBLEM",
-	
 	"S_STOCKEXPLOSION", "SPR_JEXP",
 	
 	"sfx_jjoin", "sfx_jleave", "sfx_jkick", "sfx_jfail",
 	"sfx_jtip",
 
-	"sfx_jhurt", "sfx_jwarn", "sfx_jheal",
-
+	"sfx_jhurt", "sfx_jwarn",
 	"sfx_jexpl", "sfx_jslip", "sfx_jsplat", "sfx_jfall"
 )
 
@@ -44,7 +42,6 @@ sfxinfo[sfx_jtip].caption = "A tip arrived"
 
 sfxinfo[sfx_jhurt].caption = "Hurt"
 sfxinfo[sfx_jwarn].caption = "Low on health"
-sfxinfo[sfx_jheal].caption = "Heal"
 
 //
 
