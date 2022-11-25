@@ -31,6 +31,12 @@ end
 
 //
 
+joeFuncs.getPlural = function(val, str)
+	return (val == 1) and str or (str .. "s")
+end
+
+//
+
 joeFuncs.getCountdown = function(tics)
 	//
 

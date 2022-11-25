@@ -18,7 +18,7 @@ local tipTexts = {
 
 	"\x85" .. "Joe" .. "\x80 is watching you everywhere. No matter what. ALL HAIL \x85" .. "JOE" .. "\x80!",
 	"\x85" .. "Among Us" .. "\x80, is basically life. If you don't like it, you will \x85" .. "SUFFER" .. "\x80.",
-	"Hi guys! I am \x8A" .. "Sans" .. "\x80 Undertale."
+	"hi guys. i am \x8A" .. "sans" .. "\x80 undertale."
 }
 
 //

@@ -1,5 +1,9 @@
 //
 
+joeVars.serverLife = 0
+
+//
+
 joeVars.scoresKey = false
 joeVars.scoresTicker = 0
 
@@ -79,6 +83,10 @@ addHook("MapLoad", resetVars)
 local function syncVars(net)
 	//
 
+	joeVars.serverLife = net($)
+
+	//
+
 	joeVars.tipText = net($)
 	joeVars.tipTimer = net($)
 	joeVars.tipDelay = net($)
@@ -99,5 +107,13 @@ local function syncVars(net)
 	//
 end
 addHook("NetVars", syncVars)
+
+//
+
+local function handleLifetime()
+	joeVars.serverLife = $ + 1
+end
+addHook("ThinkFrame", handleLifetime)
+addHook("IntermissionThinker", handleLifetime)
 
 //

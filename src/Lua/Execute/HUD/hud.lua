@@ -265,12 +265,34 @@ local function drawDebugInfo(v, player)
 
 	//
 
-
 	local x, y = (14 * FRACUNIT), (156 * FRACUNIT)
 	local flags = V_SNAPTOBOTTOM | V_SNAPTOLEFT | V_PERPLAYER
 
 	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, -(640 * FRACUNIT), x)
 	local spec = (player.spectator) and V_60TRANS or 0
+
+	//
+
+	local timer_format = "none"
+	local timer = {
+		hours = G_TicsToHours(joeVars.serverLife),
+		minutes = G_TicsToMinutes(joeVars.serverLife, false),
+		seconds = G_TicsToSeconds(joeVars.serverLife)
+	}
+
+	if (joeVars.serverLife) then
+		if (timer.hours > 0) then
+			timer_format = string.format("%d %s, %d %s, and %d %s.", timer.hours, joeFuncs.getPlural(timer.hours, "hour"), timer.minutes, joeFuncs.getPlural(timer.minutes, "minute"), timer.seconds, joeFuncs.getPlural(timer.seconds, "second"))
+
+		elseif (timer.minutes > 0) then
+			timer_format = string.format("%d %s, and %d %s.", timer.minutes, joeFuncs.getPlural(timer.minutes, "minute"), timer.seconds, joeFuncs.getPlural(timer.seconds, "second"))
+
+		elseif (timer.seconds > 0) then
+			timer_format = string.format("%d %s.", timer.seconds, joeFuncs.getPlural(timer.seconds, "second"))
+		end
+	end
+
+	//
 
 	local val = {
 		x = "\x82" .. "X: \x80" .. (player.realmo.x / FRACUNIT),
@@ -279,8 +301,15 @@ local function drawDebugInfo(v, player)
 
 		angle = "\x83" .. "ANG: \x80" .. (AngleFixed(player.realmo.angle) / FRACUNIT),
 		aim   = "\x83" .. "AIM: \x80" .. (AngleFixed(player.aiming) / FRACUNIT),
-		speed = "\x87" .. "SPD: \x80" .. (FixedHypot(player.speed, player.realmo.momz) / FRACUNIT)
+		speed = "\x87" .. "SPD: \x80" .. (FixedHypot(player.speed, player.realmo.momz) / FRACUNIT),
+
+		lifetime = string.format("\x82Server lifetime:\x80 %s", timer_format)
 	}
+
+	//
+
+	joeFuncs.drawFill(v, anim - (2 * FRACUNIT), y - (8 * FRACUNIT), (v.stringWidth(val.lifetime, 0, "small") + 3) * FRACUNIT, 6 * FRACUNIT, 31 | V_20TRANS | flags)
+	v.drawString(anim, y - (7 * FRACUNIT), val.lifetime, flags | V_ALLOWLOWERCASE, "small-fixed")
 
 	//
 
