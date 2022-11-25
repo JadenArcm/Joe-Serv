@@ -1,6 +1,7 @@
 //
 
 local scroller = {delay = TICRATE, pos = 0, direction = 1}
+local MAXSCROLLV = (FRACUNIT / 4) + (FRACUNIT / 2)
 
 local handleTAB = {
 	//
@@ -93,7 +94,7 @@ local function drawPlayers(v)
 	for i, player in ipairs(player_list) do
 		//
 
-		local py = (y - ((scroller.pos >> 1) * FRACUNIT)) + ((i - 1) * (20 * FRACUNIT))
+		local py = (y - (scroller.pos >> 1)) + ((i - 1) * (20 * FRACUNIT))
 		local gflags = (((player.playerstate == PST_DEAD) or (player.quittime > 0)) and V_TRANSLUCENT or 0) | flags
 
 		local score_string = player.score
@@ -146,15 +147,15 @@ local function drawPlayers(v)
 	if (scroller.delay) then
 		scroller.delay = $ - 1
 	elseif (scroller.direction > 0) then
-		if (scroller.pos < ((#player_list * 20) - scaledheight) << 1) then
-			scroller.pos = $ + 1
+		if (scroller.pos < (((#player_list * 20) - scaledheight) * FRACUNIT) << 1) then
+			scroller.pos = $ + MAXSCROLLV
 		else
 			scroller.delay = TICRATE
 			scroller.direction = -1
 		end
 	else
 		if (scroller.pos > 0) then
-			scroller.pos = $ - 1
+			scroller.pos = $ - MAXSCROLLV
 		else
 			scroller.delay = TICRATE
 			scroller.direction = 1
@@ -219,12 +220,12 @@ local function drawNetInfo(v)
 
 		//
 
-		if (rawget(_G, "mpemeraldsave") or rawget(_G, "solchars")) and joeFuncs.isValid(consoleplayer) then
+		if rawget(_G, "solchars") and joeFuncs.isValid(consoleplayer) then
 			for i = 0, 6 do
 				local patch = v.cachePatch("TSEM" .. (i + 1))
 				local alpha = V_70TRANS
 
-				if ((netgame) and (mpemeraldsave & (1 << i))) or (consoleplayer.solemeralds and (consoleplayer.solemeralds & (1 << i))) then
+				if (consoleplayer.solemeralds and (consoleplayer.solemeralds & (1 << i))) then
 					alpha = 0
 				end
 
@@ -298,7 +299,7 @@ end
 local function drawScores(v)
 	//
 
-	if (leveltime <= 47) then return end
+	if (leveltime <= 50) then return end
 
 	//
 
@@ -306,7 +307,7 @@ local function drawScores(v)
 
 	//
 
-	v.fadeScreen(0xFF00, min(joeVars.scoresTicker, 24))
+	v.fadeScreen(0xFA00, min(joeVars.scoresTicker, 10))
 
 	if (netgame or multiplayer) then
 		drawNetInfo(v)

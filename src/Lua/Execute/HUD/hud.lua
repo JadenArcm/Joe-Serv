@@ -95,7 +95,7 @@ local function drawScoreRings(v, player)
 	local score_color = scoreColors[((player.score / 100) % #scoreColors) + 1]
 
 	local ring_patch = "JOE_RING" .. ((leveltime / 2) % 24)
-	local ring_color = ((player.rings <= 0) and ((leveltime / 5) & 1)) and v.getColormap(TC_RAINBOW, SKINCOLOR_FLAME) or nil
+	local ring_color = ((player.rings <= 0) and ((leveltime / 5) & 1)) and v.getColormap(TC_RAINBOW, SKINCOLOR_KETCHUP) or nil
 
 	//
 
@@ -164,13 +164,28 @@ local function drawLives(v, player)
 	//
 
 	local player_lives = ((player.lives == INFLIVES) or (netgame and (CV_FindVar("cooplives").value == 0))) and '\x16' or ("\x82x\x80" .. max(0, min(player.lives, 99)))
-	local yoffs = G_GametypeUsesLives() and 1 or 3
+	local yoffs = G_GametypeUsesLives() and FRACUNIT or (3 * FRACUNIT)
 
 	local patch = v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A)
 	local scale = FRACUNIT / 3
 
 	local colormap = joeFuncs.getSkincolor(v, player, false)
-	local health_color = (player.spectator and ((leveltime % TICRATE < 17) and 54 or 2)) or ((player.pflags & PF_GODMODE) and 131) or (((player.hp.current <= (player.hp.max / 4)) and 36) or ((player.hp.current <= (player.hp.max / 2)) and 73) or 113)
+	local health_color = 113
+
+	//
+
+	if (player.spectator) then
+		health_color = (leveltime % TICRATE < 17) and 57 or 24
+
+	elseif (player.pflags & PF_GODMODE) then
+		health_color = 131
+
+	elseif (player.hp.current <= (player.hp.max / 2)) then
+	 	health_color = 73
+
+	elseif (player.hp.current <= (player.hp.max / 4)) then
+		health_color = 36
+	end
 
 	//
 
@@ -184,7 +199,7 @@ local function drawLives(v, player)
 		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.max, FRACUNIT, 24 | flags)
 		joeFuncs.drawFill(v, anim - (34 * FRACUNIT), y + (7 * FRACUNIT), player.hp.current, FRACUNIT, health_color | flags)
 	else
-		v.drawString(anim - (3 * FRACUNIT), y + (yoffs * FRACUNIT), joeFuncs.getPlayerName(player, 1), flags | V_ALLOWLOWERCASE, "small-fixed-right")
+		v.drawString(anim - (3 * FRACUNIT), y + yoffs, joeFuncs.getPlayerName(player, 1), flags | V_ALLOWLOWERCASE, "small-fixed-right")
 
 		if G_GametypeUsesLives() then
 			v.drawString(anim - (3 * FRACUNIT), y + (5 * FRACUNIT), player_lives, flags | V_ALLOWLOWERCASE, "small-fixed-right")

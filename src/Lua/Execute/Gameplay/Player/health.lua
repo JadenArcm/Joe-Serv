@@ -35,8 +35,8 @@ local function healHealth(player)
 
 	//
 
-	if not (leveltime % 4) and not (player.hp.delay) and (player.hp.current > 0) then
-		player.hp.current = min($ + (FRACUNIT / 24), player.hp.max)
+	if not (leveltime % 3) and not (player.hp.delay) and (player.hp.current > 0) then
+		player.hp.current = min($ + (FRACUNIT / 20), player.hp.max)
 	end
 
 	//
@@ -45,7 +45,7 @@ addHook("PlayerThink", healHealth)
 
 //
 
-local function getDamaged(mo, _, src, dmg, dmgtype)
+local function getDamaged(mo, _, _, dmg, dmgtype)
 	//
 
 	local player = mo.player
@@ -61,10 +61,7 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 	if (player.pflags & PF_GODMODE) then return false end
 
 	for _, types in ipairs({DMG_CRUSHED, DMG_DROWNED, DMG_DEATHPIT, DMG_INSTAKILL, DMG_SPACEDROWN}) do
-		if (dmgtype == types) then
-			player.hp.current = 0
-			return true
-		end
+		if (dmgtype == types) then return true end
 	end
 
 	for _, powers in ipairs({pw_super, pw_invulnerability, pw_flashing}) do
@@ -77,7 +74,7 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 
 	if (damage) then
 		player.hp.current = max(0, $ - (damage * FRACUNIT))
-		player.hp.delay = 5 * TICRATE
+		player.hp.delay = (3 * TICRATE) + (TICRATE / 2)
 
 		P_SetObjectMomZ(mo, (mo.eflags & MFE_UNDERWATER) and (3 * FRACUNIT) or (6 * FRACUNIT), false)
 		P_InstaThrust(mo, mo.angle + ANGLE_180, 10 * mo.scale)
@@ -85,7 +82,7 @@ local function getDamaged(mo, _, src, dmg, dmgtype)
 		P_ResetPlayer(player)
 		mo.state = S_PLAY_PAIN
 
-		player.powers[pw_flashing] = TICRATE + (TICRATE / 2)
+		player.powers[pw_flashing] = 2 * TICRATE
 
 		if (player.hp.current >= (player.hp.max / 4)) then
 			player.hp.soundp = false
