@@ -286,11 +286,11 @@ local function drawDebugInfo(v, player)
 		end
 
 		if (timer.minutes > 0) then
-			timer_format = (timer.minutes .. " " .. joeFuncs.getPlural(timer.minutes, "minute") .. ((timer.seconds == 0) and "." or ", ")) + $
+			timer_format = (timer.minutes .. " " .. joeFuncs.getPlural(timer.minutes, "minute") .. ((timer.seconds == 0) and "." or ", and ")) + $
 		end
 
 		if (timer.hours > 0) then
-			timer_format = (timer.hours .. " " .. joeFuncs.getPlural(timer.hours, "hour") .. ", ") + $
+			timer_format = (timer.hours .. " " .. joeFuncs.getPlural(timer.hours, "hour") .. ((timer.minutes == 0) and ", and " or ", ")) + $
 		end
 	end
 
