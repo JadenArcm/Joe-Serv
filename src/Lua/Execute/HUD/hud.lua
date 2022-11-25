@@ -273,7 +273,7 @@ local function drawDebugInfo(v, player)
 
 	//
 
-	local timer_format = "none"
+	local timer_format = ""
 	local timer = {
 		hours = G_TicsToHours(joeVars.serverLife),
 		minutes = G_TicsToMinutes(joeVars.serverLife, false),
@@ -281,14 +281,16 @@ local function drawDebugInfo(v, player)
 	}
 
 	if (joeVars.serverLife) then
+		if (timer.seconds > 0) then
+			timer_format = timer.seconds .. " " .. joeFuncs.getPlural(timer.seconds, "second") .. "."
+		end
+
+		if (timer.minutes > 0) then
+			timer_format = (timer.minutes .. " " .. joeFuncs.getPlural(timer.minutes, "minute") .. ((timer.seconds == 0) and "." or ", ")) + $
+		end
+
 		if (timer.hours > 0) then
-			timer_format = string.format("%d %s, %d %s, and %d %s.", timer.hours, joeFuncs.getPlural(timer.hours, "hour"), timer.minutes, joeFuncs.getPlural(timer.minutes, "minute"), timer.seconds, joeFuncs.getPlural(timer.seconds, "second"))
-
-		elseif (timer.minutes > 0) then
-			timer_format = string.format("%d %s, and %d %s.", timer.minutes, joeFuncs.getPlural(timer.minutes, "minute"), timer.seconds, joeFuncs.getPlural(timer.seconds, "second"))
-
-		elseif (timer.seconds > 0) then
-			timer_format = string.format("%d %s.", timer.seconds, joeFuncs.getPlural(timer.seconds, "second"))
+			timer_format = (timer.hours .. " " .. joeFuncs.getPlural(timer.hours, "hour") .. ", ") + $
 		end
 	end
 

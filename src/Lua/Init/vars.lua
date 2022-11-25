@@ -111,9 +111,15 @@ addHook("NetVars", syncVars)
 //
 
 local function handleLifetime()
-	joeVars.serverLife = $ + 1
+	//
+
+	if (gamestate ~= GS_TITLESCREEN) then
+		joeVars.serverLife = $ + 1
+	end
+
+	//
 end
-addHook("ThinkFrame", handleLifetime)
+addHook("PreThinkFrame", handleLifetime)
 addHook("IntermissionThinker", handleLifetime)
 
 //
