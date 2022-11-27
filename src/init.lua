@@ -1,5 +1,5 @@
 /*
-	Joe's Workshop - v1.0
+	Joe's Workshop
 	By Jaden
 */
 
@@ -8,8 +8,10 @@
 rawset(_G, "joeFuncs", {})
 rawset(_G, "joeVars", {})
 
-local version = "v1.0c"
-local date 	  = "October 31st, 2022"
+//
+
+local version = {1, 0, "d"}
+local date 	  = "November 27th, 2022"
 local helpers = "-Scorbun- and Furry"
 
 //
@@ -64,6 +66,6 @@ dofolder("tips.lua")
 
 //
 
-print(string.format("\n" .. "Welcome to Joe's Workshop, \x82%s\x80." .. "\n" .. "Made by \x87Jaden\x80, with help of \x82%s\x80." .. "\n" .. "Made in \x85%s\x80." .. "\n", version, helpers, date))
+print(string.format("\n" .. "Welcome to Joe's Workshop, \x82v%d.%d%s\x80." .. "\n" .. "Made by \x87Jaden\x80, with help of \x82%s\x80." .. "\n" .. "Made in \x85%s\x80." .. "\n", version[1], version[2], version[3], helpers, date))
 
 //

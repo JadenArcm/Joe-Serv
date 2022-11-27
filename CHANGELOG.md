@@ -1,3 +1,13 @@
+## *v1.0d* - (27/11/2022)
+
+- `setgravity` is now added as a command.
+- A debug display was added, toggled via `joe_owndebug`.
+- Health now takes fixed values, making the health recovery more fair.
+- `summon` now has a object blacklist, and takes angles and scale into account.
+- More things that i forgot to mention,.,.,..,.
+
+> *Joe's Mappers* is now in! Pretty much incomplete in terms of maps, but yeah! Maps!!!
+
 ## *v1.0c* - (31/10/2022)
 
 - Funny Deaths returns.

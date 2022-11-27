@@ -191,7 +191,9 @@ local commandInfo = {
 				end
 			end
 
-			P_SpawnMobjFromMobj(player.realmo, 0, 0, 0, object_tospawn)
+			local mo = P_SpawnMobjFromMobj(player.realmo, 0, 0, 0, object_tospawn)
+			mo.angle = player.realmo.angle
+			P_SetScale(mo, player.realmo.scale)
 		end
 	},
 
