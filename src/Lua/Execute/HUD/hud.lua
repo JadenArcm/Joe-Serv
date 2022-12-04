@@ -119,6 +119,7 @@ local function drawTimer(v, player)
 	local flags = V_SNAPTOTOP | V_SNAPTORIGHT | V_HUDTRANS | V_PERPLAYER
 
 	local anim = joeFuncs.getEasing("inoutexpo", joeVars.HUDTicker, (640 * FRACUNIT), x)
+	local style = CV_FindVar("timerres")
 
 	//
 
@@ -126,28 +127,32 @@ local function drawTimer(v, player)
 	local info = joeFuncs.getCountdown(player.realtime)
 
 	local patch = "JOE_TIME" .. (((player.realtime % TICRATE) * 235) / 1000)
-	local color = nil
+	local color = SKINCOLOR_SILVER
+
+	local xoffs = (style.value == 0) and -22 or 0
 
 	//
 
 	if ((gametyperules & GTR_FRIENDLY) and (exitTics < (60 * TICRATE)) and ((leveltime / 5) & 1)) or (info.flashing) then
-		color = v.getColormap(TC_RAINBOW, SKINCOLOR_RED)
+		color = SKINCOLOR_RED
 	end
 
 	//
 
-	v.drawScaled(anim, y - (3 * FRACUNIT), FRACUNIT, v.cachePatch(patch), flags, color)
+	v.drawScaled(anim, y - (3 * FRACUNIT), FRACUNIT, v.cachePatch(patch), flags, v.getColormap(TC_DEFAULT, color))
 
-	if (CV_FindVar("timerres").value == 3) then
-		joeFuncs.drawNum(v, anim - (8 * FRACUNIT), y, info.tics, flags, {font = "JOE_BNUM", space = 7, align = "right"})
+	if (style.value < 3) then
+		joeFuncs.drawNum(v, anim - ((51 + xoffs) * FRACUNIT), y, G_TicsToMinutes(info.tics, true), flags, {font = "JOE_BNUM", space = 7, align = "right"})
+
+		v.drawScaled(anim - ((52 + xoffs) * FRACUNIT), y, FRACUNIT, v.cachePatch("JOE_COLON"), flags, nil)
+		joeFuncs.drawNum(v, anim - ((30 + xoffs) * FRACUNIT), y, G_TicsToSeconds(info.tics), flags, {font = "JOE_BNUM", space = 7, pad = 2, align = "right"})
+
+		if (style.value > 0) then
+			v.drawScaled(anim - (30  * FRACUNIT), y, FRACUNIT, v.cachePatch("JOE_PERIO"), flags | V_HUDTRANS, nil)
+			joeFuncs.drawNum(v, anim - (8 * FRACUNIT), y, G_TicsToCentiseconds(info.tics), flags, {font = "JOE_BNUM", space = 7, pad = 2, align = "right"})
+		end
 	else
-		joeFuncs.drawNum(v, anim - (51 * FRACUNIT), y, G_TicsToMinutes(info.tics, true), flags, {font = "JOE_BNUM", space = 7, align = "right"})
-
-		v.drawScaled(anim - (52 * FRACUNIT), y, FRACUNIT, v.cachePatch("JOE_COLON"), flags, nil)
-		joeFuncs.drawNum(v, anim - (30 * FRACUNIT), y, G_TicsToSeconds(info.tics), flags, {font = "JOE_BNUM", space = 7, pad = 2, align = "right"})
-
-		v.drawScaled(anim - (30  * FRACUNIT), y, FRACUNIT, v.cachePatch("JOE_PERIO"), flags | V_HUDTRANS, nil)
-		joeFuncs.drawNum(v, anim - (8 * FRACUNIT), y, G_TicsToCentiseconds(info.tics), flags, {font = "JOE_BNUM", space = 7, pad = 2, align = "right"})
+		joeFuncs.drawNum(v, anim - (8 * FRACUNIT), y, info.tics, flags, {font = "JOE_BNUM", space = 7, align = "right"})
 	end
 
 	//
@@ -296,34 +301,35 @@ local function drawDebugInfo(v, player)
 
 	//
 
-	local val = {
-		x = "\x82" .. "X: \x80" .. (player.realmo.x / FRACUNIT),
-		y = "\x82" .. "Y: \x80" .. (player.realmo.y / FRACUNIT),
-		z = "\x82" .. "Z: \x80" .. (player.realmo.z / FRACUNIT),
+	local vals = {
+		string.format("%cX:%c %.2f", 0x82, 0x80, player.realmo.x),
+		string.format("%cY:%c %.2f", 0x82, 0x80, player.realmo.y),
+		string.format("%cX:%c %.2f", 0x82, 0x80, player.realmo.z),
 
-		angle = "\x83" .. "ANG: \x80" .. (AngleFixed(player.realmo.angle) / FRACUNIT),
-		aim   = "\x83" .. "AIM: \x80" .. (AngleFixed(player.aiming) / FRACUNIT),
-		speed = "\x87" .. "SPD: \x80" .. (FixedHypot(player.speed, player.realmo.momz) / FRACUNIT),
+		string.format("%cANG:%c %.1f", 0x83, 0x80, AngleFixed(player.realmo.angle)),
+		string.format("%cAIM:%c %.1f", 0x83, 0x80, AngleFixed(player.aiming)),
+		string.format("%cSPD:%c %.1f", 0x87, 0x80, FixedHypot(player.speed, player.realmo.momz)),
 
-		lifetime = string.format("\x82Server lifetime:\x80 %s", timer_format)
+		string.format("%cServer Lifetime:%c %s", 0x82, 0x80, timer_format)
 	}
 
 	//
 
-	joeFuncs.drawFill(v, anim - (2 * FRACUNIT), y - (8 * FRACUNIT), (v.stringWidth(val.lifetime, 0, "small") + 3) * FRACUNIT, 6 * FRACUNIT, 31 | V_20TRANS | flags)
-	v.drawString(anim, y - (7 * FRACUNIT), val.lifetime, flags | V_ALLOWLOWERCASE, "small-fixed")
+	if (netgame or multiplayer) then
+		joeFuncs.drawFill(v, anim - (2 * FRACUNIT), y - (8 * FRACUNIT), (v.stringWidth(vals[#vals], 0, "small") + 3) * FRACUNIT, 6 * FRACUNIT, 31 | V_20TRANS | flags)
+		v.drawString(anim, y - (7 * FRACUNIT), vals[#vals], flags | V_ALLOWLOWERCASE, "small-fixed")
+	end
 
 	//
 
-	joeFuncs.drawFill(v, anim - (2 * FRACUNIT), y, 40 * FRACUNIT, 35 * FRACUNIT, 31 | V_20TRANS | flags)
+	joeFuncs.drawFill(v, anim - (2 * FRACUNIT), y, 48 * FRACUNIT, 35 * FRACUNIT, 31 | V_20TRANS | flags)
 
-	v.drawString(anim, y + (2 * FRACUNIT), val.x, flags, "small-fixed")
-	v.drawString(anim, y + (7 * FRACUNIT), val.y, flags, "small-fixed")
-	v.drawString(anim, y + (12 * FRACUNIT), val.z, flags, "small-fixed")
+	for i = 1, #vals - 1 do
+		local opts = (i > 3) and {2 * FRACUNIT, spec} or {0, 0}
+		local dumb = -(3 * FRACUNIT) + opts[1]
 
-	v.drawString(anim, y + (19 * FRACUNIT), val.angle, flags | spec, "small-fixed")
-	v.drawString(anim, y + (24 * FRACUNIT), val.aim, flags | spec, "small-fixed")
-	v.drawString(anim, y + (29 * FRACUNIT), val.speed, flags | spec, "small-fixed")
+		v.drawString(anim, (y + dumb) + ((i * 5) * FRACUNIT), vals[i], flags | opts[2], "small-fixed")
+	end
 
 	//
 end

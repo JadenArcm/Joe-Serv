@@ -66,6 +66,17 @@ dofolder("tips.lua")
 
 //
 
-print(string.format("\n" .. "Welcome to Joe's Workshop, \x82v%d.%d%s\x80." .. "\n" .. "Made by \x87Jaden\x80, with help of \x82%s\x80." .. "\n" .. "Made in \x85%s\x80." .. "\n", version[1], version[2], version[3], helpers, date))
+local print_message = [[
+
+  Welcome to Joe's Workshop!
+  %c*%c We are currently on %cv%d.%d%s%c.
+
+  Made by %cJaden%c, with help of %c%s%c.
+  %c*%c Compiled on %c%s%c.
+
+  Have fun!
+]]
+
+print(print_message:format(0x82, 0x80, 0x85, version[1], version[2], version[3], 0x80, 0x87, 0x80, 0x82, helpers, 0x80, 0x82, 0x80, 0x83, date, 0x80))
 
 //

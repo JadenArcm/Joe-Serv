@@ -63,7 +63,7 @@ local function emblemThink(mo)
 	//
 
 	if (mo.spinang > 0) then
-		mo.spinang = max(MAXSPINV, $ - (FRACUNIT / 3))
+		mo.spinang = max(MAXSPINV, $ - (FRACUNIT / 4))
 	end
 
 	if not (mo.health) then
@@ -71,7 +71,7 @@ local function emblemThink(mo)
 	end
 
 	if (joeVars.collectedEmblems >= joeVars.totalEmblems) then
-		mo.frame = $ &~ FF_TRANS50
+		mo.frame = $ & ~(FF_TRANS50)
 		mo.blendmode = AST_ADD
 	end
 
@@ -80,7 +80,7 @@ local function emblemThink(mo)
 	mo.shadowscale = (2 * FRACUNIT) / 3
 	mo.angle = $ + FixedAngle((mo.spinang > 0) and mo.spinang or MAXSPINV)
 
-	mo.z = mo.oldz + (14 * abs(cos((leveltime * 2) * ANG2)))
+	mo.z = mo.oldz + (16 * abs(cos((leveltime * 3) * ANG1)))
 
 	//
 end
@@ -96,20 +96,29 @@ local function touchedEmblem(mo, toucher)
 
 	//
 
+	local amount = string.format("(\x84%d\x82 / \x8A%d\x82)", joeVars.collectedEmblems + 1, joeVars.totalEmblems)
+	local emblem_id = (mo.orig + 1)
+
+	//
+
 	joeVars.collectedEmblems = $ + 1
 
 	mo.health = 0
 	mo.spinang = TICRATE * FRACUNIT
 
+	P_SpawnMobjFromMobj(mo, 0, 0, 0, MT_SPARK)
+
 	//
 
 	if (joeVars.collectedEmblems >= joeVars.totalEmblems) then
-		S_StartSound(toucher, sfx_s3kac)
-		P_AddPlayerScore(toucher.player, 50000)
+		S_StartSound(nil, sfx_jmball)
+		chatprint("\x82* " .. joeFuncs.getPlayerName(toucher.player, 0) .. "\x82 collected the last emblem! (\x87#" .. emblem_id .. "\x82)")
 
-		P_FlashPal(toucher.player, PAL_WHITE, 5)
+		P_AddPlayerScore(toucher.player, 50000)
 	else
-		S_StartSound(toucher, sfx_nxitem)
+		S_StartSound(nil, sfx_jmbgot)
+		chatprint("\x82* " .. joeFuncs.getPlayerName(toucher.player, 0) .. "\x82 collected emblem \x87#" .. emblem_id .. "\x82. " .. amount)
+
 		P_AddPlayerScore(toucher.player, 5000)
 	end
 

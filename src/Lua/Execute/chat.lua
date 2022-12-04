@@ -10,7 +10,7 @@ local function chatprintEx(player, msg, sound)
 	end
 
 	if (CV_FindVar("chatnotifications").value) then
-		S_StartSound(nil, sound, (player ~= nil) and player or nil)
+		S_StartSound(nil, sound, player)
 	end
 
 	//
@@ -19,7 +19,7 @@ end
 local function chatError(player, msg)
 	//
 
-	local err = "\x82* \x85" .. "ERROR: " .. "\x80"
+	local err = "\x82* \x85" .. "ERROR: " .. "\x82"
 	return chatprintEx(player, err .. msg, joeVars.chatSounds.failure)
 
 	//
@@ -31,7 +31,7 @@ local function customChat(source, type, target, message)
 	//
 
 	if (#message > 220) then
-		chatError(source, "Messages cannot be above \x82" .. "220" .. "\x80 characters.")
+		chatError(source, "Messages cannot be above \x85" .. "220" .. "\x82 characters.")
 		return true
 	end
 

@@ -11,7 +11,7 @@ local blackListedSkins = {
 	["kiryu"] = true,
 
 	["frank"] = true,
-	["dummy"] = true,
+	["dummie"] = true,
 
 	["kirby"] = true,
 	["metaknight"] = true

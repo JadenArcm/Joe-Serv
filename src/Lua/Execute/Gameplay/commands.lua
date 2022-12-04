@@ -114,14 +114,13 @@ local commandInfo = {
 			end
 
 			local target = joeFuncs.getPlayer(node)
-			local message = ""
 
 			if (target == -1) then
 				printError(player, "That player doesn't exist. Please double-check.")
 				return
 			end
 
-			if joeFuncs.isServerOrAdmin(target, false) then
+			if joeFuncs.isServerOrAdmin(target) then
 				printError(player, "That player is either an admin or the server itself.")
 				return
 			end
@@ -177,7 +176,7 @@ local commandInfo = {
 				return
 			end
 
-			local object_valid, object_tospawn = pcall(function(object) return _G["MT_" .. string.upper(object)] end, object)
+			local object_valid, object_tospawn = pcall(function(obj) return _G["MT_" .. string.upper(obj)] end, object)
 
 			if not (object_valid) then
 				printError(player, "That object doesn't exist. Please double-check.")
@@ -442,8 +441,8 @@ local commandInfo = {
 		func = function(player)
 			if not inLevel(player) then return end
 
-			if (gametyperules & GTR_RINGSLINGER) and (player.rings <= 120) then
-				printError(player, "You need more than \x82" .. "120 Rings" .. "\x80 to use this.")
+			if (gametyperules & GTR_RINGSLINGER) and (player.rings < 150) then
+				printError(player, "You need more than \x82" .. "150 rings" .. "\x80 to use this.")
 				return
 			end
 

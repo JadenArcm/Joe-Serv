@@ -307,7 +307,7 @@ local function drawScores(v)
 
 	//
 
-	v.fadeScreen(0xFA00, min(joeVars.scoresTicker, 10))
+	v.fadeScreen(0xFA00, min(joeVars.scoresTicker / 2, 10))
 
 	if (netgame or multiplayer) then
 		drawNetInfo(v)

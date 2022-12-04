@@ -1,11 +1,11 @@
 //
 
 local emblemDistances = {
-	{3072, SKINCOLOR_BLUE},
-	{2048, SKINCOLOR_EMERALD},
-	{1024, SKINCOLOR_YELLOW},
-	{512, SKINCOLOR_ORANGE},
-	{256, SKINCOLOR_RED}
+	{3072, 70, SKINCOLOR_BLUE},
+	{2048, 52, SKINCOLOR_EMERALD},
+	{1024, 35, SKINCOLOR_YELLOW},
+	{512,  17, SKINCOLOR_ORANGE},
+	{128,  8, SKINCOLOR_RED}
 }
 
 //
@@ -13,24 +13,28 @@ local emblemDistances = {
 local function drawEmblemIcon(v, x, y, flags, info)
 	//
 
+	local sound = 0
 	local color = SKINCOLOR_SILVER
+
 	local distance = FixedHypot(FixedHypot(info[1].x - info[2].x, info[1].y - info[2].y), info[1].z - info[2].z) / FRACUNIT
 
 	//
 
 	for i = 1, #emblemDistances do
 		if (distance < emblemDistances[i][1]) then
-			color = emblemDistances[i][2]
+			sound = emblemDistances[i][2]
+			color = emblemDistances[i][3]
 		end
 	end
 
 	if not (info[1].health) then
-		color = SKINCOLOR_JET
+		color = SKINCOLOR_CARBON
 	end
 
 	//
 
-	v.drawScaled(x, y, FRACUNIT, v.cachePatch("JOE_HUNT"), flags, v.getColormap(TC_DEFAULT, color))
+	v.drawScaled(x, y, FRACUNIT, v.cachePatch("JOE_HUNT" .. ((info[1].health) and "A" or "B")), flags, v.getColormap(TC_DEFAULT, color))
+	return sound
 
 	//
 end
@@ -49,7 +53,7 @@ local function drawEmblemRadar(v, player)
 	//
 
 	local x, y = (152 * FRACUNIT), (176 * FRACUNIT)
-	local flags = V_SNAPTOBOTTOM | V_PERPLAYER
+	local flags = V_SNAPTOBOTTOM | V_PERPLAYER | V_HUDTRANS
 
 	local anim = joeFuncs.getEasing("inback", joeVars.emblemTicker, y, (400 * FRACUNIT))
 
@@ -62,10 +66,12 @@ local function drawEmblemRadar(v, player)
 	//
 
 	for i, mo in ipairs(joeVars.emblemInfo) do
-		local emblem_flags = (mo.health) and V_HUDTRANS or V_HUDTRANSHALF
 		local offs = ((i - 1) * 20) - ((#joeVars.emblemInfo - 1) * 10)
+		local interval = drawEmblemIcon(v, x + (offs * FRACUNIT), anim, flags | ((not mo.health) and V_ADD or 0), {mo, player.realmo})
 
-		drawEmblemIcon(v, x + (offs * FRACUNIT), anim, emblem_flags | flags, {mo, player.realmo})
+		if (mo.health and (interval ~= 0)) and not (leveltime % interval) then
+			S_StartSoundAtVolume(nil, sfx_jmbdin, 200, player)
+		end
 	end
 
 	//
