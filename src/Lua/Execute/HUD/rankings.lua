@@ -239,7 +239,7 @@ local function drawNetInfo(v)
 			table.sort(joeVars.emblemInfo, function(a, b) return (a.orig < b.orig) end)
 
 			for i, mo in ipairs(joeVars.emblemInfo) do
-				local frame = string.char((mo.frame & FF_FRAMEMASK) + 65)
+				local frame = R_Frame2Char(mo.frame & FF_FRAMEMASK)
 				local patch = (not mo.health) and v.cachePatch("GOTIT" .. frame) or v.cachePatch("NEEDIT")
 
 				local eflgs = (joeVars.collectedEmblems >= joeVars.totalEmblems) and V_ADD or 0
