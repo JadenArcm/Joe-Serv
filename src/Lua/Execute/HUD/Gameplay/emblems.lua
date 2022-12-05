@@ -1,11 +1,11 @@
 //
 
 local emblemDistances = {
-	{3072, 70, SKINCOLOR_BLUE},
-	{2048, 52, SKINCOLOR_EMERALD},
-	{1024, 35, SKINCOLOR_YELLOW},
-	{512,  15, SKINCOLOR_ORANGE},
-	{128,  6,  SKINCOLOR_RED}
+	{3072, SKINCOLOR_BLUE},
+	{2048, SKINCOLOR_EMERALD},
+	{1024, SKINCOLOR_YELLOW},
+	{512,  SKINCOLOR_ORANGE},
+	{128,  SKINCOLOR_RED}
 }
 
 //
@@ -23,7 +23,6 @@ local function drawEmblemIcon(v, x, y, flags, info)
 	for i = 1, #emblemDistances do
 		if (distance < emblemDistances[i][1]) then
 			sound = emblemDistances[i][2]
-			color = emblemDistances[i][3]
 		end
 	end
 
@@ -34,7 +33,6 @@ local function drawEmblemIcon(v, x, y, flags, info)
 	//
 
 	v.drawScaled(x, y, FRACUNIT, v.cachePatch("JOE_HUNT" .. ((info[1].health) and "A" or "B")), flags, v.getColormap(TC_DEFAULT, color))
-	return sound
 
 	//
 end
@@ -67,11 +65,7 @@ local function drawEmblemRadar(v, player)
 
 	for i, mo in ipairs(joeVars.emblemInfo) do
 		local offs = ((i - 1) * 20) - ((#joeVars.emblemInfo - 1) * 10)
-		local interval = drawEmblemIcon(v, x + (offs * FRACUNIT), anim, flags | ((not mo.health) and V_ADD or 0), {mo, player.realmo})
-
-		if (mo.health and (interval ~= 0)) and not (leveltime % interval) then
-			S_StartSoundAtVolume(nil, sfx_jmbdin, 200, player)
-		end
+		drawEmblemIcon(v, x + (offs * FRACUNIT), anim, flags | ((not mo.health) and V_ADD or 0), {mo, player.realmo})
 	end
 
 	//

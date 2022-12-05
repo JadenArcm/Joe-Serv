@@ -15,7 +15,9 @@ local function spawnSparkles(mo, offs, zoffs, type)
 	local mobj = P_SpawnMobjFromMobj(mo, 0, 0, zoffs[2], type)
 
 	mobj.flags = $ & ~(MF_NOGRAVITY) | (MF_NOCLIP)
-	mobj.scale = FRACUNIT + P_RandomFixed()
+	mobj.renderflags = $ | (RF_FULLBRIGHT | RF_NOCOLORMAPS)
+
+	mobj.destscale = FRACUNIT + P_RandomFixed()
 
 	mobj.color = mo.color
 	mobj.colorized = true
@@ -76,6 +78,10 @@ local function emblemThink(mo)
 	//
 
 	local bounce = abs(cos((leveltime * 3) * ANG1))
+
+	//
+
+	mo.renderflags = $ | (RF_NOCOLORMAPS)
 	mo.shadowscale = (2 * FRACUNIT) / 3
 
 	//
@@ -91,7 +97,17 @@ local function emblemThink(mo)
 			spawnSparkles(mo, 10, {15, 0}, MT_BOXSPARKLE)
 		end
 
-		S_StartSound(mo, sfx_s1c9, nil)
+		local expl = P_SpawnMobjFromMobj(mo, 0, 0, 0, MT_THOK)
+		expl.state = S_STOCKEXPLOSION
+		expl.fuse = TICRATE
+
+		for player in players.iterate do
+			if (R_PointToDist2(mo.x, mo.y, player.mo.x, player.mo.y) <= (96 * FRACUNIT)) then
+				P_StartQuake(12 * FRACUNIT, 5)
+			end
+		end
+
+		S_StartSound(mo, sfx_jmbspk, nil)
 
 		mo.fuse = -1
 		mo.flags2 = $ | MF2_DONTDRAW
@@ -101,6 +117,8 @@ local function emblemThink(mo)
 		mo.z = mo.oldz + (16 * bounce)
 
 		if (mo.health) and not (bounce) then
+			S_StartSound(mo, sfx_s1c9, nil)
+
 			for i = 1, 4 do
 				spawnSparkles(mo, 4, {6, mo.height}, MT_BOXSPARKLE)
 			end

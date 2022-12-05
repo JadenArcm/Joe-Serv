@@ -8,7 +8,7 @@ freeslot(
 	"sfx_jtip",
 
 	"sfx_jhurt", "sfx_jwarn",
-	"sfx_jmbgot", "sfx_jmball", "sfx_jmbdin",
+	"sfx_jmbgot", "sfx_jmball", "sfx_jmbspk",
 
 	"sfx_jexpl", "sfx_jslip", "sfx_jsplat", "sfx_jfall"
 )
@@ -39,10 +39,6 @@ sfxinfo[sfx_jfail].caption = "Player Sync-Failed"
 
 //
 
-sfxinfo[sfx_jtip].caption = "A tip arrived"
-
-//
-
 sfxinfo[sfx_jhurt].caption = "Hurt"
 sfxinfo[sfx_jwarn].caption = "Low on health"
 
@@ -50,7 +46,7 @@ sfxinfo[sfx_jwarn].caption = "Low on health"
 
 sfxinfo[sfx_jmbgot].caption = "Got an emblem!"
 sfxinfo[sfx_jmball].caption = "Got them all!"
-sfxinfo[sfx_jmbdin].caption = "Beep"
+sfxinfo[sfx_jmbspk].caption = "Explosion"
 
 //
 
@@ -58,5 +54,10 @@ sfxinfo[sfx_jexpl].caption = "Explosion"
 sfxinfo[sfx_jslip].caption = "Cartoon sound"
 sfxinfo[sfx_jsplat].caption = "Crushed"
 sfxinfo[sfx_jfall].caption = "AAAAAAA"
+
+//
+
+sfxinfo[sfx_jtip].caption = "A tip arrived"
+sfxinfo[sfx_s1c9].caption = "/"
 
 //
