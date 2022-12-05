@@ -209,7 +209,7 @@ local function drawNetInfo(v)
 
 		for i = 0, 6 do
 			local patch = v.cachePatch("TEMER" .. (i + 1))
-			local alpha = V_70TRANS
+			local alpha = V_60TRANS
 
 			if (emeralds & (1 << i)) then
 				alpha = 0
@@ -223,7 +223,7 @@ local function drawNetInfo(v)
 		if rawget(_G, "solchars") and joeFuncs.isValid(consoleplayer) then
 			for i = 0, 6 do
 				local patch = v.cachePatch("TSEM" .. (i + 1))
-				local alpha = V_70TRANS
+				local alpha = V_60TRANS
 
 				if (consoleplayer.solemeralds and (consoleplayer.solemeralds & (1 << i))) then
 					alpha = 0
@@ -239,13 +239,13 @@ local function drawNetInfo(v)
 			table.sort(joeVars.emblemInfo, function(a, b) return (a.orig < b.orig) end)
 
 			for i, mo in ipairs(joeVars.emblemInfo) do
-				local frame = R_Frame2Char(mo.frame & FF_FRAMEMASK)
-				local patch = (not mo.health) and v.cachePatch("GOTIT" .. frame) or v.cachePatch("NEEDIT")
+				local patch = v.cachePatch("GOTIT" .. R_Frame2Char(mo.frame & FF_FRAMEMASK))
+				local alpha = (mo.health) and V_60TRANS or 0
 
-				local eflgs = (joeVars.collectedEmblems >= joeVars.totalEmblems) and V_ADD or 0
-				local color = (joeVars.collectedEmblems >= joeVars.totalEmblems) and TC_RAINBOW or TC_DEFAULT
+				local bop_calc = cos(FixedAngle((leveltime + (16 * i)) * (6 * FRACUNIT)))
+				local bop = (joeVars.collectedEmblems >= joeVars.totalEmblems) and bop_calc or 0
 
-				v.drawScaled(anim + ((14 * FRACUNIT) * (i - 1)), (184 * FRACUNIT), FRACUNIT / 2, patch, V_SNAPTOBOTTOM | flags | eflgs, v.getColormap(color, mo.color))
+				v.drawScaled(anim + ((14 * FRACUNIT) * (i - 1)), (184 * FRACUNIT) + bop, FRACUNIT / 2, patch, V_SNAPTOBOTTOM | alpha | flags, v.getColormap(TC_RAINBOW, mo.color))
 			end
 		else
 			v.drawScaled(anim, (184 * FRACUNIT), FRACUNIT / 2, v.cachePatch("GOTITX"), V_SNAPTOBOTTOM | flags, v.getColormap(TC_RAINBOW, SKINCOLOR_JET))
