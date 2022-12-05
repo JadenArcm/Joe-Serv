@@ -174,7 +174,31 @@ local function drawNetInfo(v)
 	local flags = V_SNAPTOLEFT
 
 	local player_amount = 0
+	local timer_format = ""
+
 	local anim = joeFuncs.getEasing("outexpo", joeVars.scoresTicker, -(640 * FRACUNIT), x)
+
+	//
+
+	local timer = {
+		hours = G_TicsToHours(joeVars.serverLife),
+		minutes = G_TicsToMinutes(joeVars.serverLife, false),
+		seconds = G_TicsToSeconds(joeVars.serverLife)
+	}
+
+	if (joeVars.serverLife) then
+		if (timer.seconds > 0) then
+			timer_format = timer.seconds .. " " .. joeFuncs.getPlural(timer.seconds, "second") .. "."
+		end
+
+		if (timer.minutes > 0) then
+			timer_format = (timer.minutes .. " " .. joeFuncs.getPlural(timer.minutes, "minute") .. ((timer.seconds == 0) and "." or ", and ")) + $
+		end
+
+		if (timer.hours > 0) then
+			timer_format = (timer.hours .. " " .. joeFuncs.getPlural(timer.hours, "hour") .. ((timer.minutes == 0) and ", and " or ", ")) + $
+		end
+	end
 
 	//
 
@@ -185,7 +209,8 @@ local function drawNetInfo(v)
 	//
 
 	v.drawString(anim, y, CV_FindVar("servername").string, V_ALLOWLOWERCASE | V_SNAPTOTOP | flags, "thin-fixed")
-	v.drawString(anim, y + (8 * FRACUNIT), string.format("\x82%d\x80 - %d Players.", player_amount, CV_FindVar("maxplayers").value), V_ALLOWLOWERCASE | V_SNAPTOTOP | flags, "small-fixed")
+	v.drawString(anim, y + (8 * FRACUNIT), string.format("\x82Server Lifetime:\x80 %s", timer_format), V_ALLOWLOWERCASE | V_SNAPTOTOP | flags, "small-fixed")
+	v.drawString(anim, y + (13 * FRACUNIT), string.format("\x82Players:\x80 %d of %d.", player_amount, CV_FindVar("maxplayers").value), V_ALLOWLOWERCASE | V_SNAPTOTOP | flags, "small-fixed")
 
 	//
 

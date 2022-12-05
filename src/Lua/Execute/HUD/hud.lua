@@ -278,29 +278,6 @@ local function drawDebugInfo(v, player)
 
 	//
 
-	local timer_format = ""
-	local timer = {
-		hours = G_TicsToHours(joeVars.serverLife),
-		minutes = G_TicsToMinutes(joeVars.serverLife, false),
-		seconds = G_TicsToSeconds(joeVars.serverLife)
-	}
-
-	if (joeVars.serverLife) then
-		if (timer.seconds > 0) then
-			timer_format = timer.seconds .. " " .. joeFuncs.getPlural(timer.seconds, "second") .. "."
-		end
-
-		if (timer.minutes > 0) then
-			timer_format = (timer.minutes .. " " .. joeFuncs.getPlural(timer.minutes, "minute") .. ((timer.seconds == 0) and "." or ", and ")) + $
-		end
-
-		if (timer.hours > 0) then
-			timer_format = (timer.hours .. " " .. joeFuncs.getPlural(timer.hours, "hour") .. ((timer.minutes == 0) and ", and " or ", ")) + $
-		end
-	end
-
-	//
-
 	local vals = {
 		string.format("%cX:%c %.2f", 0x82, 0x80, player.realmo.x),
 		string.format("%cY:%c %.2f", 0x82, 0x80, player.realmo.y),
@@ -308,23 +285,14 @@ local function drawDebugInfo(v, player)
 
 		string.format("%cANG:%c %.1f", 0x83, 0x80, AngleFixed(player.realmo.angle)),
 		string.format("%cAIM:%c %.1f", 0x83, 0x80, AngleFixed(player.aiming)),
-		string.format("%cSPD:%c %.1f", 0x87, 0x80, FixedHypot(player.speed, player.realmo.momz)),
-
-		string.format("%cServer Lifetime:%c %s", 0x82, 0x80, timer_format)
+		string.format("%cSPD:%c %.1f", 0x87, 0x80, FixedHypot(player.speed, player.realmo.momz))
 	}
-
-	//
-
-	if (netgame or multiplayer) then
-		joeFuncs.drawFill(v, anim - (2 * FRACUNIT), y - (8 * FRACUNIT), (v.stringWidth(vals[#vals], 0, "small") + 3) * FRACUNIT, 6 * FRACUNIT, 31 | V_20TRANS | flags)
-		v.drawString(anim, y - (7 * FRACUNIT), vals[#vals], flags | V_ALLOWLOWERCASE, "small-fixed")
-	end
 
 	//
 
 	joeFuncs.drawFill(v, anim - (2 * FRACUNIT), y, 48 * FRACUNIT, 35 * FRACUNIT, 31 | V_20TRANS | flags)
 
-	for i = 1, #vals - 1 do
+	for i = 1, #vals do
 		local opts = (i > 3) and {2 * FRACUNIT, spec} or {0, 0}
 		local dumb = -(3 * FRACUNIT) + opts[1]
 

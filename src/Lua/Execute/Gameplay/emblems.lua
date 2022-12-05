@@ -73,7 +73,7 @@ local function emblemThink(mo)
 		P_SetObjectMomZ(mo, (mo.fuse * FRACUNIT) / 26, false)
 
 	elseif (mo.fuse == 1) then
-		for i = 1, 5 do
+		for i = 1, 8 do
 			spawnSparkles(mo, 10, 5, MT_BOXSPARKLE)
 		end
 
