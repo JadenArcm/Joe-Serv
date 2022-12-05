@@ -267,7 +267,7 @@ local function drawNetInfo(v)
 				local patch = v.cachePatch("GOTIT" .. R_Frame2Char(mo.frame & FF_FRAMEMASK))
 				local alpha = (mo.health) and V_60TRANS or 0
 
-				local bop_calc = cos(FixedAngle((leveltime + (16 * i)) * (6 * FRACUNIT)))
+				local bop_calc = cos(FixedAngle((leveltime + (18 * i)) * (10 * FRACUNIT)))
 				local bop = (joeVars.collectedEmblems >= joeVars.totalEmblems) and bop_calc or 0
 
 				v.drawScaled(anim + ((14 * FRACUNIT) * (i - 1)), (184 * FRACUNIT) + bop, FRACUNIT / 2, patch, V_SNAPTOBOTTOM | alpha | flags, v.getColormap(TC_RAINBOW, mo.color))

@@ -1,9 +1,18 @@
 //
 
+local emblemProperties = {
+	[0] = {C, SKINCOLOR_FLAME},
+	{E, SKINCOLOR_MINT},
+	{F, SKINCOLOR_GOLD},
+	{G, SKINCOLOR_SAPPHIRE},
+	{P, SKINCOLOR_RASPBERRY},
+	{L, SKINCOLOR_YELLOW}
+}
+
 local function spawnSparkles(mo, offs, zoffs, type)
 	//
 
-	local mobj = P_SpawnMobjFromMobj(mo, 0, 0, 0, type)
+	local mobj = P_SpawnMobjFromMobj(mo, 0, 0, zoffs[2], type)
 
 	mobj.flags = $ & ~(MF_NOGRAVITY) | (MF_NOCLIP)
 	mobj.scale = FRACUNIT + P_RandomFixed()
@@ -16,7 +25,7 @@ local function spawnSparkles(mo, offs, zoffs, type)
 
 	mobj.momx = P_RandomRange(-offs, offs) * FRACUNIT
 	mobj.momy = P_RandomRange(-offs, offs) * FRACUNIT
-	P_SetObjectMomZ(mobj, P_RandomRange(0, zoffs) * FRACUNIT, false)
+	P_SetObjectMomZ(mobj, P_RandomRange(0, zoffs[1]) * FRACUNIT, false)
 
 	//
 end
@@ -37,12 +46,12 @@ local function spawnEmblems(nummap)
 		//
 
 		mo.z = mo.floorz + (mt.z * FRACUNIT) + zoffs
-
 		mo.oldz = mo.z
-		mo.orig = mt.angle
 
-		mo.frame = P_RandomRange(0, 19) | (FF_PAPERSPRITE | FF_FULLBRIGHT)
-		mo.color = P_RandomRange(1, FIRSTSUPERCOLOR - 1)
+		mo.orig = mt.angle
+		mo.frame = emblemProperties[mt.angle][1] | (FF_PAPERSPRITE | FF_FULLBRIGHT)
+
+		mo.color = emblemProperties[mt.angle][2]
 		mo.colorized = true
 
 		//
@@ -66,15 +75,20 @@ local function emblemThink(mo)
 
 	//
 
+	local bounce = abs(cos((leveltime * 3) * ANG1))
+	mo.shadowscale = (2 * FRACUNIT) / 3
+
+	//
+
 	if (mo.fuse > 1) then
-		mo.angle = $ + FixedAngle((mo.fuse * FRACUNIT) / 2)
+		mo.angle = $ + FixedAngle(mo.fuse * FRACUNIT)
 		mo.blendmode = AST_ADD
 
-		P_SetObjectMomZ(mo, (mo.fuse * FRACUNIT) / 26, false)
+		P_SetObjectMomZ(mo, (mo.fuse * FRACUNIT) / 25, false)
 
 	elseif (mo.fuse == 1) then
 		for i = 1, 8 do
-			spawnSparkles(mo, 10, 5, MT_BOXSPARKLE)
+			spawnSparkles(mo, 10, {15, 0}, MT_BOXSPARKLE)
 		end
 
 		S_StartSound(mo, sfx_s1c9, nil)
@@ -84,10 +98,14 @@ local function emblemThink(mo)
 
 	else
 		mo.angle = $ + FixedAngle(2 * FRACUNIT)
-		mo.z = mo.oldz + (16 * abs(cos((leveltime * 3) * ANG1)))
-	end
+		mo.z = mo.oldz + (16 * bounce)
 
-	mo.shadowscale = (2 * FRACUNIT) / 3
+		if (mo.health) and not (bounce) then
+			for i = 1, 4 do
+				spawnSparkles(mo, 4, {6, mo.height}, MT_BOXSPARKLE)
+			end
+		end
+	end
 
 	//
 end
@@ -103,13 +121,13 @@ local function touchedEmblem(mo, toucher)
 
 	//
 
-	local amount = string.format("\x80(\x82%d\x80 / \x87%d\x80)", joeVars.collectedEmblems + 1, joeVars.totalEmblems)
+	local amount = string.format("\x80(\x87%d\x80 - \x85%d\x80)", joeVars.collectedEmblems + 1, joeVars.totalEmblems)
 	local emblem_id = (mo.orig + 1)
 
 	//
 
 	mo.fuse = TICRATE + 17
-	mo.angle = R_PointToAngle2(mo.x, mo.y, toucher.x, toucher.y) - FixedAngle(60 * FRACUNIT)
+	mo.angle = R_PointToAngle2(mo.x, mo.y, toucher.x, toucher.y) - FixedAngle(38 * FRACUNIT)
 
 	mo.health = 0
 	joeVars.collectedEmblems = $ + 1
