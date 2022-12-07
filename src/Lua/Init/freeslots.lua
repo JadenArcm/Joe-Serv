@@ -58,6 +58,6 @@ sfxinfo[sfx_jfall].caption = "AAAAAAA"
 //
 
 sfxinfo[sfx_jtip].caption = "A tip arrived"
-sfxinfo[sfx_s1c9].caption = "/"
+sfxinfo[sfx_s1c9] = {caption = "/", flags = SF_X2AWAYSOUND}
 
 //

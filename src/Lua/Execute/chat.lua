@@ -72,9 +72,9 @@ local function customChat(source, type, target, message)
 		end
 
 		for targets in players.iterate do
-			if (source.ctfteam ~= targets.ctfteam) then continue end
-
-			chatprintEx(targets, ({"\x85", "\x84"})[source.ctfteam] .. "[TEAM] " .. joeFuncs.getPlayerName(source, 1) .. "\x80: " .. message, joeVars.chatSounds.teams)
+			if (source.ctfteam == targets.ctfteam) then
+				chatprintEx(targets, ({"\x85", "\x84"})[source.ctfteam] .. "[TEAM] " .. joeFuncs.getPlayerName(source, 1) .. "\x80: " .. message, joeVars.chatSounds.teams)
+			end
 		end
 
 		return true

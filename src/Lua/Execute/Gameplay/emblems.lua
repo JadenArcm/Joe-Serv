@@ -1,10 +1,10 @@
 //
 
 local emblemProperties = {
-	[0] = {C, SKINCOLOR_FLAME},
+	[0] = {C, SKINCOLOR_KETCHUP},
 	{E, SKINCOLOR_MINT},
 	{F, SKINCOLOR_GOLD},
-	{G, SKINCOLOR_SAPPHIRE},
+	{G, SKINCOLOR_ICY},
 	{P, SKINCOLOR_RASPBERRY},
 	{L, SKINCOLOR_YELLOW}
 }
@@ -102,7 +102,7 @@ local function emblemThink(mo)
 		expl.fuse = TICRATE
 
 		for player in players.iterate do
-			if (R_PointToDist2(mo.x, mo.y, player.mo.x, player.mo.y) <= (96 * FRACUNIT)) then
+			if (joeFuncs.getDist(mo, player.mo) <= (128 * FRACUNIT)) then
 				P_StartQuake(12 * FRACUNIT, 5)
 			end
 		end

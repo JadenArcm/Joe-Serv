@@ -6,6 +6,12 @@ end
 
 //
 
+joeFuncs.getDist = function(mo, mobj)
+	return FixedHypot(FixedHypot(mo.x - mobj.x, mo.y - mobj.y), mo.z - mobj.z)
+end
+
+//
+
 joeFuncs.getEasing = function(func, ticker, m, x)
 	//
 
