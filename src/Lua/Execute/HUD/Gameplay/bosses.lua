@@ -82,19 +82,19 @@ local function drawBosses(v, player)
 	local bar_height = (10 * FRACUNIT)
 
 	local boss_pos = {anim - bar_width, y}
-	local boss_str = string.format("%cAnd %c%d%c %s left...", 0x82, 0x86, (#joeVars.bossInfo - 4), 0x82, joeFuncs.getPlural(#joeVars.bossInfo - 3, "boss"))
+	local boss_str = string.format("%cAnd %c%d%c %s left...", 0x82, 0x86, (#joeVars.bossInfo - 4), 0x82, ((#joeVars.bossInfo - 4) == 1) and "boss" or "bosses")
 
 	//
 
 	for i, mo in ipairs(joeVars.bossInfo) do
 		if (i > 4) then
-			v.drawString(anim, 130 * FRACUNIT, boss_str, V_ALLOWLOWERCASE | V_HUDTRANS | flags, "thin-fixed-right")
+			v.drawString(anim, 111 * FRACUNIT, boss_str, V_ALLOWLOWERCASE | V_HUDTRANS | flags, "thin-fixed-right")
 			break
 		end
 
 		if (joeFuncs.getDist(mo, player.realmo) <= 2048 * FRACUNIT) then
 			local bar_color = ((mo.flags2 & MF2_FRET) and (leveltime % 2)) and 1 or 37
-			local bar_alpha = (not mo.health) and ((10 - min((mo.deathticker / 2) + 1, 10)) << V_ALPHASHIFT) or 0
+			local bar_alpha = (not mo.health) and ((10 - min((mo.deathticker / 2) + 1, CV_FindVar("translucenthud").value)) << V_ALPHASHIFT) or V_HUDTRANS
 
 			local boss_health = FixedMul(FixedDiv(mo.health * FRACUNIT, mo.info.spawnhealth * FRACUNIT), bar_width - (4 * FRACUNIT))
 			local boss_info = {bossNames[mo.type] or "Unknown Boss", mo.health .. " / " .. mo.info.spawnhealth}
