@@ -4,6 +4,10 @@ joeVars.serverLife = 0
 
 //
 
+joeVars.bossInfo = {}
+
+//
+
 joeVars.scoresKey = false
 joeVars.scoresTicker = 0
 
@@ -54,6 +58,10 @@ joeVars.ownDebug = CV_RegisterVar({name = "joe_owndebug", defaultvalue = "Off", 
 local function resetVars()
 	//
 
+	joeVars.bossInfo = {}
+
+	//
+
 	joeVars.scoresKey = false
 	joeVars.scoresTicker = 0
 
@@ -76,7 +84,7 @@ local function resetVars()
 
 	//
 end
-addHook("MapLoad", resetVars)
+addHook("MapChange", resetVars)
 
 //
 
@@ -84,6 +92,10 @@ local function syncVars(net)
 	//
 
 	joeVars.serverLife = net($)
+
+	//
+
+	joeVars.bossInfo = net($)
 
 	//
 
