@@ -92,7 +92,7 @@ local function drawBosses(v, player)
 			break
 		end
 
-		if (joeFuncs.getDist(mo, player.realmo) <= 2048 * FRACUNIT) then
+		if (joeFuncs.getDist(mo, player.realmo) <= 4096 * FRACUNIT) then
 			local bar_color = ((mo.flags2 & MF2_FRET) and (leveltime % 2)) and 1 or 37
 			local bar_alpha = (not mo.health) and ((10 - min((mo.deathticker / 2) + 1, CV_FindVar("translucenthud").value)) << V_ALPHASHIFT) or V_HUDTRANS
 
