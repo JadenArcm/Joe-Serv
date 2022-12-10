@@ -9,8 +9,6 @@ local function inLevel(player)
 	return false
 end
 
-local blacklistedMobjs = {MT_EMBLEM, MT_COOPEMBLEM, MT_PLAYER}
-
 //
 
 local function teleportMobjToMobj(source, target)
@@ -181,13 +179,6 @@ local commandInfo = {
 			if not (object_valid) then
 				printError(player, "That object doesn't exist. Please double-check.")
 				return
-			end
-
-			for _, types in ipairs(blacklistedMobjs) do
-				if (object_tospawn == types) then
-					printError(player, "\x82" .. ("MT_" .. string.upper(object)) .. "\x80 can't be spawned. Please choose another object.")
-					return
-				end
 			end
 
 			local mo = P_SpawnMobjFromMobj(player.realmo, 0, 0, 0, object_tospawn)

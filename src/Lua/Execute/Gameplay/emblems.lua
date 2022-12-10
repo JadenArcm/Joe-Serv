@@ -59,6 +59,8 @@ local function spawnEmblems(nummap)
 		//
 
 		joeVars.totalEmblems = $ + 1
+		mt.mobj.flags2 = $ | MF2_DONTDRAW
+
 		table.insert(joeVars.emblemInfo, mo)
 
 		//
@@ -74,6 +76,36 @@ local function emblemThink(mo)
 	//
 
 	if not joeFuncs.isValid(mo) then return end
+
+	//
+
+	if not (mo.orig or mo.oldz) then
+		if (mo.fuse > 1) then
+			P_SetObjectMomZ(mo, (mo.fuse * FRACUNIT) / 12, false)
+			P_InstaThrust(mo, mo.angle, (mo.fuse * mo.scale) / 4)
+
+			mo.spritexoffset = P_RandomRange(-4, 4) * FRACUNIT
+			mo.spriteyoffset = P_RandomRange(-4, 4) * FRACUNIT
+
+		elseif (mo.fuse == 1) then
+			local expl = P_SpawnMobjFromMobj(mo, 0, 0, 0, MT_THOK)
+			expl.state = S_STOCKEXPLOSION
+			expl.fuse = TICRATE
+
+			for player in players.iterate do
+				if (joeFuncs.getDist(mo, player.mo) <= (1024 * FRACUNIT)) then
+					P_StartQuake(64 * FRACUNIT, 5)
+				end
+			end
+
+			S_StartSound(expl, sfx_jexpl, nil)
+		end
+
+		mo.frame = P
+		mo.color = SKINCOLOR_SILVER
+		mo.blendmode = AST_REVERSESUBTRACT
+		return
+	end
 
 	//
 
@@ -102,7 +134,7 @@ local function emblemThink(mo)
 		expl.fuse = TICRATE
 
 		for player in players.iterate do
-			if (joeFuncs.getDist(mo, player.mo) <= (128 * FRACUNIT)) then
+			if (joeFuncs.getDist(mo, player.mo) <= (512 * FRACUNIT)) then
 				P_StartQuake(12 * FRACUNIT, 5)
 			end
 		end
@@ -136,6 +168,20 @@ local function touchedEmblem(mo, toucher)
 
 	if not (joeFuncs.isValid(mo) and mo.health) then return end
 	if not joeFuncs.isValid(toucher.player) then return end
+
+	//
+
+	if not (mo.orig or mo.oldz) then
+		mo.fuse = TICRATE
+		mo.health = 0
+
+		P_InstaThrust(toucher, mo.angle + ANGLE_180, 6 * toucher.scale)
+		P_SetObjectMomZ(toucher, 8 * FRACUNIT, false)
+
+		toucher.state = S_PLAY_PAIN
+		S_StartSound(toucher, skins[toucher.skin].soundsid[SKSPLDET1], nil)
+		return true
+	end
 
 	//
 

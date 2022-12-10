@@ -295,7 +295,7 @@ local function drawCoopInfo(v)
 	local x, y, fa = 0, 0, 0
 	local spin = (leveltime % 360) * FRACUNIT
 
-	local anim = joeFuncs.getEasing("outcubic", joeVars.scoresTicker, (400 * FRACUNIT), 0)
+	local anim = joeFuncs.getEasing("inoutexpo", joeVars.scoresTicker, -(400 * FRACUNIT), 0)
 
 	//
 
@@ -305,7 +305,7 @@ local function drawCoopInfo(v)
 
 		fa = FixedAngle(spin)
 		x = (305 << 15) + (48 * cos(fa))
-		y = (186 << 15) + (48 * sin(fa))
+		y = (145 << 15) + (48 * sin(fa))
 
 		spin = $ + ((360 * FRACUNIT) / 7)
 
@@ -314,6 +314,27 @@ local function drawCoopInfo(v)
 		end
 
 		v.drawScaled(x, y + anim, FRACUNIT, patch, flags, nil);
+	end
+
+	//
+
+	if (joeVars.totalEmblems > 0) and (#joeVars.emblemInfo > 0) then
+		table.sort(joeVars.emblemInfo, function(a, b) return (a.orig < b.orig) end)
+
+		for i, mo in ipairs(joeVars.emblemInfo) do
+			local patch = v.getSpritePatch(mo.sprite, mo.frame & FF_FRAMEMASK)
+			local alpha = (mo.health) and V_60TRANS or 0
+
+			local bop_calc = cos(FixedAngle((leveltime + (18 * i)) * (14 * FRACUNIT)))
+			local bop = (joeVars.collectedEmblems >= joeVars.totalEmblems) and bop_calc or 0
+
+			local offs = ((i - 1) * 30) - ((#joeVars.emblemInfo - 1) * 15)
+
+			v.drawScaled((158 * FRACUNIT) + (offs * FRACUNIT), ((180 * FRACUNIT) - anim) + bop, FRACUNIT / 2, patch, alpha, v.getColormap(TC_RAINBOW, mo.color))
+		end
+	else
+		v.drawScaled(160 * FRACUNIT, (180 * FRACUNIT) - anim, FRACUNIT / 2, v.getSpritePatch(SPR_EMBM, X), 0, v.getColormap(TC_RAINBOW, SKINCOLOR_JET))
+		v.drawString(160 * FRACUNIT, (184 * FRACUNIT) - anim, "No emblems?", V_ALLOWLOWERCASE, "thin-fixed-center")
 	end
 
 	//
