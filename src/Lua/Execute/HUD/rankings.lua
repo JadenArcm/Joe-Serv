@@ -267,7 +267,7 @@ local function drawNetInfo(v)
 				local patch = v.cachePatch("GOTIT" .. R_Frame2Char(mo.frame & FF_FRAMEMASK))
 				local alpha = (mo.health) and V_60TRANS or 0
 
-				local bop_calc = cos(FixedAngle((leveltime + (18 * i)) * (10 * FRACUNIT)))
+				local bop_calc = cos(FixedAngle((leveltime + (18 * i)) * (16 * FRACUNIT)))
 				local bop = (joeVars.collectedEmblems >= joeVars.totalEmblems) and bop_calc or 0
 
 				v.drawScaled(anim + ((14 * FRACUNIT) * (i - 1)), (184 * FRACUNIT) + bop, FRACUNIT / 2, patch, V_SNAPTOBOTTOM | alpha | flags, v.getColormap(TC_RAINBOW, mo.color))
@@ -295,7 +295,7 @@ local function drawCoopInfo(v)
 	local x, y, fa = 0, 0, 0
 	local spin = (leveltime % 360) * FRACUNIT
 
-	local anim = joeFuncs.getEasing("inoutexpo", joeVars.scoresTicker, -(400 * FRACUNIT), 0)
+	local anim = joeFuncs.getEasing("outcubic", joeVars.scoresTicker, -(400 * FRACUNIT), 0)
 
 	//
 
@@ -325,12 +325,11 @@ local function drawCoopInfo(v)
 			local patch = v.getSpritePatch(mo.sprite, mo.frame & FF_FRAMEMASK)
 			local alpha = (mo.health) and V_60TRANS or 0
 
-			local bop_calc = cos(FixedAngle((leveltime + (18 * i)) * (14 * FRACUNIT)))
+			local bop_calc = cos(FixedAngle((leveltime + (18 * i)) * (16 * FRACUNIT)))
 			local bop = (joeVars.collectedEmblems >= joeVars.totalEmblems) and bop_calc or 0
 
 			local offs = ((i - 1) * 30) - ((#joeVars.emblemInfo - 1) * 15)
-
-			v.drawScaled((158 * FRACUNIT) + (offs * FRACUNIT), ((180 * FRACUNIT) - anim) + bop, FRACUNIT / 2, patch, alpha, v.getColormap(TC_RAINBOW, mo.color))
+			v.drawScaled((158 + offs) * FRACUNIT, ((180 * FRACUNIT) - anim) + bop, FRACUNIT / 2, patch, alpha, v.getColormap(TC_RAINBOW, mo.color))
 		end
 	else
 		v.drawScaled(160 * FRACUNIT, (180 * FRACUNIT) - anim, FRACUNIT / 2, v.getSpritePatch(SPR_EMBM, X), 0, v.getColormap(TC_RAINBOW, SKINCOLOR_JET))

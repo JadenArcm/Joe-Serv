@@ -1,12 +1,11 @@
 //
 
 local emblemProperties = {
-	[0] = {C, SKINCOLOR_KETCHUP},
-	{E, SKINCOLOR_MINT},
-	{F, SKINCOLOR_GOLD},
-	{G, SKINCOLOR_ICY},
-	{P, SKINCOLOR_RASPBERRY},
-	{L, SKINCOLOR_YELLOW}
+	[0] = {A, SKINCOLOR_ICY},
+	{B, SKINCOLOR_RASPBERRY},
+	{C, SKINCOLOR_SALMON},
+	{D, SKINCOLOR_APRICOT},
+	{E, SKINCOLOR_LIME}
 }
 
 local function spawnSparkles(mo, offs, zoffs, type)
@@ -34,7 +33,7 @@ end
 
 //
 
-local function spawnEmblems(nummap)
+local function spawnEmblems()
 	//
 
 	for mt in mapthings.iterate do
@@ -58,9 +57,13 @@ local function spawnEmblems(nummap)
 
 		//
 
-		joeVars.totalEmblems = $ + 1
-		mt.mobj.flags2 = $ | MF2_DONTDRAW
+		if joeFuncs.isValid(mt.mobj) then
+			mt.mobj.flags2 = $ | MF2_DONTDRAW
+		end
 
+		//
+
+		joeVars.totalEmblems = $ + 1
 		table.insert(joeVars.emblemInfo, mo)
 
 		//

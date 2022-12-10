@@ -28,6 +28,7 @@ local function handleTips()
 	//
 
 	if not (netgame or multiplayer) then return end
+	if (gamestate ~= GS_LEVEL) then return end
 
 	//
 
