@@ -5,6 +5,7 @@ joeVars.serverLife = 0
 //
 
 joeVars.bossInfo = {}
+joeVars.starpostInfo = {}
 
 //
 
@@ -59,6 +60,7 @@ local function resetVars()
 	//
 
 	joeVars.bossInfo = {}
+	joeVars.starpostInfo = {}
 
 	//
 
@@ -96,6 +98,7 @@ local function syncVars(net)
 	//
 
 	joeVars.bossInfo = net($)
+	joeVars.starpostInfo = net($)
 
 	//
 

@@ -107,7 +107,7 @@ local commandInfo = {
 
 		func = function(player, node, reason)
 			if not (node) then
-				printHelp(player, "muteplayer <name/node> \x86[reason]", "Mutes or un-mutes the selected player.")
+				printHelp(player, "muteplayer <name/node> \x86[reason]", "Toggles muting for the selected player.")
 				return
 			end
 
@@ -183,7 +183,6 @@ local commandInfo = {
 
 			local mo = P_SpawnMobjFromMobj(player.realmo, 0, 0, 0, object_tospawn)
 			mo.angle = player.realmo.angle
-			P_SetScale(mo, player.realmo.scale)
 		end
 	},
 
@@ -206,6 +205,7 @@ local commandInfo = {
 				return
 			end
 
+			print("The gravity has been changed to \x82" .. string.format("%f", grav) .. "\x80.")
 			gravity = grav
 		end
 	},
@@ -313,7 +313,7 @@ local commandInfo = {
 				return
 			end
 
-			if (target.pflags & PF_GODMODE) then target.pflags = $ &~ PF_GODMODE end
+			if (target.pflags & PF_GODMODE) then target.pflags = $ & ~(PF_GODMODE) end
 			P_KillMobj(target.mo, nil, nil)
 		end
 	},
@@ -383,12 +383,7 @@ local commandInfo = {
 		admin = false,
 
 		func = function(player, toggle)
-			if All7Emeralds(emeralds) then
-				emeralds = 0
-			else
-				emeralds = 127
-			end
-
+			emeralds = (not All7Emeralds($)) and 127 or 0
 			S_StartSound(nil, All7Emeralds(emeralds) and sfx_s3k9c or sfx_s3k37)
 
 			print(joeFuncs.getPlayerName(player, 1) .. "\x80 " .. (All7Emeralds(emeralds) and "spawned" or "returned") .. " all of the \x83" .. "Chaos Emeralds" .. "\x80.")
@@ -511,6 +506,7 @@ local commandInfo = {
 				return
 			end
 
+			CONS_Printf(player, "Your scale is now \x82" .. string.format("%f", scale) .. "\x80.")
 			player.mo.destscale = scale
 		end
 	},

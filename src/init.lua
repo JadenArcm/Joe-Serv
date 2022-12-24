@@ -48,6 +48,7 @@ folder = "Execute/Gameplay/Player"
 dofolder("effects.lua")
 dofolder("health.lua")
 dofolder("deaths.lua")
+dofolder("starposts.lua")
 
 //
 
@@ -59,6 +60,7 @@ folder = "Execute/HUD/Gameplay"
 dofolder("bosses.lua")
 dofolder("nametags.lua")
 dofolder("emblems.lua")
+dofolder("starposts.lua")
 
 folder = "Execute/HUD/Miscellaneous"
 dofolder("autoexit.lua")

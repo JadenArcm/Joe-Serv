@@ -31,12 +31,27 @@ local function playerVars(player)
 
 	//
 
+	player.starinfo = {}
+	player.starinfo.tics = 0
+	player.starinfo.prevtics = 0
+	player.starinfo.menutics = 0
+	player.starinfo.refmobj = nil
+
+	player.starinfo.menu = {}
+	player.starinfo.menu["enabled"] = false
+	player.starinfo.menu["itemOn"] = 1
+
+	//
+
 	player.force = {}
 	player.force.god = false
 	player.force.noclip = false
 	player.force.colorize = false
 
 	//
+
+	player.lastsidemove = 0
+	player.lastforwardmove = 0
 
 	player.jinit = true
 
