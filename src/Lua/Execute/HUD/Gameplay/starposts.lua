@@ -40,18 +40,18 @@ local function drawList(v, player, x, y, flags, size)
 	//
 
 	for i = top, bottom do
-		if (offs > (100 * FRACUNIT)) then break end
+		if (offs > (100 * FRACUNIT)) then
+			break
+		end
 
 		local mo = size[i]
-		local hilicol = ((itemOn == i) and V_YELLOWMAP) or ((not mo.enabled) and V_GRAYMAP) or 0
 
-		local color = (mo == player.starinfo.refmobj) and SKINCOLOR_ORANGE or SKINCOLOR_RED
-		local mapping = (mo == player.starinfo.refmobj) and TC_RAINBOW or TC_DEFAULT
-		local properties = (mo.enabled) and {color, V_HUDTRANS} or {SKINCOLOR_SILVER, V_HUDTRANSHALF}
+		local hilicol = ((itemOn == i) and V_YELLOWMAP) or ((not mo.enabled) and V_GRAYMAP) or 0
+		local properties = (mo.enabled) and {SKINCOLOR_RED, V_HUDTRANS} or {SKINCOLOR_SILVER, V_HUDTRANSHALF}
 
 		joeFuncs.drawFill(v, x - (30 * FRACUNIT), (y - (7 * FRACUNIT)) + offs, 43 * FRACUNIT, 14 * FRACUNIT, 31 | flags | V_HUDTRANSHALF)
 
-		v.drawScaled(x, y + offs, FRACUNIT / 2, v.cachePatch("JOE_STAR"), properties[2] | flags, v.getColormap(mapping, properties[1]))
+		v.drawScaled(x, y + offs, FRACUNIT / 2, v.cachePatch("JOE_STAR"), properties[2] | flags, v.getColormap(TC_DEFAULT, properties[1]))
 		v.drawString(x - (18 * FRACUNIT), (y - (3 * FRACUNIT)) + offs, "#" .. i, hilicol | properties[2] | flags, "thin-fixed-center")
 
 		offs = $ + (14 * FRACUNIT)

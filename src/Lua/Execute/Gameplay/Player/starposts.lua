@@ -43,12 +43,12 @@ local function handleStarposts()
 		local star = player.starinfo
 
 		star.prevtics = max(0, $ - 1)
-		star.menutics = (star.menu["enabled"] and not star.prevtics) and min($ + 2, TICRATE) or max(0, $ - 1)
+		star.menutics = (star.menu["enabled"] and not star.prevtics) and min($ + 2, TICRATE) or max(0, $ - 3)
 
 		star.tics = (star.menu["enabled"]) and min($ + 2, TICRATE) or max(0, $ - 1)
 
 		if (star.menu["enabled"]) then
-				if P_MovingThru(player, "down") then
+			if P_MovingThru(player, "down") then
 				star.menu["itemOn"] = M_CycleThru($, 1)
 				S_StartSound(nil, sfx_menu1, player)
 			end
@@ -67,26 +67,26 @@ local function handleStarposts()
 				for i, mo in ipairs(joeVars.starpostInfo) do
 					if (star.menu["itemOn"] == i) then
 						if not (mo.enabled) then
-							S_StartSound(player.mo, sfx_adderr)
+							S_StartSound(nil, sfx_adderr, player)
 							break
 						end
 
-						P_TeleportMove(player.realmo, mo.x + (-64 * cos(mo.angle)), mo.y + (-64 * sin(mo.angle)), mo.z + mo.height)
+						P_TeleportMove(player.realmo, mo.x + FixedMul(-(mo.radius - FRACUNIT), cos(mo.angle + ANGLE_90)), mo.y + FixedMul(-(mo.radius - FRACUNIT), sin(mo.angle + ANGLE_90)), mo.z + mo.height)
 						P_FlashPal(player, PAL_WHITE, 5)
-						S_StartSound(player.realmo, sfx_mixup)
+						S_StartSound(nil, sfx_mixup, player)
 
 						player.realmo.state = S_PLAY_FALL
 						player.drawangle = mo.angle
 
 						player.pflags = $ | PF_THOKKED
-						player.powers[pw_flashing] = 17
-
 						star.menu["enabled"] = false
 					end
 				end
 			end
 
 			player.powers[pw_nocontrol] = 2
+			player.powers[pw_flashing] = 2
+
 			player.cmd.buttons = $ & (BT_JUMP | BT_SPIN)
 		end
 
@@ -138,7 +138,6 @@ local function starpostThink(mo)
 
 		if not (player.starinfo.menu["enabled"]) then
 			player.starinfo.prevtics = min($ + 2, TICRATE + 1)
-			player.starinfo.refmobj = mo
 
 			if P_DidPress(player, BT_TOSSFLAG) then
 				player.starinfo.menu["enabled"] = true
@@ -154,7 +153,7 @@ local function starpostThink(mo)
 	arrow.fuse = -1
 
 	arrow.sprite = SPR_LCKN
-	arrow.frame = $ | (FF_PAPERSPRITE | TR_TRANS60)
+	arrow.frame = $ | (FF_PAPERSPRITE | FF_ADD)
 
 	arrow.renderflags = $ | (RF_FULLBRIGHT | RF_NOCOLORMAPS)
 	arrow.color = SKINCOLOR_RED
