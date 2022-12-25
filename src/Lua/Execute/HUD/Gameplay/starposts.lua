@@ -44,15 +44,18 @@ local function drawList(v, player, x, y, flags, size)
 			break
 		end
 
-		local mo = size[i]
+		local info = size[i]
 
-		local hilicol = ((itemOn == i) and V_YELLOWMAP) or ((not mo.enabled) and V_GRAYMAP) or 0
-		local properties = (mo.enabled) and {SKINCOLOR_RED, V_HUDTRANS} or {SKINCOLOR_SILVER, V_HUDTRANSHALF}
+		local patch = (info.mobj) and (((info.mobj.type == MT_STARPOST) and "JOE_STAR") or ((info.mobj.type == MT_SIGN) and "JOE_SIGN")) or "JOE_SPWN"
+		local str = (info.mobj) and (((info.mobj.type == MT_STARPOST) and ("#" .. i)) or ((info.mobj.type == MT_SIGN) and "FIN")) or "SPW"
+
+		local hilicol = ((itemOn == i) and V_YELLOWMAP) or ((info.mobj and not info.mobj.enabled) and V_GRAYMAP) or 0
+		local properties = (info.mobj) and ((info.mobj.enabled) and {(info.mobj.type == MT_SIGN) and ColorOpposite(info.mobj.target.color) or SKINCOLOR_RED, V_HUDTRANS} or {SKINCOLOR_SILVER, V_HUDTRANSHALF}) or {SKINCOLOR_BLUE, V_HUDTRANS}
 
 		joeFuncs.drawFill(v, x - (30 * FRACUNIT), (y - (7 * FRACUNIT)) + offs, 43 * FRACUNIT, 14 * FRACUNIT, 31 | flags | V_HUDTRANSHALF)
 
-		v.drawScaled(x, y + offs, FRACUNIT / 2, v.cachePatch("JOE_STAR"), properties[2] | flags, v.getColormap(TC_DEFAULT, properties[1]))
-		v.drawString(x - (18 * FRACUNIT), (y - (3 * FRACUNIT)) + offs, "#" .. i, hilicol | properties[2] | flags, "thin-fixed-center")
+		v.drawScaled(x, y + offs, FRACUNIT / 2, v.cachePatch(patch), properties[2] | flags, v.getColormap(TC_DEFAULT, properties[1]))
+		v.drawString(x - (18 * FRACUNIT), (y - (3 * FRACUNIT)) + offs, str, hilicol | properties[2] | flags, "thin-fixed-center")
 
 		offs = $ + (14 * FRACUNIT)
 	end
@@ -83,14 +86,14 @@ local function drawStarposts(v, player)
 
 	//
 
-	if (player.starinfo.prevtics > 0) then
-		local alpha = (10 - min((player.starinfo.prevtics / 2) + 1, CV_FindVar("translucenthud").value)) << V_ALPHASHIFT
+	if (player.starinfo.previous_tics > 0) then
+		local alpha = (10 - min((player.starinfo.previous_tics / 2) + 1, CV_FindVar("translucenthud").value)) << V_ALPHASHIFT
 		v.drawString(160, 192, "Press [\x82TOSSFLAG\x80] to open the starpost menu.", V_ALLOWLOWERCASE | V_SNAPTOBOTTOM | V_PERPLAYER | alpha, "small-center")
 	end
 
-	if (player.starinfo.menutics > 0) then
+	if (player.starinfo.menu_tics > 0) then
 		for i = 1, #strings do
-			local alpha = (10 - min((player.starinfo.menutics / 2) + 1, CV_FindVar("translucenthud").value)) << V_ALPHASHIFT
+			local alpha = (10 - min((player.starinfo.menu_tics / 2) + 1, CV_FindVar("translucenthud").value)) << V_ALPHASHIFT
 			v.drawString(160, 192 - ((i - 1) * 5), strings[i], V_ALLOWLOWERCASE | V_SNAPTOBOTTOM | V_PERPLAYER | alpha, "small-center")
 		end
 	end

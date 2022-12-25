@@ -4,6 +4,8 @@ freeslot(
 	"S_COOPEMBLEM", "MT_COOPEMBLEM",
 	"S_STOCKEXPLOSION", "SPR_JEXP",
 
+	"S_CUSTOMARROW", "MT_CUSTOMARROW",
+
 	"sfx_jjoin", "sfx_jleave", "sfx_jkick", "sfx_jfail",
 	"sfx_jtip",
 
@@ -24,6 +26,19 @@ mobjinfo[MT_COOPEMBLEM] = {
 	radius = 16 * FRACUNIT,
 	height = 30 * FRACUNIT,
 	flags = MF_SPECIAL | MF_NOGRAVITY | MF_NOCLIPHEIGHT
+}
+
+//
+
+states[S_CUSTOMARROW] = {SPR_LCKN, A | FF_PAPERSPRITE | FF_TRANS20, -1, nil, 0, 0, S_NULL}
+
+mobjinfo[MT_CUSTOMARROW] = {
+	doomednum = -1,
+	spawnstate = S_CUSTOMARROW,
+	seestate = S_CUSTOMARROW,
+	radius = 16 * FRACUNIT,
+	height = 16 * FRACUNIT,
+	flags = MF_NOGRAVITY | MF_NOCLIPHEIGHT | MF_SCENERY
 }
 
 //

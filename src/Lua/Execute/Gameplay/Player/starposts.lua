@@ -31,6 +31,27 @@ local function M_CycleThru(value, increment)
 	return value
 end
 
+local function M_CheckDist(player, mo)
+	if (joeFuncs.getDist(mo, player.realmo) >= mo.radius) then return end
+
+	if not (player.starinfo.menu["enabled"]) then
+		player.starinfo.previous_tics = min($ + 2, TICRATE + 1)
+
+		if P_DidPress(player, BT_TOSSFLAG) then
+			player.starinfo.menu["enabled"] = true
+			S_StartSound(nil, sfx_strpst, player)
+		end
+	end
+end
+
+local function M_SpawnArrow(mo, offset)
+	local arrow = P_SpawnMobjFromMobj(mo, 0, 0, offset, MT_CUSTOMARROW)
+	arrow.color = SKINCOLOR_GREEN
+	arrow.colorized = true
+
+	arrow.renderflags = $ | (RF_FULLBRIGHT | RF_NOCOLORMAPS)
+end
+
 //
 
 local function handleStarposts()
@@ -41,11 +62,6 @@ local function handleStarposts()
 		if (player.playerstate ~= PST_LIVE) then continue end
 
 		local star = player.starinfo
-
-		star.prevtics = max(0, $ - 1)
-		star.menutics = (star.menu["enabled"] and not star.prevtics) and min($ + 2, TICRATE) or max(0, $ - 3)
-
-		star.tics = (star.menu["enabled"]) and min($ + 2, TICRATE) or max(0, $ - 1)
 
 		if (star.menu["enabled"]) then
 			if P_MovingThru(player, "down") then
@@ -58,35 +74,10 @@ local function handleStarposts()
 				S_StartSound(nil, sfx_menu1, player)
 			end
 
-			if P_DidPress(player, BT_SPIN) then
-				star.menu["enabled"] = false
-				S_StartSound(nil, sfx_addfil, player)
-			end
-
-			if P_DidPress(player, BT_JUMP) then
-				for i, mo in ipairs(joeVars.starpostInfo) do
-					if (star.menu["itemOn"] == i) then
-						if not (mo.enabled) then
-							S_StartSound(nil, sfx_adderr, player)
-							break
-						end
-
-						P_TeleportMove(player.realmo, mo.x + FixedMul(-(mo.radius - FRACUNIT), cos(mo.angle + ANGLE_90)), mo.y + FixedMul(-(mo.radius - FRACUNIT), sin(mo.angle + ANGLE_90)), mo.z + mo.height)
-						P_FlashPal(player, PAL_WHITE, 5)
-						S_StartSound(nil, sfx_mixup, player)
-
-						player.realmo.state = S_PLAY_FALL
-						player.drawangle = mo.angle
-
-						player.pflags = $ | PF_THOKKED
-						star.menu["enabled"] = false
-					end
-				end
-			end
-
 			player.powers[pw_nocontrol] = 2
-			player.powers[pw_flashing] = 2
+			player.powers[pw_flashing] = 1
 
+			player.realmo.momx, player.realmo.momy = 0, 0
 			player.cmd.buttons = $ & (BT_JUMP | BT_SPIN)
 		end
 
@@ -98,6 +89,81 @@ local function handleStarposts()
 end
 addHook("PreThinkFrame", handleStarposts)
 
+local function handlePlayers(player)
+	//
+
+	if (player.spectator) then return end
+
+	if (player.playerstate ~= PST_LIVE) then
+		player.starinfo.menu["enabled"] = false
+		return
+	end
+
+	//
+
+	local star = player.starinfo
+
+	//
+
+	star.previous_tics = max(0, $ - 1)
+	star.teleport_tics = max(0, $ - 1)
+
+	star.menu_tics = (star.menu["enabled"] and not star.previous_tics) and min($ + 2, TICRATE) or max(0, $ - 3)
+	star.tics = (star.menu["enabled"]) and min($ + 2, TICRATE) or max(0, $ - 1)
+
+	//
+
+	if (star.menu["enabled"]) then
+		if P_DidPress(player, BT_SPIN) then
+			star.menu["enabled"] = false
+			S_StartSound(nil, sfx_addfil, player)
+		end
+
+		if P_DidPress(player, BT_JUMP) then
+			for i, info in ipairs(joeVars.starpostInfo) do
+				if (star.menu["itemOn"] == i) then
+					if (info.mobj) and not (info.mobj.enabled) then
+						S_StartSound(nil, sfx_adderr, player)
+						break
+					end
+
+					star.teleport_tics = 2 * TICRATE
+					star.previous_mobj = info
+
+					star.menu["enabled"] = false
+					S_StartSound(nil, sfx_vwre, player)
+				end
+			end
+		end
+	end
+
+	//
+
+	if (star.teleport_tics > 0) then
+		player.realmo.state = S_PLAY_SPRING
+		player.drawangle = $ + ANG10
+
+		player.pflags = $ | PF_THOKKED
+		player.powers[pw_nocontrol], player.powers[pw_flashing] = 2, 1
+
+		player.realmo.momx, player.realmo.momy = 0, 0
+		P_SetObjectMomZ(player.realmo, FRACUNIT + (FRACUNIT / 3), false)
+	end
+
+	if (star.teleport_tics == 1) then
+		local info = star.previous_mobj
+		local mo = (info.mobj) and {info.mobj.x, info.mobj.y, info.mobj.z, info.mobj.height} or {info.x * FRACUNIT, info.y * FRACUNIT, info.z * FRACUNIT, 64 * FRACUNIT}
+
+		P_TeleportMove(player.realmo, mo[1], mo[2], mo[3] + mo[4])
+		P_FlashPal(player, PAL_WHITE, 5)
+
+		S_StartSound(nil, sfx_mixup, player)
+	end
+
+	//
+end
+addHook("PlayerThink", handlePlayers)
+
 //
 
 local function insertInfo()
@@ -105,21 +171,36 @@ local function insertInfo()
 
 	for mo in mobjs.iterate() do
 		if (mo.type == MT_STARPOST) then
-			table.insert(joeVars.starpostInfo, mo)
+			table.insert(joeVars.starpostInfo, mo.spawnpoint)
+			M_SpawnArrow(mo, mo.height)
 		end
 	end
 
 	table.sort(joeVars.starpostInfo, function(a, b)
-		return ((a.spawnpoint.angle + (a.spawnpoint.extrainfo * 360)) < (b.spawnpoint.angle + (b.spawnpoint.extrainfo * 360)))
+		return ((a.angle + (a.extrainfo * 360)) < (b.angle + (b.extrainfo * 360)))
 	end)
+
+	//
+
+	for mt in mapthings.iterate do
+		if (mt.type == 1) then
+			table.insert(joeVars.starpostInfo, mt)
+		end
+
+		if (mt.type == mobjinfo[MT_SIGN].doomednum) then
+			table.insert(joeVars.starpostInfo, mt)
+			M_SpawnArrow(mt.mobj, mt.mobj.height * 3)
+		end
+	end
 
 	//
 
 	for player in players.iterate do
 		if (player.valid) and (player.jinit) then
 			player.starinfo.tics = 0
-			player.starinfo.prevtics = 0
-			player.starinfo.menutics = 0
+			player.starinfo.menu_tics = 0
+			player.starinfo.previous_tics = 0
+			player.starinfo.teleport_tics = 0
 
 			player.starinfo.menu["enabled"] = false
 			player.starinfo.menu["itemOn"] = 1
@@ -130,40 +211,48 @@ local function insertInfo()
 end
 addHook("MapLoad", insertInfo)
 
+//
+
+local function arrowThink(mo)
+	//
+
+	mo.spriteyoffset = 8 * cos((leveltime * 2) * ANG1)
+	mo.angle = $ + FixedAngle(FRACUNIT)
+
+	mo.blendmode = AST_ADD
+
+	//
+end
+addHook("MobjThinker", arrowThink, MT_CUSTOMARROW)
+
+//
+
 local function starpostThink(mo)
 	//
 
 	for player in players.iterate do
-		if (joeFuncs.getDist(mo, player.realmo) >= mo.height) then continue end
-
-		if not (player.starinfo.menu["enabled"]) then
-			player.starinfo.prevtics = min($ + 2, TICRATE + 1)
-
-			if P_DidPress(player, BT_TOSSFLAG) then
-				player.starinfo.menu["enabled"] = true
-				S_StartSound(nil, sfx_strpst, player)
-			end
-		end
+		M_CheckDist(player, mo)
 	end
-
-	//
-
-	local arrow = P_SpawnMobjFromMobj(mo, 0, 0, mo.height, MT_THOK)
-	arrow.angle = mo.angle + ANGLE_90
-	arrow.fuse = -1
-
-	arrow.sprite = SPR_LCKN
-	arrow.frame = $ | (FF_PAPERSPRITE | FF_ADD)
-
-	arrow.renderflags = $ | (RF_FULLBRIGHT | RF_NOCOLORMAPS)
-	arrow.color = SKINCOLOR_RED
-
-	//
 
 	mo.enabled = $ or ((mo.state == S_STARPOST_SPIN) or (mo.state == S_STARPOST_FLASH))
 
 	//
 end
 addHook("MobjThinker", starpostThink, MT_STARPOST)
+
+//
+
+local function signThink(mo)
+	//
+
+	for player in players.iterate do
+		M_CheckDist(player, mo)
+	end
+
+	mo.enabled = $ or (joeFuncs.isValid(mo.target) and joeFuncs.isValid(mo.target.player))
+
+	//
+end
+addHook("MobjThinker", signThink, MT_SIGN)
 
 //

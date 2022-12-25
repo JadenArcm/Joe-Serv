@@ -33,8 +33,11 @@ local function playerVars(player)
 
 	player.starinfo = {}
 	player.starinfo.tics = 0
-	player.starinfo.prevtics = 0
-	player.starinfo.menutics = 0
+	player.starinfo.menu_tics = 0
+	player.starinfo.previous_tics = 0
+	player.starinfo.teleport_tics = 0
+
+	player.starinfo.previous_mobj = nil
 
 	player.starinfo.menu = {}
 	player.starinfo.menu["enabled"] = false
