@@ -143,18 +143,30 @@ local function handlePlayers(player)
 		player.realmo.state = S_PLAY_SPRING
 		player.drawangle = $ + ANG10
 
-		player.pflags = $ | PF_THOKKED
 		player.powers[pw_nocontrol], player.powers[pw_flashing] = 2, 1
 
 		player.realmo.momx, player.realmo.momy = 0, 0
-		P_SetObjectMomZ(player.realmo, FRACUNIT + (FRACUNIT / 3), false)
+		P_SetObjectMomZ(player.realmo, FRACUNIT, false)
 	end
 
 	if (star.teleport_tics == 1) then
 		local info = star.previous_mobj
-		local mo = (info.mobj) and {info.mobj.x, info.mobj.y, info.mobj.z, info.mobj.height} or {info.x * FRACUNIT, info.y * FRACUNIT, info.z * FRACUNIT, 64 * FRACUNIT}
+		local mo = {}
 
-		P_TeleportMove(player.realmo, mo[1], mo[2], mo[3] + mo[4])
+		if (info.type == 1) then
+			mo.x, mo.y = (info.x * FRACUNIT), (info.y * FRACUNIT)
+			mo.z = P_FloorzAtPos(mo.x, mo.y, info.z * FRACUNIT, player.realmo.height)
+
+			mo.angle = 0
+			mo.offset = 72 * FRACUNIT
+		else
+			mo.x, mo.y, mo.z = info.mobj.x, info.mobj.y, info.mobj.z
+
+			mo.angle = info.mobj.angle + ANGLE_90
+			mo.offset = info.mobj.height
+		end
+
+		P_TeleportMove(player.realmo, mo.x + (48 * cos(mo.angle)), mo.y + (48 * sin(mo.angle)), mo.z + mo.offset)
 		P_FlashPal(player, PAL_WHITE, 5)
 
 		S_StartSound(nil, sfx_mixup, player)
@@ -169,10 +181,14 @@ addHook("PlayerThink", handlePlayers)
 local function insertInfo()
 	//
 
-	for mo in mobjs.iterate() do
-		if (mo.type == MT_STARPOST) then
-			table.insert(joeVars.starpostInfo, mo.spawnpoint)
-			M_SpawnArrow(mo, mo.height)
+	if (titlemapinaction) then return end
+
+	//
+
+	for mt in mapthings.iterate do
+		if (mt.type == mobjinfo[MT_STARPOST].doomednum) then
+			table.insert(joeVars.starpostInfo, mt)
+			M_SpawnArrow(mt.mobj, mt.mobj.height)
 		end
 	end
 

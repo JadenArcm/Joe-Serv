@@ -187,7 +187,7 @@ local function drawLives(v, player)
 
 	elseif (player.hp.current <= (player.hp.max / 4)) then
 		health_color = 36
-		
+
 	elseif (player.hp.current <= (player.hp.max / 2)) then
 	 	health_color = 73
 	end
