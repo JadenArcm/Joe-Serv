@@ -75,7 +75,7 @@ local function drawStarposts(v, player)
 	//
 
 	local x, y = (299 * FRACUNIT), (47 * FRACUNIT)
-	local flags = V_SNAPTORIGHT | V_PERPLAYER
+	local flags = V_SNAPTOTOP | V_SNAPTORIGHT | V_PERPLAYER
 
 	local anim = joeFuncs.getEasing("inoutexpo", player.starinfo.tics, (640 * FRACUNIT), x)
 	local strings = {
