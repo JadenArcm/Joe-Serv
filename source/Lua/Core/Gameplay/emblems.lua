@@ -49,6 +49,10 @@ addHook("MapLoad", function()
 		joeVars.totalEmblems = $ + 1
 		table.insert(joeVars.emblemInfo, mo)
 	end
+
+	table.sort(joeVars.emblemInfo, function(a, b)
+		return (a.orig < b.orig)
+	end)
 end)
 
 --//

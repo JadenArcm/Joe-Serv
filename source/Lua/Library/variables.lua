@@ -10,6 +10,7 @@ local function initVariables(t, opts)
 
 			["devbug"] = CV_RegisterVar({"joe_devbug", "Off", 0, CV_OnOff}),
 			["nametags"] = CV_RegisterVar({"joe_nametags", "On", 0, CV_OnOff}),
+			["radar"] = CV_RegisterVar({"joe_emblemradar", "Off", 0, CV_OnOff}),
 			["customhud"] = CV_RegisterVar({"joe_customhud", "On", 0, CV_OnOff}),
 		}
 
@@ -29,6 +30,7 @@ local function initVariables(t, opts)
 	-- Emblems
 	t.collectedEmblems = 0
 	t.totalEmblems = 0
+	t.emblemTics = 0
 	t.emblemInfo = {}
 
 	-- Time limit / Autoexit
@@ -52,6 +54,7 @@ addHook("NetVars", function(sync)
 	for entry, _ in pairs(joeVars) do
 		if (entry == "cvars") then continue end
 		if (entry == "displayList") then continue end
+		if (entry == "emblemTics") then continue end
 
 		joeVars[entry] = sync($)
 	end

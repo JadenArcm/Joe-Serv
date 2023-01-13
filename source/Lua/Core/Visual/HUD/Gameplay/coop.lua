@@ -16,7 +16,7 @@ end
 
 local function drawScore(v, player)
 	local x, y = (9 * FRACUNIT), (25 * FRACUNIT)
-	local flags = V_SNAPTOTOP | V_SNAPTORIGHT | V_PERPLAYER
+	local flags = V_SNAPTOTOP | V_SNAPTOLEFT | V_PERPLAYER
 
 	local alpha, anim = getParams(v, -(50 * FRACUNIT), x, player.hudstuff["display"])
 
@@ -31,7 +31,7 @@ end
 
 local function drawRings(v, player)
 	local x, y = (296 * FRACUNIT), (25 * FRACUNIT)
-	local flags = V_SNAPTOTOP | V_SNAPTOLEFT | V_PERPLAYER
+	local flags = V_SNAPTOTOP | V_SNAPTORIGHT | V_PERPLAYER
 
 	local alpha, anim = getParams(v, (400 * FRACUNIT), x, player.hudstuff["display"])
 	local should_flash = ((player.powers[pw_super] > 0) and (player.rings < 20)) or (player.rings <= 0)

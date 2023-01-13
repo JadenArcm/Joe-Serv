@@ -4,6 +4,10 @@ function joeFuncs.addHUD(func)
 	table.insert(joeVars.displayList, func)
 end
 
+function joeFuncs.getWaving(i, mn, mx, tics)
+	return sin(FixedAngle((tics + (mn * i)) * (mx * FRACUNIT)))
+end
+
 --//
 
 function joeFuncs.getSkincolor(v, player, real_color)

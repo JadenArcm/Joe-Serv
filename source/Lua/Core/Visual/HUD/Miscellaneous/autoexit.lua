@@ -26,7 +26,7 @@ end
 local function handleTickers()
 	if (gamestate ~= GS_LEVEL) then return end
 
-	joeVars.exitTics = ((leveltime > TICRATE) and (leveltime < (5 * TICRATE))) and min($ + 1, TICRATE) or max(0, $ - 1)
+	joeVars.exitTics = ((leveltime > TICRATE) and (leveltime < (6 * TICRATE))) and min($ + 1, TICRATE) or max(0, $ - 1)
 	joeVars.exitDelay = ((leveltime - joeVars.exitCountdown) >= (2 * TICRATE)) and min($ + 1, TICRATE) or max(0, $ - 1)
 end
 addHook("ThinkFrame", handleTickers)
