@@ -143,6 +143,31 @@ local command_info = {
 		end
 	},
 
+	{
+		name = "getammo",
+		admin = true,
+
+		func = function(player)
+			if not inLevel(player) then return end
+
+			local weapons = {
+				{pw_automaticring, RW_AUTO, 400},
+				{pw_bouncering, RW_BOUNCE, 100},
+				{pw_scatterring, RW_SCATTER, 50},
+				{pw_grenadering, RW_GRENADE, 100},
+				{pw_explosionring, RW_EXPLODE, 50},
+				{pw_railring, RW_RAIL, 50},
+			}
+
+			for i = 1, #weapons do
+				player.ringweapons = $ | (weapons[i][2])
+				player.powers[weapons[i][1]] = weapons[i][3]
+			end
+
+			CONS_Printf(player, "You now have \x82" .. "every" .. "\x80 weapon!")
+		end
+	},
+
 	//
 
 	{
