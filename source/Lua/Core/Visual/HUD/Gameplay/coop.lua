@@ -52,20 +52,18 @@ local function drawLives(v, player)
 	local alpha, anim = getParams(v, -(50 * FRACUNIT), x, player.hudstuff["display"])
 
 	local scale = FRACUNIT / 2
-	local yoffs = G_GametypeUsesLives() and FRACUNIT or (4 * FRACUNIT)
-
 	local patch = v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A)
 	local colormap = joeFuncs.getSkincolor(v, player, true)
 
-	local player_lives = ((player.lives == INFLIVES) or (netgame and (CV_FindVar("cooplives").value == 0))) and "INF" or ("\x82x\x80" .. max(0, min(player.lives, 99)))
+	local lives = ((player.lives == INFLIVES) or (netgame and (CV_FindVar("cooplives").value == 0))) and {pos = 4, str = ""} or {pos = 1, str = ("\x82x\x80" .. max(0, min(player.lives, 99)))}
 
 	if (alpha ~= false) then
 		v.drawScaled(anim, y, scale, v.cachePatch("STLIVEBK"), flags | alpha, nil)
 		v.drawScaled(anim, y, scale, patch, flags | alpha, colormap)
 
-		v.drawString(anim + (19 * FRACUNIT), y + yoffs, joeFuncs.getPlayerName(player, 1), flags | alpha | V_ALLOWLOWERCASE, "thin-fixed")
-		if G_GametypeUsesLives() then
-			v.drawString(anim + (19 * FRACUNIT), y + (9 * FRACUNIT), player_lives, flags | alpha | V_ALLOWLOWERCASE, "thin-fixed")
+		v.drawString(anim + (19 * FRACUNIT), y + (lives.pos * FRACUNIT), joeFuncs.getPlayerName(player, 1), flags | alpha | V_ALLOWLOWERCASE, "thin-fixed")
+		if G_GametypeUsesLives() and (string.len(lives.str) > 0) then
+			v.drawString(anim + (19 * FRACUNIT), y + (9 * FRACUNIT), lives.str, flags | alpha | V_ALLOWLOWERCASE, "thin-fixed")
 		end
 	end
 end

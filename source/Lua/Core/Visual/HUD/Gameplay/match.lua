@@ -61,14 +61,14 @@ local function drawWeapon(v, player, x, y, scale, flags, selection)
 	else
 		v.drawScaled(x, y, scale, weap_patch, flags | params.patch_alpha, nil)
 		v.drawString(x + (8 * FRACUNIT), y + (8 * FRACUNIT), player.powers[match_weapons[selection].power], flags | params.patch_alpha | params.text_color, "thin-fixed-center")
+
+		if (selection == player.ammoremovalweapon) and ((player.ammoremovaltimer) and (leveltime % 8 < 4)) then
+			v.drawString(x + (8 * FRACUNIT), y + (2 * FRACUNIT), "-" .. player.ammoremoval, flags | V_REDMAP, "small-fixed-center")
+		end
 	end
 
 	if (player.currentweapon == selection) then
 		v.drawScaled(x - (2 * FRACUNIT), (y - (2 * FRACUNIT)) + FixedMul((offs[2] / 2) * FRACUNIT, scale), scale, v.cachePatch("CURWEAP"), flags | alpha, nil)
-
-		if (player.ammoremovaltimer) and (leveltime % 8 < 4) then
-			v.drawString(x + (8 * FRACUNIT), y + (2 * FRACUNIT), "-" .. player.ammoremoval, flags | V_REDMAP, "small-fixed-center")
-		end
 	end
 end
 
@@ -104,8 +104,12 @@ local function drawPlayer(v, player)
 	local patch = v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A)
 	local colormap = joeFuncs.getSkincolor(v, player, true)
 
-	if G_GametypeUsesLives() and ((CV_FindVar("cooplives").value ~= 0) or (player.lives ~= INFLIVES)) then
-		name_str = ("\x80 / \x82x\x80" .. max(0, min(player.lives, 99)))
+	if G_GametypeUsesLives() then
+		if (CV_FindVar("cooplives").value == 0) or (player.lives == INFLIVES) then
+			name_str = ""
+		else
+			name_str = ("\x80 / \x82x\x80" .. max(0, min(player.lives, 99)))
+		end
 	end
 
 	if (alpha ~= false) then
