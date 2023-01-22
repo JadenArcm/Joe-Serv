@@ -84,8 +84,15 @@ end
 
 --//
 
+---@param player player_t
 function joeFuncs.worldToScreen(v, player, mo)
-	local cam = (camera.chase) and {camera.x, camera.y, camera.z, camera.angle, camera.aiming} or {player.realmo.x, player.realmo.y, player.viewz, player.realmo.angle, player.aiming}
+	local cam = {player.realmo.x, player.realmo.y, player.viewz, player.realmo.angle, player.aiming}
+
+	if (camera.chase) then
+		cam = {camera.x, camera.y, camera.z, camera.angle, camera.aiming}
+	elseif (player.awayviewmobj) then
+		cam = {player.awayviewmobj.x, player.awayviewmobj.y, player.awayviewmobj.z, player.awayviewmobj.angle, player.awayviewaiming}
+	end
 
 	local sx = cam[4] - R_PointToAngle2(cam[1], cam[2], mo[1], mo[2])
 	local sy = 0
