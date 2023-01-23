@@ -12,7 +12,7 @@ joeFuncs.addHUD(function(v, player)
 		if not joeFuncs.isValid(target.mo) then continue end
 		if (R_PointToDist2(target.mo.x, target.mo.y, player.realmo.x, player.realmo.y) >= maxdist) then continue end
 
-		if (numtags > joeVars.cvars["maxtags"].value) then continue end
+		if (numtags >= joeVars.cvars["maxtags"].value) then continue end
 
 		local player_name = joeFuncs.getPlayerName(target, 1)
 		local player_zoffs = P_MobjFlip(target.mo) * (P_GetPlayerHeight(target) + (16 * target.mo.scale))
