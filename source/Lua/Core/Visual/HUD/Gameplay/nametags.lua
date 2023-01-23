@@ -17,7 +17,7 @@ joeFuncs.addHUD(function(v, player)
 		local player_name = joeFuncs.getPlayerName(target, 1)
 		local player_zoffs = P_MobjFlip(target.mo) * (P_GetPlayerHeight(target) + (16 * target.mo.scale))
 
-		local alpha = ((joeFuncs.getDistance(target.mo, player.realmo) <= (maxdist / 2)) or P_CheckSight(player.realmo, target.mo)) and V_20TRANS or V_90TRANS
+		local alpha = ((joeFuncs.getDistance(target.mo, player.realmo) >= (maxdist / 2)) or not P_CheckSight(player.realmo, target.mo)) and V_90TRANS or V_20TRANS
 		local screen = joeFuncs.worldToScreen(v, player, {target.mo.x, target.mo.y, target.mo.z + player_zoffs})
 
 		if (screen.visible) then
