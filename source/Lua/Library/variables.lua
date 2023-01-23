@@ -9,9 +9,12 @@ local function initVariables(t, opts)
 			["showperms"] = CV_RegisterVar({"joe_showperms", "On", CV_NETVAR, CV_OnOff}),
 
 			["devbug"] = CV_RegisterVar({"joe_devbug", "Off", 0, CV_OnOff}),
-			["nametags"] = CV_RegisterVar({"joe_nametags", "On", 0, CV_OnOff}),
 			["radar"] = CV_RegisterVar({"joe_emblemradar", "Off", 0, CV_OnOff}),
 			["customhud"] = CV_RegisterVar({"joe_customhud", "On", 0, CV_OnOff}),
+
+			["nametags"] = CV_RegisterVar({"joe_nametags", "On", 0, CV_OnOff}),
+			["maxtags"] = CV_RegisterVar({"joe_maxtags", "5", 0, {MIN = 1, MAX = 20}}),
+			["bosstags"] = CV_RegisterVar({"joe_bosstags", "On", 0, CV_OnOff}),
 		}
 
 		-- Display list
