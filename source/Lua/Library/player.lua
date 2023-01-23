@@ -38,8 +38,8 @@ function joeFuncs.getPlayer(node)
 end
 
 function joeFuncs.getPlayerName(player, params)
-	local player_color = joeFuncs.getColor(max(1, player.skincolor))
-	local badge_color = joeFuncs.getColor(ColorOpposite(max(1, player.skincolor)))
+	local player_color = joeFuncs.getColor(player.skincolor)
+	local badge_color = joeFuncs.getColor(ColorOpposite(player.skincolor))
 
 	local badge, status = "", ""
 

@@ -9,6 +9,10 @@ function joeFuncs.getDistance(ref, mo)
 end
 
 function joeFuncs.getColor(color)
+	if not (color) then
+		return "\x80"
+	end
+
 	local c = 0x80 + (skincolors[color].chatcolor >> V_CHARCOLORSHIFT)
 	return string.char(c)
 end

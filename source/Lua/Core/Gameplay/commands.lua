@@ -40,16 +40,17 @@ local command_info = {
 		name = "addbot",
 		admin = true,
 
-		func = function(player)
+		func = function(player, s)
 			if not inLevel(player) then return end
 
-			local skin = P_RandomRange(0, #skins - 1)
+			local skin = s or P_RandomRange(0, #skins - 1)
 			local color = P_RandomRange(1, SKINCOLOR_SUPERSILVER1 - 1)
 
 			local bot_name = skins[skin].realname .. " " .. P_RandomByte()
 			local skin_name = skins[skin].name
 
 			G_AddPlayer(skin_name, color, bot_name, BOT_MPAI)
+			S_StartSound(nil, joeVars.chatSounds.event, nil)
 		end
 	},
 
@@ -322,7 +323,7 @@ local command_info = {
 				printHelp(player, "kill <mode> <...>", "Self-explanatory. Works just like Minecraft does.")
 				CONS_Printf(player, "Available modes:")
 				for i = 1, #types do
-					CONS_Printf(player, "[\x87" .. types[i][1] .. "\x80]: " .. types[i][2])
+					CONS_Printf(player, "\x87" .. types[i][1] .. "\x80 > " .. types[i][2])
 				end
 				return
 			end
