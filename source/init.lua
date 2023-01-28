@@ -45,8 +45,8 @@ local file_init = {
 		l = {"coop.lua", "match.lua", "nametags.lua", "bosstags.lua", "radar.lua", "starwarps.lua"},
 	},
 	{
-		f = "Core/Visual/Hud/Miscellaneous",
-		l = {"spectator.lua", "devbug.lua", "autoexit.lua"},
+		f = "Core/Visual/HUD/Miscellaneous",
+		l = {"spectator.lua", "autoexit.lua", "echo.lua"},
 	},
 }
 

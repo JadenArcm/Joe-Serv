@@ -8,7 +8,6 @@ local function initVariables(t, opts)
 			["autoexit"] = CV_RegisterVar({"joe_exittimer", "10", CV_NETVAR, {MIN = 5, MAX = 120}}),
 			["showperms"] = CV_RegisterVar({"joe_showperms", "On", CV_NETVAR, CV_OnOff}),
 
-			["devbug"] = CV_RegisterVar({"joe_devbug", "Off", 0, CV_OnOff}),
 			["radar"] = CV_RegisterVar({"joe_emblemradar", "Off", 0, CV_OnOff}),
 			["customhud"] = CV_RegisterVar({"joe_customhud", "On", 0, CV_OnOff}),
 
@@ -40,6 +39,10 @@ local function initVariables(t, opts)
 	t.exitCountdown = t.cvars["autoexit"].value * (60 * TICRATE)
 	t.exitTics = 0
 	t.exitDelay = 0
+
+	-- CSay?
+	t.sayTimer = 0
+	t.sayText = ""
 
 	-- Starwarps
 	t.starWarps = {}

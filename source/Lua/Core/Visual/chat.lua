@@ -85,6 +85,19 @@ addHook("PlayerMsg", function(source, type, target, message)
 		return true
 	end
 
+	if (type == 3) then
+		if (gamestate ~= GS_LEVEL) then
+			chatError(source, "You can only use this on a level.")
+			return true
+		end
+
+		joeVars.sayText = message
+		joeVars.sayTimer = 5 * TICRATE
+
+		S_StartSound(nil, joeVars.chatSounds.event, nil)
+		return true
+	end
+
 	return nil
 end)
 

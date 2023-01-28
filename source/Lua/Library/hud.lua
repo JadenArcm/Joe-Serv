@@ -34,6 +34,9 @@ function joeFuncs.drawFill(v, x, y, width, height, col)
 	local patch = string.format("~%03d", max(0, min((col & 255), 255)))
 	local flags = col
 
+	if (width < 0) then width = 0 end
+	if (height < 0) then height = 0 end
+
 	v.drawCropped(x, y, width, height, v.cachePatch(patch), flags, nil, 0, 0, FRACUNIT, FRACUNIT)
 end
 
