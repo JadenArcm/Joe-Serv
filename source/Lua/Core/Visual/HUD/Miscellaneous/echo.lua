@@ -2,7 +2,6 @@
 
 addHook("ThinkFrame", function()
 	joeVars.sayTimer = max(0, $ - 1)
-	joeVars.sayAuthorTimer = (joeVars.sayTimer > 0) and min($ + 2, TICRATE) or max(0, $ - 1)
 end)
 
 joeFuncs.addHUD(function(v)
