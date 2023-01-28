@@ -36,6 +36,7 @@ local function initPlayer(player)
 	-- Starposts
 	player.starwarp = {}
 	player.starwarp.tics = 0
+	player.starwarp.hover_tics = 0
 	player.starwarp.cursor = 1
 	player.starwarp.enabled = false
 

@@ -17,9 +17,13 @@ end
 local function P_CheckDist(ref, player)
 	if (joeFuncs.getDistance(ref, player.realmo) >= ref.radius) then return end
 
-	if P_PressedButton(player, BT_TOSSFLAG) and not (player.starwarp.enabled) then
-		player.starwarp.enabled = true
-		S_StartSound(nil, sfx_strpst, player)
+	if not (player.starwarp.enabled) then
+		player.starwarp.hover_tics = min($ + 2, TICRATE)
+
+		if P_PressedButton(player, BT_TOSSFLAG) then
+			player.starwarp.enabled = true
+			S_StartSound(nil, sfx_strpst, player)
+		end
 	end
 end
 
@@ -61,6 +65,10 @@ local function handleWarp(player)
 	if (player.spectator) then return end
 
 	player.starwarp.tics = (player.starwarp.enabled) and min($ + 1, TICRATE) or max(0, $ - 1)
+
+	if (player.starwarp.hover_tics > 0) then
+		player.starwarp.hover_tics = max(0, $ - 1)
+	end
 
 	if (player.starwarp.enabled) then
 		local mo = player.realmo
