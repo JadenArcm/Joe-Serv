@@ -44,6 +44,12 @@ local function initVariables(t, opts)
 	t.sayTimer = 0
 	t.sayText = ""
 
+	-- Tips
+	t.tipTics = 0
+	t.tipTimer = 0
+	t.tipDelay = 2 * TICRATE
+	t.tipText = ""
+
 	-- Starwarps
 	t.starWarps = {}
 

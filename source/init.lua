@@ -46,7 +46,7 @@ local file_init = {
 	},
 	{
 		"Core/Visual/HUD/Miscellaneous",
-		{"spectator.lua", "autoexit.lua", "echo.lua"},
+		{"spectator.lua", "autoexit.lua", "tips.lua", "echo.lua"},
 	},
 }
 
