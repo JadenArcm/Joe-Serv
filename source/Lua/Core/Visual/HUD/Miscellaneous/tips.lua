@@ -33,7 +33,7 @@ local function handleTickers()
 
 	if not (joeVars.tipTimer) then
 		joeVars.tipDelay = 6 * TICRATE
-		joeVars.tipTimer = 7 * TICRATE
+		joeVars.tipTimer = 180 * TICRATE
 
 		joeVars.tipText = tipTexts[P_RandomRange(1, #tipTexts)]
 		S_StartSound(nil, sfx_jtip, nil)
