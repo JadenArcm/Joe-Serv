@@ -10,9 +10,9 @@ local tipTexts = {
 
 	{"Be respectful to others, please.", "If doing otherwise, you will be either \x85" .. "muted" .. "\x80, \x85" .. "kicked" .. "\x80 or \x85" .. "banned" .. "\x80."},
 
-	{"You don't really like names on top of every player? Disable it with " .. CVAR_COLOR .. "joe_nametags" .. "\x80.",  "(and " .. CVAR_COLOR .. "joe_maxtags" .. "\x80 to see a few according to your preference.)"},
-	"You can see how the bosses are! With " .. CVAR_COLOR .. "joe_bosstags" .. "\x80, you can see the amount of health they have.",
 	"You can use commands on the chat! Just use the \x86" .. "/<command>" .. "\x80 prefix, and call it a day.",
+	{"You don't really like names on top of every player? Disable it with " .. CVAR_COLOR .. "joe_nametags" .. "\x80.",  "(and " .. CVAR_COLOR .. "joe_maxtags" .. "\x80 to see a few according to your preference.)"},
+	{"You can see how the bosses are!", "With " .. CVAR_COLOR .. "joe_bosstags" .. "\x80, you can see the amount of health they have."},
 }
 
 --//
@@ -33,8 +33,6 @@ local function handleTickers()
 		joeVars.tipText = tipTexts[P_RandomRange(1, #tipTexts)]
 		S_StartSound(nil, sfx_jtip, nil)
 	end
-
-	print("delay: " .. joeVars.tipDelay, "tics: " .. joeVars.tipTics, "timer: " .. joeVars.tipTimer)
 end
 addHook("ThinkFrame", handleTickers)
 

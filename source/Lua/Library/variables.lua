@@ -1,8 +1,8 @@
 --//
 
-local function initVariables(t, opts)
-	-- Variables that should not be synced or reset at map change
-	if (opts) then
+local function initVariables(t, no_reset)
+	-- Variables that should not be reset at map change
+	if (no_reset) then
 		-- Console variables
 		t.cvars = {
 			["autoexit"] = CV_RegisterVar({"joe_exittimer", "10", CV_NETVAR, {MIN = 5, MAX = 120}}),
@@ -16,8 +16,14 @@ local function initVariables(t, opts)
 			["customhud"] = CV_RegisterVar({"joe_customhud", "On", 0, CV_OnOff}),
 		}
 
-		-- Display list
+		-- Display List
 		t.displayList = {}
+
+		-- Tips
+		t.tipTics = 0
+		t.tipTimer = TICRATE
+		t.tipDelay = 0
+		t.tipText = ""
 	end
 
 	-- Chat sounds
@@ -43,12 +49,6 @@ local function initVariables(t, opts)
 	-- CSay?
 	t.sayTimer = 0
 	t.sayText = ""
-
-	-- Tips
-	t.tipTics = 0
-	t.tipTimer = 0
-	t.tipDelay = 2 * TICRATE
-	t.tipText = ""
 
 	-- Starwarps
 	t.starWarps = {}
