@@ -81,7 +81,7 @@ local function drawTime(v, player)
 	local limit_warn = (gametyperules & GTR_ALLOWEXIT) and ((joeVars.exitCountdown - leveltime) < (60 * TICRATE)) and ((leveltime / 5) & 1)
 
 	local patch = "JOE_TIME" .. (((time.tics % TICRATE) * 235) / 1000)
-	local color = ((limit_warn) or (time.warn)) and SKINCOLOR_RED or SKINCOLOR_SILVER
+	local color = (time.warn or limit_warn) and SKINCOLOR_RED or SKINCOLOR_SILVER
 
 	if (alpha ~= false) then
 		v.drawScaled(anim, y - (3 * FRACUNIT), FRACUNIT, v.cachePatch(patch), flags | alpha, v.getColormap(TC_DEFAULT, color))

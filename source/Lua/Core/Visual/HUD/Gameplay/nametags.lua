@@ -21,8 +21,8 @@ joeFuncs.addHUD(function(v, player)
 		local screen = joeFuncs.worldToScreen(v, player, {target.mo.x, target.mo.y, target.mo.z + player_zoffs})
 
 		if (screen.visible) then
-			joeFuncs.drawFill(v, (screen.x - (2 * FRACUNIT)) - ((v.stringWidth(player_name, 0, "thin") / 2) * FRACUNIT), screen.y - (2 * FRACUNIT), (v.stringWidth(player_name, 0, "thin") + 4) * FRACUNIT, 10 * FRACUNIT, 31 | V_30TRANS)
-			v.drawString(screen.x, screen.y, player_name, alpha | V_ALLOWLOWERCASE, "thin-fixed-center")
+			joeFuncs.drawFill(v, (screen.x - (2 * FRACUNIT)) - ((v.stringWidth(player_name, 0, "small") / 2) * FRACUNIT), screen.y - (2 * FRACUNIT), (v.stringWidth(player_name, 0, "small") + 4) * FRACUNIT, 8 * FRACUNIT, 31 | V_30TRANS)
+			v.drawString(screen.x, screen.y, player_name, alpha | V_ALLOWLOWERCASE, "small-fixed-center")
 
 			numtags = $ + 1
 		end
