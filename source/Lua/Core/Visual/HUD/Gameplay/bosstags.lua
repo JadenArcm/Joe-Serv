@@ -33,7 +33,7 @@ joeFuncs.addHUD(function(v, player)
 		local bar_offs = 5 * FRACUNIT
 
 		local alpha = (joeFuncs.getDistance(mo, player.realmo) >= (maxdist / 2)) and V_70TRANS or V_30TRANS
-		local perc = ((mo.health * 100) / mo.info.spawnhealth) .. "\x86%"
+		local perc = string.format("%.1f", FixedDiv((mo.health * FRACUNIT) * 100, mo.info.spawnhealth * FRACUNIT)) .. "\x86%"
 
 		local zoffs = P_MobjFlip(mo) * (mo.height + (42 * mo.scale))
 		local screen = joeFuncs.worldToScreen(v, player, {mo.x, mo.y, mo.z + zoffs})

@@ -12,4 +12,15 @@ local function playerEffects(player)
 end
 addHook("PlayerThink", playerEffects)
 
+local function realEffects()
+	for player in players.iterate do
+		if (player.spectator) then continue end
+		if not joeFuncs.isValid(player.mo) then continue end
+
+		player.mo.frame = (player.force.noclip) and ($ | FF_TRANS60) or ($ & ~(FF_TRANS60))
+		player.mo.frame = (player.force.god) and ($ | FF_ADD) or ($ & ~(FF_ADD))
+	end
+end
+addHook("PostThinkFrame", realEffects)
+
 --//

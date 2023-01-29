@@ -29,6 +29,8 @@ end
 --//
 
 addHook("MapLoad", function()
+	if (titlemapinaction) then return end
+
 	for mt in mapthings.iterate do
 		if (mt.type ~= mobjinfo[MT_EMBLEM].doomednum) then continue end
 

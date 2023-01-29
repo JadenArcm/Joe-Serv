@@ -35,7 +35,7 @@ local function drawWeapon(v, player, x, y, scale, flags, selection)
 		text_color = (has_max and V_YELLOWMAP) or (has_wep and V_ORANGEMAP) or 0,
 		patch_alpha = (not (player.ringweapons & match_weapons[selection].weapon) or not (player.powers[match_weapons[selection].power])) and V_60TRANS or 0,
 
-		ring_alpha = (not ring_amt) and V_60TRANS or 0,
+		ring_alpha = (ring_amt <= 0) and V_60TRANS or 0,
 		ring_text = ((ring_amt >= match_weapons[ring_type].max) and V_YELLOWMAP) or (((not ring_amt) and ((leveltime / 5) & 1)) and V_REDMAP) or 0
 	}
 
@@ -58,6 +58,11 @@ local function drawWeapon(v, player, x, y, scale, flags, selection)
 	if (selection == 0) then
 		v.drawScaled(x, y, scale, ring_patch, flags | params.ring_alpha, nil)
 		v.drawString(x + (8 * FRACUNIT), y + (8 * FRACUNIT), ring_amt, flags | params.ring_alpha | params.ring_text, "thin-fixed-center")
+
+		if (player.powers[pw_infinityring]) then
+			local flash = (((player.rings <= 0) or (player.powers[pw_super] and (player.rings < 20))) and ((leveltime / 5) & 1)) and V_REDMAP or V_YELLOWMAP
+			v.drawString(x + (8 * FRACUNIT), y + FRACUNIT, max(0, player.rings), flash, "small-fixed-center")
+		end
 	else
 		v.drawScaled(x, y, scale, weap_patch, flags | params.patch_alpha, nil)
 		v.drawString(x + (8 * FRACUNIT), y + (8 * FRACUNIT), player.powers[match_weapons[selection].power], flags | params.patch_alpha | params.text_color, "thin-fixed-center")
