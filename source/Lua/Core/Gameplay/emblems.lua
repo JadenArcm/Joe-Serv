@@ -148,8 +148,6 @@ addHook("TouchSpecial", function(mo, toucher)
 		return true
 	end
 
-	local amount = string.format("\x80(\x82%d\x80 - \x82%d\x80)", joeVars.collectedEmblems + 1, joeVars.totalEmblems)
-
 	mo.fuse = TICRATE + 17
 	mo.angle = R_PointToAngle2(mo.x, mo.y, toucher.x, toucher.y) - FixedAngle(38 * FRACUNIT)
 
@@ -158,13 +156,13 @@ addHook("TouchSpecial", function(mo, toucher)
 
 	if (joeVars.collectedEmblems >= joeVars.totalEmblems) then
 		S_StartSound(nil, sfx_emjall)
-		chatprint("\x82* " .. joeFuncs.getPlayerName(toucher.player, 0) .. "\x82 found the last emblem! " .. amount)
+		chatprint("\x82* " .. joeFuncs.getPlayerName(toucher.player, 0) .. "\x82 found the last emblem!")
 
 		P_FlashPal(toucher.player, PAL_WHITE, 8)
 		P_AddPlayerScore(toucher.player, 50000)
 	else
 		S_StartSound(nil, sfx_emjgot)
-		chatprint("\x82* " .. joeFuncs.getPlayerName(toucher.player, 0) .. "\x82 found emblem \x84#" .. mo.orig .. "\x82! " .. amount)
+		chatprint("\x82* " .. joeFuncs.getPlayerName(toucher.player, 0) .. "\x82 found emblem \x84#" .. mo.orig .. "\x82!")
 
 		P_AddPlayerScore(toucher.player, 5000)
 	end

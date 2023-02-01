@@ -94,7 +94,7 @@ addHook("PlayerMsg", function(source, type, target, message)
 		joeVars.sayText = message
 		joeVars.sayTimer = 5 * TICRATE
 
-		S_StartSound(nil, joeVars.chatSounds.event, nil)
+		S_StartSound(nil, joeVars.chatSounds.csay, nil)
 		return true
 	end
 

@@ -10,6 +10,28 @@ end
 
 --//
 
+function joeFuncs.getPingPatch(v, player)
+	if (player.bot) then
+		return v.cachePatch("ICON_BOT")
+	end
+
+	if (player.quittime > 0) then
+		local values = {0, 0, 0, 0, 0, 0, 1, 2, 3, 4}
+		return v.cachePatch("JOE_OUTG" .. values[((leveltime / 7) % #values) + 1])
+	end
+
+	local values = {3, 5, 7, 9}
+	local patch_num = 0
+
+	for i = 1, #values do
+		if (player.cmd.latency >= values[i]) then
+			patch_num = min(i + 1, 3)
+		end
+	end
+
+	return v.cachePatch("JOE_PING" .. patch_num)
+end
+
 function joeFuncs.getSkincolor(v, player, real_color)
 	local dashmode = (player.dashmode > (3 * TICRATE)) and ((leveltime % 4) < 2)
 	local map = (((player.charflags & SF_MACHINE) and (dashmode)) and TC_DASHMODE) or (((player.realmo.colorized) or (dashmode)) and TC_RAINBOW) or player.skin

@@ -6,6 +6,52 @@ end
 
 --//
 
+function joeFuncs.getPlayerLists()
+	local coop, match = {}, {}
+	local teams = {["red"] = {}, ["blue"] = {}}
+
+	local function getSorting(a, b)
+		return (a.score == b.score) and (#a < #b) or (a.score > b.score)
+	end
+
+	for player in players.iterate do
+		if not (player.spectator) then
+			table.insert(coop, player)
+			table.insert(match, player)
+
+			if G_GametypeHasTeams() then
+				if (player.ctfteam == 1) then table.insert(teams["red"], player)
+				elseif (player.ctfteam == 2) then table.insert(teams["blue"], player)
+				end
+			end
+		end
+	end
+
+	table.sort(coop, function(a, b)
+		if (gametyperules & GTR_RACE) then
+			return (circuitmap) and (a.laps > b.laps) or (a.realtime < b.realtime)
+		end
+
+		return getSorting(a, b)
+	end)
+
+	for player in players.iterate do
+		if (player.spectator) then table.insert(coop, player) end
+	end
+
+	table.sort(match, getSorting)
+	table.sort(teams["red"], getSorting)
+	table.sort(teams["blue"], getSorting)
+
+	return {
+		["coop"] = coop,
+		["match"] = match,
+		["teams"] = teams,
+	}
+end
+
+--//
+
 function joeFuncs.getPlayer(node)
 	if (node == nil) then
 		return -1
@@ -39,7 +85,7 @@ end
 
 function joeFuncs.getPlayerName(player, params)
 	local player_color = joeFuncs.getColor(player.skincolor)
-	local badge_color = joeFuncs.getColor(ColorOpposite(player.skincolor))
+	local badge_color = (player_color == "\x83") and "\x82" or "\x83"
 
 	local badge, status = "", ""
 

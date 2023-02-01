@@ -13,7 +13,9 @@ local function initVariables(t, no_reset)
 			["bosstags"] = CV_RegisterVar({"joe_bosstags", "On", 0, CV_OnOff}),
 
 			["radar"] = CV_RegisterVar({"joe_emblemradar", "Off", 0, CV_OnOff}),
-			["customhud"] = CV_RegisterVar({"joe_customhud", "On", 0, CV_OnOff}),
+
+			["display"] = CV_RegisterVar({"joe_maindisplay", "On", 0, CV_OnOff}),
+			["scores"] = CV_RegisterVar({"joe_rankdisplay", "On", 0, CV_OnOff}),
 		}
 
 		-- Display List
@@ -32,7 +34,8 @@ local function initVariables(t, no_reset)
 		failure = sfx_s1b1,
 		event = sfx_s25a,
 		teams = sfx_s257,
-		private = sfx_s3k92
+		private = sfx_s3k92,
+		csay = sfx_hoop3,
 	}
 
 	-- Emblems

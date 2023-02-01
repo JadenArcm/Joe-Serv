@@ -25,18 +25,16 @@ addHook("PlayerThink", handleTickers)
 --//
 
 local function handleDrawing(v, player)
-	local list_disable = {"score", "time", "rings", "lives", "textspectator", "teamscores", "weaponrings", "powerstones"}
+	local item_list = {"score", "time", "rings", "lives", "textspectator", "teamscores", "weaponrings", "powerstones"}
 
-	if not (joeVars.cvars["customhud"].value) then
-		for _, entry in ipairs(list_disable) do
-			if not hud.enabled(entry) then
-				hud.enable(entry)
-			end
+	if not (joeVars.cvars["display"].value) then
+		for _, entry in ipairs(item_list) do
+			if not hud.enabled(entry) then hud.enable(entry) end
 		end
 		return
 	end
 
-	for _, entry in ipairs(list_disable) do
+	for _, entry in ipairs(item_list) do
 		hud.disable(entry)
 	end
 
@@ -44,9 +42,6 @@ local function handleDrawing(v, player)
 		draw(v, player)
 	end
 end
-
---//
-
-hud.add(handleDrawing, "game")
+addHook("HUD", handleDrawing, "game")
 
 --//

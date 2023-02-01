@@ -38,7 +38,7 @@ local file_init = {
 	-- HUD
 	{
 		"Core/Visual/HUD",
-		{"main.lua"},
+		{"main.lua", "ranks.lua"},
 	},
 	{
 		"Core/Visual/HUD/Gameplay",

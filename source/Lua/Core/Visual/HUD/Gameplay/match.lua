@@ -35,7 +35,7 @@ local function drawWeapon(v, player, x, y, scale, flags, selection)
 		text_color = (has_max and V_YELLOWMAP) or (has_wep and V_ORANGEMAP) or 0,
 		patch_alpha = (not (player.ringweapons & match_weapons[selection].weapon) or not (player.powers[match_weapons[selection].power])) and V_60TRANS or 0,
 
-		ring_alpha = (ring_amt <= 0) and V_60TRANS or 0,
+		ring_alpha = (ring_amt <= 0) and V_30TRANS or 0,
 		ring_text = ((ring_amt >= match_weapons[ring_type].max) and V_YELLOWMAP) or (((not ring_amt) and ((leveltime / 5) & 1)) and V_REDMAP) or 0
 	}
 
@@ -61,7 +61,7 @@ local function drawWeapon(v, player, x, y, scale, flags, selection)
 
 		if (player.powers[pw_infinityring]) then
 			local flash = (((player.rings <= 0) or (player.powers[pw_super] and (player.rings < 20))) and ((leveltime / 5) & 1)) and V_REDMAP or V_YELLOWMAP
-			v.drawString(x + (8 * FRACUNIT), y + FRACUNIT, max(0, player.rings), flash, "small-fixed-center")
+			v.drawString(x + (8 * FRACUNIT), y + FRACUNIT, max(0, player.rings), flags | flash, "small-fixed-center")
 		end
 	else
 		v.drawScaled(x, y, scale, weap_patch, flags | params.patch_alpha, nil)
@@ -93,23 +93,38 @@ local function drawTimer(v, player)
 	end
 end
 
+local function drawPlayer(v, player)
+	local x, y = (92 * FRACUNIT), (162 * FRACUNIT)
+	local flags = V_SNAPTOBOTTOM | V_PERPLAYER
+
+	local alpha, anim = getParams(v, (210 * FRACUNIT), y, player.hudstuff["ringslinger"])
+	local patch = v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A)
+
+	local name = joeFuncs.getPlayerName(player, 1)
+	if (gametyperules & GTR_POWERSTONES) and (name:len() > 8) then
+		local col = (joeFuncs.getColor(player.skincolor) == "\x80") and "\x86" or "\x80"
+		name = name:sub(0, 8) .. col .. "..."
+	end
+
+	if (alpha ~= false) then
+		v.drawScaled(x, anim, FRACUNIT / 3, patch, flags | alpha, joeFuncs.getSkincolor(v, player, true))
+		v.drawString(x + (13 * FRACUNIT), anim + (2 * FRACUNIT), name, V_ALLOWLOWERCASE | flags | alpha, "thin-fixed")
+	end
+end
+
 local function drawPowerstones(v, player)
 	if not (gametyperules & GTR_POWERSTONES) then return end
 
-	local x, y = (126 * FRACUNIT), (164 * FRACUNIT)
+	local x, y = (158 * FRACUNIT), (164 * FRACUNIT)
 	local flags = V_SNAPTOBOTTOM | V_PERPLAYER
 
 	local _, anim = getParams(v, (210 * FRACUNIT), y, player.hudstuff["ringslinger"])
 
 	for i = 0, 6 do
-		local patch = v.cachePatch("TEMER" .. (i + 1))
 		local alpha = V_HUDTRANSHALF
+		if (player.powers[pw_emeralds] & (EMERALD1 << i)) then alpha = V_HUDTRANS end
 
-		if (player.powers[pw_emeralds] & (EMERALD1 << i)) then
-			alpha = V_HUDTRANS
-		end
-
-		v.drawScaled(x + ((i * FRACUNIT) * 10), anim, FRACUNIT, patch, flags | alpha, nil)
+		v.drawScaled(x + ((i * FRACUNIT) * 10), anim, FRACUNIT, v.cachePatch("TEMER" .. (i + 1)), flags | alpha, nil)
 	end
 end
 
@@ -137,6 +152,7 @@ joeFuncs.addHUD(function(v, player)
 
 	drawTimer(v, player)
 	drawWeapons(v, player)
+	drawPlayer(v, player)
 	drawPowerstones(v, player)
 end)
 

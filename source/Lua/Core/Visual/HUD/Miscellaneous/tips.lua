@@ -15,6 +15,7 @@ local tipTexts = {
 	{"Wanna search some \x83" .. "emblems" .. "\x80?", "Toggle " .. CVAR_COLOR .. "joe_emblemradar" .. "\x80 and go for all of those emblems!"},
 	{"You don't really like names on top of every player? Disable it with " .. CVAR_COLOR .. "joe_nametags" .. "\x80.",  "(and " .. CVAR_COLOR .. "joe_maxtags" .. "\x80 to see a few according to your preference.)"},
 	{"You can see how the bosses are!", "With " .. CVAR_COLOR .. "joe_bosstags" .. "\x80, you can see the amount of health they have."},
+	{"You don't like the HUD display? Don't worry! Just can use " .. CVAR_COLOR .. "joe_maindisplay" .. "\x80 to disable it.", "Also, " .. CVAR_COLOR .. "joe_rankdisplay" .. "\x80 exists for the player list, too."},
 
 	"\x85" .. "Joe" .. "\x80 is watching you everywhere. No matter what. ALL HAIL \x85" .. "JOE" .. "\x80!",
 	"\x85" .. "among us" .. "\x80. are you the \x85" .. "among us" .. "\x80? all hail \x85" .. "among us" .. "\x80.",
