@@ -140,9 +140,11 @@ local function drawGenericPeople(v, people)
 
 		if (player.spectator) then
 			icon_patch = v.cachePatch("ICON_SPEC")
+
 		elseif G_TagGametype() and (player.pflags & PF_TAGIT) then
 			icon_patch = v.cachePatch("ICON_TAG")
-		elseif (player.pflags & PF_FINISHED) then
+
+		elseif (player.pflags & PF_FINISHED) or (player.exiting > 1) then
 			icon_patch = v.cachePatch("ICON_FIN")
 		end
 
