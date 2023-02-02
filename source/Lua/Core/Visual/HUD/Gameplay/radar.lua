@@ -57,10 +57,10 @@ joeFuncs.addHUD(function(v, player)
 
 	if (alpha ~= false) then
 		for i, mo in ipairs(joeVars.emblemInfo) do
-			local bop = joeFuncs.getWaving(i, 30, 10, leveltime)
+			local wave = joeFuncs.getWave(i, 15, 4, 3)
 			local offs = ((i - 1) * 20) - ((#joeVars.emblemInfo - 1) * 10)
 
-			drawEmblem(v, x + (offs * FRACUNIT), anim + bop, flags | alpha, {mo, player.realmo})
+			drawEmblem(v, x + (offs * FRACUNIT), anim + wave, flags | alpha, {mo, player.realmo})
 		end
 	end
 end)

@@ -85,9 +85,10 @@ local function drawSpecificInformation(v)
 		if (#joeVars.emblemInfo > 0) then
 			for i, emblem in ipairs(joeVars.emblemInfo) do
 				local patch = v.cachePatch("GOTIT" .. R_Frame2Char(emblem.frame & FF_FRAMEMASK))
+				local wave = (joeVars.collectedEmblems >= joeVars.totalEmblems) and joeFuncs.getWave(i, 8, 3, 3) or 0
 				local alpha = (emblem.health) and V_60TRANS or 0
 
-				v.drawScaled((emb_x + (14 * (i - 1))) * FRACUNIT, y * FRACUNIT, FRACUNIT / 2, patch, alpha | V_SNAPTOLEFT,  v.getColormap(TC_RAINBOW, emblem.color))
+				v.drawScaled((emb_x + (14 * (i - 1))) * FRACUNIT, (y * FRACUNIT) + wave, FRACUNIT / 2, patch, alpha | V_SNAPTOLEFT,  v.getColormap(TC_RAINBOW, emblem.color))
 			end
 		else
 			v.drawScaled(emb_x * FRACUNIT, y * FRACUNIT, FRACUNIT / 2, v.cachePatch("GOTITX"), V_SNAPTOLEFT, v.getColormap(TC_RAINBOW, SKINCOLOR_SILVER))

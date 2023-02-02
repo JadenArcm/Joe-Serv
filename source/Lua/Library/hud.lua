@@ -4,8 +4,8 @@ function joeFuncs.addHUD(func)
 	table.insert(joeVars.displayList, func)
 end
 
-function joeFuncs.getWaving(i, mn, mx, tics)
-	return sin(FixedAngle((tics + (mn * i)) * (mx * FRACUNIT)))
+function joeFuncs.getWave(interval, diff, speed, range)
+	return sin(FixedAngle((leveltime + (diff * interval)) * (speed * FRACUNIT))) * range
 end
 
 --//
