@@ -19,6 +19,11 @@ local function realEffects()
 
 		player.mo.frame = (player.force.noclip) and ($ | FF_TRANS60) or ($ & ~(FF_TRANS60))
 		player.mo.frame = (player.force.god) and ($ | FF_ADD) or ($ & ~(FF_ADD))
+
+		if joeFuncs.isValid(player.followmobj) then
+			player.followmobj.frame = (player.force.noclip) and ($ | FF_TRANS60) or ($ & ~(FF_TRANS60))
+			player.followmobj.frame = (player.force.god) and ($ | FF_ADD) or ($ & ~(FF_ADD))
+		end
 	end
 end
 addHook("PostThinkFrame", realEffects)
