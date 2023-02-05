@@ -48,7 +48,6 @@ addHook("MapLoad", function()
 		mo.color = emblemProperties[mo.orig][2]
 		mo.colorized = true
 
-		joeVars.totalEmblems = $ + 1
 		table.insert(joeVars.emblemInfo, mo)
 	end
 
@@ -154,7 +153,7 @@ addHook("TouchSpecial", function(mo, toucher)
 	mo.health = 0
 	joeVars.collectedEmblems = $ + 1
 
-	if (joeVars.collectedEmblems >= joeVars.totalEmblems) then
+	if (joeVars.collectedEmblems >= #joeVars.emblemInfo) then
 		S_StartSound(nil, sfx_emjall)
 		chatprint("\x82* " .. joeFuncs.getPlayerName(toucher.player, 0) .. "\x82 found the last emblem!")
 

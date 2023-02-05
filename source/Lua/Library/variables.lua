@@ -40,7 +40,6 @@ local function initVariables(t, no_reset)
 
 	-- Emblems
 	t.collectedEmblems = 0
-	t.totalEmblems = 0
 	t.emblemTics = 0
 	t.emblemInfo = {}
 

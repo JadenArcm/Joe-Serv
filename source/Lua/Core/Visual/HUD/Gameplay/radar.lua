@@ -42,7 +42,7 @@ local function handleTics()
 	if (gamestate ~= GS_LEVEL) then return end
 
 	if (leveltime > TICRATE) then
-		joeVars.emblemTics = (joeVars.cvars["radar"].value and not ((joeVars.collectedEmblems >= joeVars.totalEmblems) or G_RingSlingerGametype())) and min($ + 1, TICRATE) or max(0, $ - 1)
+		joeVars.emblemTics = (joeVars.cvars["radar"].value and not ((joeVars.collectedEmblems >= #joeVars.emblemInfo) or G_RingSlingerGametype())) and min($ + 1, TICRATE) or max(0, $ - 1)
 	end
 end
 addHook("ThinkFrame", handleTics)

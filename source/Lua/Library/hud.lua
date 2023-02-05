@@ -113,7 +113,9 @@ function joeFuncs.worldToScreen(v, player, mobj)
 	local cam = {x = player.realmo.x, y = player.realmo.y, z = player.viewz, ang = player.realmo.angle, aim = player.aiming}
 	local mo = {x = mobj[1], y = mobj[2], z = mobj[3]}
 
-	if (camera.chase) then
+	if (player.awayviewtics) then
+		cam = {x = player.awayviewmobj.x, y = player.awayviewmobj.y, z = player.awayviewmobj.z, ang = player.awayviewmobj.angle, aim = player.awayviewaiming}
+	elseif (camera.chase) then
 		cam = {x = camera.x, y = camera.y, z = camera.z, ang = camera.angle, aim = camera.aiming}
 	end
 
@@ -127,7 +129,7 @@ function joeFuncs.worldToScreen(v, player, mobj)
 	local res = (v.width() * 100) / v.height()
 	local adj = 0
 
-	local fov = (CV_FindVar("fov").value / FRACUNIT) * res / 90
+	local fov = (FixedInt(CV_FindVar("fov").value) * res) / 90
 	local rfv = (res * 2) - fov
 
 	if (res == fov) then
@@ -147,8 +149,6 @@ function joeFuncs.worldToScreen(v, player, mobj)
 	sy = (FixedDiv(cam.z - mo.z, ydist) * calc) + (100 * FRACUNIT) + (tan(cam.aim) * calc)
 
 	return {x = sx, y = sy, visible = sv}
-
-	//
 end
 
 --//
