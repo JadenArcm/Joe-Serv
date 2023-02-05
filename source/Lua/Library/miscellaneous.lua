@@ -9,7 +9,7 @@ function joeFuncs.getDistance(ref, mo)
 end
 
 function joeFuncs.getColor(color)
-	if (color == SKINCOLOR_NONE) or (color == nil) then
+	if (color <= SKINCOLOR_NONE) or (color == nil) then
 		return "\x80"
 	end
 

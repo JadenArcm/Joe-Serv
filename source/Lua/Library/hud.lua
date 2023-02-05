@@ -109,19 +109,20 @@ end
 
 --//
 
-function joeFuncs.worldToScreen(v, player, mo)
-	local cam =  {player.realmo.x, player.realmo.y, player.viewz, player.realmo.angle, player.aiming}
+function joeFuncs.worldToScreen(v, player, mobj)
+	local cam = {x = player.realmo.x, y = player.realmo.y, z = player.viewz, ang = player.realmo.angle, aim = player.aiming}
+	local mo = {x = mobj[1], y = mobj[2], z = mobj[3]}
 
 	if (camera.chase) then
-		cam = {camera.x, camera.y, camera.z, camera.angle, camera.aiming}
+		cam = {x = camera.x, y = camera.y, z = camera.z, ang = camera.angle, aim = camera.aiming}
 	end
 
-	local sx = cam[4] - R_PointToAngle2(cam[1], cam[2], mo[1], mo[2])
+	local sx = cam.ang - R_PointToAngle2(cam.x, cam.y, mo.x, mo.y)
 	local sy = 0
 	local sv = true
 
 	local dist = max(1, cos(sx))
-	local ydist = max(1, FixedMul(dist, R_PointToDist2(cam[1], cam[2], mo[1], mo[2])))
+	local ydist = max(1, FixedMul(dist, R_PointToDist2(cam.x, cam.y, mo.x, mo.y)))
 
 	local res = (v.width() * 100) / v.height()
 	local adj = 0
@@ -143,7 +144,7 @@ function joeFuncs.worldToScreen(v, player, mo)
 
 	local calc = (rfv + adj)
 	sx = FixedMul(tan($), calc * FRACUNIT) + (160 * FRACUNIT)
-	sy = (FixedDiv(cam[3] - mo[3], ydist) * calc) + (100 * FRACUNIT) + (tan(cam[5]) * calc)
+	sy = (FixedDiv(cam.z - mo.z, ydist) * calc) + (100 * FRACUNIT) + (tan(cam.aim) * calc)
 
 	return {x = sx, y = sy, visible = sv}
 
