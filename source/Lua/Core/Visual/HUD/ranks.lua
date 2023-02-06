@@ -47,7 +47,7 @@ end
 local function drawSpecificInformation(v)
 	if (gametyperules & GTR_RINGSLINGER) then
 		local y = 185
-		local xoffs = (pointlimit) and 32 or 0
+		local xoffs = ((gametyperules & GTR_POINTLIMIT) and pointlimit) and 32 or 0
 
 		local time = joeFuncs.getHUDTime(leveltime)
 		local time_col = (time.warn) and V_REDMAP or V_YELLOWMAP
@@ -56,7 +56,7 @@ local function drawSpecificInformation(v)
 		v.drawString(160 + xoffs, y + 2, time_str, V_ALLOWLOWERCASE | time_col, "small-center")
 		v.drawString(160 + xoffs, y + 7, joeFuncs.getTime(time.tics), 0, "small-center")
 
-		if (pointlimit) then
+		if ((gametyperules & GTR_POINTLIMIT) and pointlimit) then
 			v.drawString(160 - xoffs, y + 2, "Point Limit:", V_ALLOWLOWERCASE | V_YELLOWMAP, "small-center")
 			v.drawString(160 - xoffs, y + 7, pointlimit, 0, "small-center")
 		end
