@@ -47,17 +47,17 @@ addHook("ThinkFrame", handleTickers)
 joeFuncs.addHUD(function(v)
 	if not (netgame or multiplayer) then return end
 
-	local x, y = (160 * FRACUNIT), (187 * FRACUNIT)
+	local x, y = (160 * FU), (187 * FU)
 	local flags = V_SNAPTOBOTTOM
 
-	local scaledwidth = (v.width() / v.dupx()) * FRACUNIT
-	local anim = joeFuncs.getEase("outquint", joeVars.tipTics, (256 * FRACUNIT), y)
+	local scaledwidth = (v.width() / v.dupx()) * FU
+	local anim = joeFuncs.getEase("outquint", joeVars.tipTics, (256 * FU), y)
 
-	joeFuncs.drawFill(v, 0, anim - (8 * FRACUNIT), scaledwidth, 22 * FRACUNIT, 31 | V_20TRANS | V_SNAPTOLEFT | flags)
+	joeFuncs.drawFill(v, 0, anim - (8 * FU), scaledwidth, 22 * FU, 31 | V_20TRANS | V_SNAPTOLEFT | flags)
 
 	if (type(joeVars.tipText) == "table") then
 		for i = 1, #joeVars.tipText do
-			v.drawString(x, (anim - (7 * FRACUNIT)) + ((5 * FRACUNIT) * i), joeVars.tipText[i], V_ALLOWLOWERCASE | flags, "small-fixed-center")
+			v.drawString(x, (anim - (7 * FU)) + ((5 * FU) * i), joeVars.tipText[i], V_ALLOWLOWERCASE | flags, "small-fixed-center")
 		end
 	else
 		v.drawString(x, anim, joeVars.tipText, V_ALLOWLOWERCASE | flags, "small-fixed-center")

@@ -20,7 +20,7 @@ end
 --//
 
 function joeFuncs.getEase(type, tics, l, m)
-	local timer = (FRACUNIT / TICRATE) * max(0, min(tics, TICRATE))
+	local timer = (FU / TICRATE) * max(0, min(tics, TICRATE))
 	return ease[type](timer, l, m)
 end
 
@@ -76,14 +76,14 @@ function joeFuncs.float2Fixed(float)
 
 	local decPos = string.find(float, "%.")
 	if (decPos == nil) then
-		return (tonumber(float) * FRACUNIT)
+		return (tonumber(float) * FU)
 	end
 
-	local num = tonumber(string.sub(float, 0, decPos - 1)) * FRACUNIT
+	local num = tonumber(string.sub(float, 0, decPos - 1)) * FU
 	local frac, i = 0, 1
 
 	for c in string.gmatch(string.sub(float, decPos + 1, string.len(float)), "%d+") do
-		frac = $ + (tonumber(c) * FRACUNIT) / (10 ^ i)
+		frac = $ + (tonumber(c) * FU) / (10 ^ i)
 		i = $ + 1
 
 		if (i == 7) then

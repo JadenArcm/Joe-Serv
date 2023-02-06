@@ -208,7 +208,7 @@ local command_info = {
 			end
 
 			if (grav == "-default") then
-				gravity = FRACUNIT / 2
+				gravity = FU / 2
 				print("The gravity has been changed to the\x82 default\x80.")
 				return
 			end

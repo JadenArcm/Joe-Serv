@@ -51,7 +51,7 @@ local function deathLogic(player)
 			mo.flags = $ | (MF_NOCLIPHEIGHT)
 			mo.momx, mo.momy = 0, 0
 
-			P_SetObjectMomZ(mo, -(FRACUNIT / 3), false)
+			P_SetObjectMomZ(mo, -(FU / 3), false)
 		end
 
 		mo.state = S_PLAY_PAIN
@@ -61,7 +61,7 @@ local function deathLogic(player)
 		end
 
 		if (leveltime % 25) then
-			local fire = P_SpawnMobjFromMobj(mo, P_RandomRange(-40, 40) * FRACUNIT, P_RandomRange(-40, 40) * FRACUNIT, P_RandomRange(-40, 40) * FRACUNIT, MT_THOK)
+			local fire = P_SpawnMobjFromMobj(mo, P_RandomRange(-40, 40) * FU, P_RandomRange(-40, 40) * FU, P_RandomRange(-40, 40) * FU, MT_THOK)
 			fire.fuse = 20
 			fire.flags = $ | (MF_NOGRAVITY)
 
@@ -69,25 +69,25 @@ local function deathLogic(player)
 			fire.blendmode = AST_ADD
 
 			P_SetScale(fire, mo.scale / 2)
-			P_SetObjectMomZ(fire, FRACUNIT / 2, true)
+			P_SetObjectMomZ(fire, FU / 2, true)
 		end
 	end
 
 	if player.deaths["spikes"] then
-		mo.spritexoffset = P_RandomRange(-2, 2) * FRACUNIT
-		mo.spriteyoffset = P_RandomRange(-2, 2) * FRACUNIT
+		mo.spritexoffset = P_RandomRange(-2, 2) * FU
+		mo.spriteyoffset = P_RandomRange(-2, 2) * FU
 
 		mo.state = S_PLAY_DRWN
-		mo.rollangle = FixedAngle(P_RandomRange(-8, 8) * FRACUNIT)
+		mo.rollangle = FixedAngle(P_RandomRange(-8, 8) * FU)
 	end
 
 	if player.deaths["electric"] then
 		if (mo.fuse > 1) then
-			mo.spritexoffset = P_RandomRange(-12, 12) * FRACUNIT
-			mo.spriteyoffset = P_RandomRange(-8, 8) * FRACUNIT
+			mo.spritexoffset = P_RandomRange(-12, 12) * FU
+			mo.spriteyoffset = P_RandomRange(-8, 8) * FU
 
 			mo.color = ({SKINCOLOR_YELLOW, SKINCOLOR_JET, SKINCOLOR_ORANGE, SKINCOLOR_ICY})[P_RandomRange(1, 4)]
-			mo.rollangle = FixedAngle(P_RandomRange(-15, 15) * FRACUNIT)
+			mo.rollangle = FixedAngle(P_RandomRange(-15, 15) * FU)
 
 			if not P_RandomRange(0, 6) then
 				S_StartSound(mo, sfx_s3k79, nil)
@@ -101,11 +101,11 @@ local function deathLogic(player)
 			mo.color = SKINCOLOR_CARBON
 			mo.fuse = -1
 
-			P_SetObjectMomZ(mo, 10 * FRACUNIT, false)
-			P_InstaThrust(mo, (mo.angle + ANGLE_180) + FixedAngle(P_RandomRange(-50, 50) * FRACUNIT), -12 * mo.scale)
+			P_SetObjectMomZ(mo, 10 * FU, false)
+			P_InstaThrust(mo, (mo.angle + ANGLE_180) + FixedAngle(P_RandomRange(-50, 50) * FU), -12 * mo.scale)
 
 			if (player == displayplayer) then
-				P_StartQuake(12 * FRACUNIT, 10)
+				P_StartQuake(12 * FU, 10)
 			end
 
 			S_StartSound(mo, sfx_s3k51, nil)
@@ -113,7 +113,7 @@ local function deathLogic(player)
 	end
 
 	if player.deaths["drowned"] then
-		P_SetObjectMomZ(mo, FRACUNIT, false)
+		P_SetObjectMomZ(mo, FU, false)
 
 		mo.state = S_PLAY_DRWN
 		mo.rollangle = $ + ANG1
@@ -121,11 +121,11 @@ local function deathLogic(player)
 
 	if player.deaths["crushed"] then
 		mo.state = S_PLAY_DEAD
-		mo.spriteyscale = FRACUNIT / 6
+		mo.spriteyscale = FU / 6
 	end
 
 	if player.deaths["deathpit"] then
-		P_SetObjectMomZ(mo, -FRACUNIT, true)
+		P_SetObjectMomZ(mo, -FU, true)
 
 		mo.state = S_PLAY_PAIN
 		player.drawangle = $ + (ANG10 * 5)
@@ -152,7 +152,7 @@ local function deathLogic(player)
 
 			if (player == displayplayer) then
 				P_FlashPal(player, PAL_WHITE, 5)
-				P_StartQuake(8 * FRACUNIT, 10)
+				P_StartQuake(8 * FU, 10)
 			end
 		end
 	end
@@ -172,7 +172,7 @@ local function deathToggles(mo, _, _, dmgtype)
 		mo.flags = $ | (MF_NOGRAVITY)
 
 		mo.momx, mo.momy = $1 / 4, $2 / 4
-		P_SetObjectMomZ(mo, FRACUNIT * 7, false)
+		P_SetObjectMomZ(mo, FU * 7, false)
 
 		S_StartSound(mo, sfx_spkdth, nil)
 	end
@@ -187,10 +187,10 @@ local function deathToggles(mo, _, _, dmgtype)
 		mo.color = SKINCOLOR_CARBON
 
 		mo.momx, mo.momy = $1 / 4, $2 / 4
-		P_SetObjectMomZ(mo, FRACUNIT * 8, false)
+		P_SetObjectMomZ(mo, FU * 8, false)
 
 		if (player == displayplayer) then
-			P_StartQuake(5 * FRACUNIT, 10)
+			P_StartQuake(5 * FU, 10)
 		end
 
 		S_StartSound(mo, sfx_thok, nil)
@@ -243,7 +243,7 @@ local function deathToggles(mo, _, _, dmgtype)
 		mo.fuse = TICRATE - 5
 
 		mo.momx, mo.momy = $1 / 4, $2 / 4
-		P_SetObjectMomZ(mo, 14 * FRACUNIT, false)
+		P_SetObjectMomZ(mo, 14 * FU, false)
 
 		S_StartSound(mo, sfx_jslip, nil)
 	end

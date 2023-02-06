@@ -11,7 +11,7 @@ local function handleTimeLimit()
 		if (limittime == 1) then
 			S_ChangeMusic("_gover", false, player, 0, 0, 2 * MUSICRATE)
 			S_StartSound(nil, sfx_s3k9b, nil)
-			P_StartQuake(64 * FRACUNIT, 8)
+			P_StartQuake(64 * FU, 8)
 
 			stoppedclock = true
 

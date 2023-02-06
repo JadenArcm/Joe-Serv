@@ -21,9 +21,9 @@ local function spawnSparkles(mo, offs, zoffs, type)
 	mobj.blendmode = AST_ADD
 	mobj.fuse = 5 * TICRATE
 
-	mobj.momx = P_RandomRange(-offs, offs) * FRACUNIT
-	mobj.momy = P_RandomRange(-offs, offs) * FRACUNIT
-	P_SetObjectMomZ(mobj, P_RandomRange(0, zoffs[1]) * FRACUNIT, false)
+	mobj.momx = P_RandomRange(-offs, offs) * FU
+	mobj.momy = P_RandomRange(-offs, offs) * FU
+	P_SetObjectMomZ(mobj, P_RandomRange(0, zoffs[1]) * FU, false)
 end
 
 --//
@@ -38,10 +38,10 @@ addHook("MapLoad", function()
 			mt.mobj.flags2 = $ | MF2_DONTDRAW
 		end
 
-		local mo = P_SpawnMobj(mt.x * FRACUNIT, mt.y * FRACUNIT, 0, MT_COOPEMBLEM)
-		local zoffs = (mt.options & MTF_AMBUSH) and (18 * FRACUNIT) or 0
+		local mo = P_SpawnMobj(mt.x * FU, mt.y * FU, 0, MT_COOPEMBLEM)
+		local zoffs = (mt.options & MTF_AMBUSH) and (18 * FU) or 0
 
-		mo.z = mo.floorz + (mt.z * FRACUNIT) + zoffs
+		mo.z = mo.floorz + (mt.z * FU) + zoffs
 		mo.orig = mt.angle + 1
 
 		mo.frame = emblemProperties[mo.orig][1] | (FF_PAPERSPRITE | FF_FULLBRIGHT)
@@ -63,11 +63,11 @@ addHook("MobjThinker", function(mo)
 
 	if (mo.orig == nil) then
 		if (mo.fuse > 1) then
-			P_SetObjectMomZ(mo, (mo.fuse * FRACUNIT) / 12, false)
+			P_SetObjectMomZ(mo, (mo.fuse * FU) / 12, false)
 			P_InstaThrust(mo, mo.angle, (mo.fuse * mo.scale) / 5)
 
-			mo.spritexoffset = P_RandomRange(-4, 4) * FRACUNIT
-			mo.spriteyoffset = P_RandomRange(-4, 4) * FRACUNIT
+			mo.spritexoffset = P_RandomRange(-4, 4) * FU
+			mo.spriteyoffset = P_RandomRange(-4, 4) * FU
 
 		elseif (mo.fuse == 1) then
 			local expl = P_SpawnMobjFromMobj(mo, 0, 0, 0, MT_THOK)
@@ -75,8 +75,8 @@ addHook("MobjThinker", function(mo)
 			expl.fuse = TICRATE
 
 			for player in players.iterate do
-				if (joeFuncs.getDistance(mo, player.realmo) <= (512 * FRACUNIT)) then
-					P_StartQuake(64 * FRACUNIT, 7)
+				if (joeFuncs.getDistance(mo, player.realmo) <= (512 * FU)) then
+					P_StartQuake(64 * FU, 7)
 					S_StartSoundAtVolume(nil, sfx_emjexp, 200, player)
 				end
 			end
@@ -90,13 +90,13 @@ addHook("MobjThinker", function(mo)
 
 	local bounce = abs(cos((leveltime * 3) * ANG1))
 	mo.renderflags = $ | (RF_NOCOLORMAPS)
-	mo.shadowscale = (2 * FRACUNIT) / 3
+	mo.shadowscale = (2 * FU) / 3
 
 	if (mo.fuse > 1) then
-		mo.angle = $ + FixedAngle(mo.fuse * FRACUNIT)
+		mo.angle = $ + FixedAngle(mo.fuse * FU)
 		mo.blendmode = AST_ADD
 
-		P_SetObjectMomZ(mo, (mo.fuse * FRACUNIT) / 25, false)
+		P_SetObjectMomZ(mo, (mo.fuse * FU) / 25, false)
 
 	elseif (mo.fuse == 1) then
 		for i = 1, 8 do
@@ -108,8 +108,8 @@ addHook("MobjThinker", function(mo)
 		expl.fuse = TICRATE
 
 		for player in players.iterate do
-			if (joeFuncs.getDistance(mo, player.mo) <= (1024 * FRACUNIT)) then
-				P_StartQuake(12 * FRACUNIT, 5)
+			if (joeFuncs.getDistance(mo, player.mo) <= (1024 * FU)) then
+				P_StartQuake(12 * FU, 5)
 			end
 		end
 
@@ -119,7 +119,7 @@ addHook("MobjThinker", function(mo)
 		mo.flags2 = $ | MF2_DONTDRAW
 
 	else
-		mo.angle = $ + FixedAngle(2 * FRACUNIT)
+		mo.angle = $ + FixedAngle(2 * FU)
 		mo.spriteyoffset = (14 * bounce)
 
 		if (mo.health) and not (bounce) then
@@ -148,7 +148,7 @@ addHook("TouchSpecial", function(mo, toucher)
 	end
 
 	mo.fuse = TICRATE + 17
-	mo.angle = R_PointToAngle2(mo.x, mo.y, toucher.x, toucher.y) - FixedAngle(38 * FRACUNIT)
+	mo.angle = R_PointToAngle2(mo.x, mo.y, toucher.x, toucher.y) - FixedAngle(38 * FU)
 
 	mo.health = 0
 	joeVars.collectedEmblems = $ + 1

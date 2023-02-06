@@ -1,10 +1,10 @@
 --//
 
 joeFuncs.addHUD(function(v, player)
-	local x, y = (160 * FRACUNIT), (188 * FRACUNIT)
+	local x, y = (160 * FU), (188 * FU)
 	local flags = V_SNAPTOBOTTOM | V_ALLOWLOWERCASE | V_PERPLAYER
 
-	local anim = joeFuncs.getEase("inoutquad", player.hudstuff["specinfo"], (220 * FRACUNIT), y)
+	local anim = joeFuncs.getEase("inoutquad", player.hudstuff["specinfo"], (220 * FU), y)
 	local alpha = joeFuncs.getAlpha(v, 17 - (player.hudstuff["specinfo"] / 2))
 
 	local text = ""
@@ -32,7 +32,7 @@ joeFuncs.addHUD(function(v, player)
 	end
 
 	if (alpha ~= false) then
-		v.drawString(x, anim - (8 * FRACUNIT), "- Spectator -", flags | alpha | V_GRAYMAP, "thin-fixed-center")
+		v.drawString(x, anim - (8 * FU), "- Spectator -", flags | alpha | V_GRAYMAP, "thin-fixed-center")
 		v.drawString(x, anim, text, flags | alpha, "thin-fixed-center")
 	end
 end)

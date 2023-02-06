@@ -5,7 +5,7 @@ addHook("ThinkFrame", function()
 end)
 
 joeFuncs.addHUD(function(v)
-	local x, y = (160 * FRACUNIT), (96 * FRACUNIT)
+	local x, y = (160 * FU), (96 * FU)
 	local alpha = joeFuncs.getAlpha(v, 17 - min(joeVars.sayTimer / 2, 17))
 
 	if (alpha ~= false) then

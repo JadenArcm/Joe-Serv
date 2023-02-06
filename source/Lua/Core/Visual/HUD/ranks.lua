@@ -19,7 +19,7 @@ local function drawPeopleInTeams(v, x, y, people)
 			name = name:sub(0, 12) .. col .. "..."
 		end
 
-		v.drawScaled(x * FRACUNIT, y * FRACUNIT, FRACUNIT / 3, v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A), alpha, joeFuncs.getSkincolor(v, player, true))
+		v.drawScaled(x * FU, y * FU, FU / 3, v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A), alpha, joeFuncs.getSkincolor(v, player, true))
 		v.drawString(x + 13, y + 2, name, V_ALLOWLOWERCASE | alpha, "thin")
 		v.draw(x - 19, y - 1, joeFuncs.getPingPatch(v, player), 0, nil)
 
@@ -88,10 +88,10 @@ local function drawSpecificInformation(v)
 				local wave = (joeVars.collectedEmblems >= #joeVars.emblemInfo) and joeFuncs.getWave(i, 8, 3, 3) or 0
 				local alpha = (emblem.health) and V_60TRANS or 0
 
-				v.drawScaled((emb_x + (14 * (i - 1))) * FRACUNIT, (y * FRACUNIT) + wave, FRACUNIT / 2, patch, alpha | V_SNAPTOLEFT,  v.getColormap(TC_RAINBOW, emblem.color))
+				v.drawScaled((emb_x + (14 * (i - 1))) * FU, (y * FU) + wave, FU / 2, patch, alpha | V_SNAPTOLEFT,  v.getColormap(TC_RAINBOW, emblem.color))
 			end
 		else
-			v.drawScaled(emb_x * FRACUNIT, y * FRACUNIT, FRACUNIT / 2, v.cachePatch("GOTITX"), V_SNAPTOLEFT, v.getColormap(TC_RAINBOW, SKINCOLOR_SILVER))
+			v.drawScaled(emb_x * FU, y * FU, FU / 2, v.cachePatch("GOTITX"), V_SNAPTOLEFT, v.getColormap(TC_RAINBOW, SKINCOLOR_SILVER))
 			v.drawString(emb_x + 16, y + 2, "No Emblems?", V_ALLOWLOWERCASE | V_SNAPTOLEFT, "small")
 		end
 	end
@@ -134,7 +134,7 @@ local function drawGenericPeople(v, people)
 			name = $:sub(0, 12) .. col .. "..."
 		end
 
-		v.drawScaled(x * FRACUNIT, y * FRACUNIT, FRACUNIT / 3, v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A), alpha, joeFuncs.getSkincolor(v, player, true))
+		v.drawScaled(x * FU, y * FU, FU / 3, v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A), alpha, joeFuncs.getSkincolor(v, player, true))
 		v.drawString(x + 13, y + 2, name, V_ALLOWLOWERCASE | alpha, "thin")
 
 		v.draw(x - 19, y - 1, joeFuncs.getPingPatch(v, player), 0, nil)

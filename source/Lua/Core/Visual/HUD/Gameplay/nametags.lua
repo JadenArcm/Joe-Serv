@@ -4,7 +4,7 @@ joeFuncs.addHUD(function(v, player)
 	if not (joeVars.cvars["nametags"].value) then return end
 	if not joeFuncs.isValid(player.realmo) then return end
 
-	local maxdist = 2048 * FRACUNIT
+	local maxdist = 2048 * FU
 	local numtags = 0
 
 	for target in players.iterate do
@@ -21,7 +21,7 @@ joeFuncs.addHUD(function(v, player)
 		local screen = joeFuncs.worldToScreen(v, player, {target.mo.x, target.mo.y, target.mo.z + player_zoffs})
 
 		if (screen.visible) then
-			joeFuncs.drawFill(v, (screen.x - (2 * FRACUNIT)) - ((v.stringWidth(player_name, 0, "small") / 2) * FRACUNIT), screen.y - (2 * FRACUNIT), (v.stringWidth(player_name, 0, "small") + 4) * FRACUNIT, 8 * FRACUNIT, 31 | V_30TRANS)
+			joeFuncs.drawFill(v, (screen.x - (2 * FU)) - ((v.stringWidth(player_name, 0, "small") / 2) * FU), screen.y - (2 * FU), (v.stringWidth(player_name, 0, "small") + 4) * FU, 8 * FU, 31 | V_30TRANS)
 			v.drawString(screen.x, screen.y, player_name, alpha | V_ALLOWLOWERCASE, "small-fixed-center")
 
 			numtags = $ + 1

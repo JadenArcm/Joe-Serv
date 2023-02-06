@@ -16,8 +16,8 @@ mobjinfo[MT_COOPEMBLEM] = {
 	doomednum = -1,
 	spawnstate = S_COOPEMBLEM,
 	seestate = S_COOPEMBLEM,
-	radius = 16 * FRACUNIT,
-	height = 30 * FRACUNIT,
+	radius = 16 * FU,
+	height = 30 * FU,
 	flags = MF_SPECIAL | MF_NOGRAVITY | MF_NOCLIPHEIGHT
 }
 

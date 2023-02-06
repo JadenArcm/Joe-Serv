@@ -5,7 +5,7 @@ function joeFuncs.addHUD(func)
 end
 
 function joeFuncs.getWave(interval, diff, speed, range)
-	return sin(FixedAngle((leveltime + (diff * interval)) * (speed * FRACUNIT))) * range
+	return sin(FixedAngle((leveltime + (diff * interval)) * (speed * FU))) * range
 end
 
 --//
@@ -59,7 +59,7 @@ function joeFuncs.drawFill(v, x, y, width, height, col)
 	if (width < 0) then width = 0 end
 	if (height < 0) then height = 0 end
 
-	v.drawCropped(x, y, width, height, v.cachePatch(patch), flags, nil, 0, 0, FRACUNIT, FRACUNIT)
+	v.drawCropped(x, y, width, height, v.cachePatch(patch), flags, nil, 0, 0, FU, FU)
 end
 
 function joeFuncs.drawNum(v, x, y, num, flags, params)
@@ -68,7 +68,7 @@ function joeFuncs.drawNum(v, x, y, num, flags, params)
 	local font  	= (params) and params.font  or "STTNUM"
 	local spacing	= (params) and params.space or 0
 	local pad   	= (params) and params.pad   or 0
-	local scale		= (params) and params.scale or FRACUNIT
+	local scale		= (params) and params.scale or FU
 	local alignment = (params) and params.align or "left"
 
 	num = tostring($)
@@ -83,7 +83,7 @@ function joeFuncs.drawNum(v, x, y, num, flags, params)
 		local width = spacing or patch.width
 
 		if joeFuncs.isValid(patch) then
-			ax = $ + FixedMul(width * FRACUNIT, scale)
+			ax = $ + FixedMul(width * FU, scale)
 		end
 	end
 
@@ -102,7 +102,7 @@ function joeFuncs.drawNum(v, x, y, num, flags, params)
 		v.drawScaled(rx, y, scale, patch, flags, nil)
 
 		if joeFuncs.isValid(patch) then
-			rx = $ + FixedMul(width * FRACUNIT, scale)
+			rx = $ + FixedMul(width * FU, scale)
 		end
 	end
 end
@@ -145,8 +145,8 @@ function joeFuncs.worldToScreen(v, player, mobj)
 	end
 
 	local calc = (rfv + adj)
-	sx = FixedMul(tan($), calc * FRACUNIT) + (160 * FRACUNIT)
-	sy = (FixedDiv(cam.z - mo.z, ydist) * calc) + (100 * FRACUNIT) + (tan(cam.aim) * calc)
+	sx = FixedMul(tan($), calc * FU) + (160 * FU)
+	sy = (FixedDiv(cam.z - mo.z, ydist) * calc) + (100 * FU) + (tan(cam.aim) * calc)
 
 	return {x = sx, y = sy, visible = sv}
 end

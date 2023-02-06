@@ -57,19 +57,19 @@ local function drawWeapon(v, player, x, y, scale, flags, selection)
 
 	if (selection == 0) then
 		v.drawScaled(x, y, scale, ring_patch, flags | params.ring_alpha, nil)
-		v.drawString(x + (8 * FRACUNIT), y + (8 * FRACUNIT), ring_amt, flags | params.ring_alpha | params.ring_text, "thin-fixed-center")
+		v.drawString(x + (8 * FU), y + (8 * FU), ring_amt, flags | params.ring_alpha | params.ring_text, "thin-fixed-center")
 
 		if (player.powers[pw_infinityring]) then
 			local flash = (((player.rings <= 0) or (player.powers[pw_super] and (player.rings < 20))) and ((leveltime / 5) & 1)) and V_REDMAP or V_YELLOWMAP
-			v.drawString(x + (8 * FRACUNIT), y + FRACUNIT, max(0, player.rings), flags | flash, "small-fixed-center")
+			v.drawString(x + (8 * FU), y + FU, max(0, player.rings), flags | flash, "small-fixed-center")
 		end
 	else
 		v.drawScaled(x, y, scale, weap_patch, flags | params.patch_alpha, nil)
-		v.drawString(x + (8 * FRACUNIT), y + (8 * FRACUNIT), player.powers[match_weapons[selection].power], flags | params.patch_alpha | params.text_color, "thin-fixed-center")
+		v.drawString(x + (8 * FU), y + (8 * FU), player.powers[match_weapons[selection].power], flags | params.patch_alpha | params.text_color, "thin-fixed-center")
 	end
 
 	if (player.currentweapon == selection) then
-		v.drawScaled(x - (2 * FRACUNIT), (y - (2 * FRACUNIT)) + ((offs[2] / 2) * scale), scale, v.cachePatch("CURWEAP"), flags | alpha, nil)
+		v.drawScaled(x - (2 * FU), (y - (2 * FU)) + ((offs[2] / 2) * scale), scale, v.cachePatch("CURWEAP"), flags | alpha, nil)
 	end
 end
 
@@ -78,10 +78,10 @@ end
 local function drawTimer(v, player)
 	if G_IsSpecialStage(gamemap) then return end
 
-	local x, y = (160 * FRACUNIT), (5 * FRACUNIT)
+	local x, y = (160 * FU), (5 * FU)
 	local flags = V_SNAPTOTOP | V_ALLOWLOWERCASE | V_PERPLAYER
 
-	local alpha, anim = getParams(v, -(50 * FRACUNIT), y, player.hudstuff["ringslinger"])
+	local alpha, anim = getParams(v, -(50 * FU), y, player.hudstuff["ringslinger"])
 
 	local time = joeFuncs.getHUDTime(player.realtime)
 	local timer_type = (time.should_flash) and "Time Left:" or "Time Elapsed:"
@@ -89,15 +89,15 @@ local function drawTimer(v, player)
 
 	if (alpha ~= false) then
 		v.drawString(x, anim, timer_type, flags | alpha | color_type, "thin-fixed-center")
-		v.drawString(x, anim + (8 * FRACUNIT), joeFuncs.getTime(time.tics), flags | alpha, "thin-fixed-center")
+		v.drawString(x, anim + (8 * FU), joeFuncs.getTime(time.tics), flags | alpha, "thin-fixed-center")
 	end
 end
 
 local function drawPlayer(v, player)
-	local x, y = (92 * FRACUNIT), (162 * FRACUNIT)
+	local x, y = (92 * FU), (162 * FU)
 	local flags = V_SNAPTOBOTTOM | V_PERPLAYER
 
-	local alpha, anim = getParams(v, (210 * FRACUNIT), y, player.hudstuff["ringslinger"])
+	local alpha, anim = getParams(v, (210 * FU), y, player.hudstuff["ringslinger"])
 	local patch = v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A)
 
 	local name = joeFuncs.getPlayerName(player, 1)
@@ -107,41 +107,41 @@ local function drawPlayer(v, player)
 	end
 
 	if (alpha ~= false) then
-		v.drawScaled(x, anim, FRACUNIT / 3, patch, flags | alpha, joeFuncs.getSkincolor(v, player, true))
-		v.drawString(x + (13 * FRACUNIT), anim + (2 * FRACUNIT), name, V_ALLOWLOWERCASE | flags | alpha, "thin-fixed")
+		v.drawScaled(x, anim, FU / 3, patch, flags | alpha, joeFuncs.getSkincolor(v, player, true))
+		v.drawString(x + (13 * FU), anim + (2 * FU), name, V_ALLOWLOWERCASE | flags | alpha, "thin-fixed")
 	end
 end
 
 local function drawPowerstones(v, player)
 	if not (gametyperules & GTR_POWERSTONES) then return end
 
-	local x, y = (158 * FRACUNIT), (164 * FRACUNIT)
+	local x, y = (158 * FU), (164 * FU)
 	local flags = V_SNAPTOBOTTOM | V_PERPLAYER
 
-	local _, anim = getParams(v, (210 * FRACUNIT), y, player.hudstuff["ringslinger"])
+	local _, anim = getParams(v, (210 * FU), y, player.hudstuff["ringslinger"])
 
 	for i = 0, 6 do
 		local alpha = V_HUDTRANSHALF
 		if (player.powers[pw_emeralds] & (EMERALD1 << i)) then alpha = V_HUDTRANS end
 
-		v.drawScaled(x + ((i * FRACUNIT) * 10), anim, FRACUNIT, v.cachePatch("TEMER" .. (i + 1)), flags | alpha, nil)
+		v.drawScaled(x + ((i * FU) * 10), anim, FU, v.cachePatch("TEMER" .. (i + 1)), flags | alpha, nil)
 	end
 end
 
 local function drawWeapons(v, player)
-	local x, y = (152 * FRACUNIT), (177 * FRACUNIT)
+	local x, y = (152 * FU), (177 * FU)
 	local flags = V_SNAPTOBOTTOM | V_PERPLAYER
 
-	local _, anim = getParams(v, (210 * FRACUNIT), y, player.hudstuff["ringslinger"])
+	local _, anim = getParams(v, (210 * FU), y, player.hudstuff["ringslinger"])
 	local numweapons = 6
 
 	for type = 0, numweapons do
 		local offs = (type * 20) - (numweapons * 10)
-		drawWeapon(v, player, x + (offs * FRACUNIT), anim, FRACUNIT, flags, type)
+		drawWeapon(v, player, x + (offs * FU), anim, FU, flags, type)
 	end
 
 	if ((player.ammoremovaltimer) and (leveltime % 8 < 4)) then
-		v.drawString(x + (8 * FRACUNIT), y + (17 * FRACUNIT), "-" .. player.ammoremoval, flags | V_REDMAP, "small-fixed-center")
+		v.drawString(x + (8 * FU), y + (17 * FU), "-" .. player.ammoremoval, flags | V_REDMAP, "small-fixed-center")
 	end
 end
 

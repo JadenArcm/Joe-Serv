@@ -21,7 +21,7 @@ end
 
 local function drawEmblem(v, x, y, flags, params)
 	local color = SKINCOLOR_SILVER
-	local dist = joeFuncs.getDistance(params[1], params[2]) / FRACUNIT
+	local dist = joeFuncs.getDistance(params[1], params[2]) / FU
 
 	for i = 1, #emblem_dists do
 		if (dist <= emblem_dists[i][1]) then
@@ -33,7 +33,7 @@ local function drawEmblem(v, x, y, flags, params)
 		color = SKINCOLOR_GREY
 	end
 
-	v.drawScaled(x, y, FRACUNIT, v.cachePatch("JOE_HUNT" .. (params[1].health and "A" or "B")), flags, v.getColormap(TC_DEFAULT, color))
+	v.drawScaled(x, y, FU, v.cachePatch("JOE_HUNT" .. (params[1].health and "A" or "B")), flags, v.getColormap(TC_DEFAULT, color))
 end
 
 --//
@@ -50,17 +50,17 @@ addHook("ThinkFrame", handleTics)
 joeFuncs.addHUD(function(v, player)
 	if not (#joeVars.emblemInfo) then return end
 
-	local x, y = (152 * FRACUNIT), (176 * FRACUNIT)
+	local x, y = (152 * FU), (176 * FU)
 	local flags = V_SNAPTOBOTTOM | V_PERPLAYER
 
-	local alpha, anim = getParams(v, (230 * FRACUNIT), y, joeVars.emblemTics)
+	local alpha, anim = getParams(v, (230 * FU), y, joeVars.emblemTics)
 
 	if (alpha ~= false) then
 		for i, mo in ipairs(joeVars.emblemInfo) do
 			local wave = joeFuncs.getWave(i, 15, 4, 3)
 			local offs = ((i - 1) * 20) - ((#joeVars.emblemInfo - 1) * 10)
 
-			drawEmblem(v, x + (offs * FRACUNIT), anim + wave, flags | alpha, {mo, player.realmo})
+			drawEmblem(v, x + (offs * FU), anim + wave, flags | alpha, {mo, player.realmo})
 		end
 	end
 end)
