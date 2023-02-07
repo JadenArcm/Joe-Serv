@@ -1,21 +1,18 @@
 --//
 
 local blackListedSkins = {
-	["adventuresonic"] = true,
-	["jellytails"] = true,
-	["tailsdoll"] = true,
-	["bowser"] = true,
-	["speccy"] = true,
-	["milne"] = true,
-	["iclyn"] = true,
-	["kiryu"] = true,
+	"adventuresonic", "jellytails",
+	"tailsdoll", "bowser",
+	"speccy", "milne",
+	"iclyn", "kiryu",
 
-	["frank"] = true,
-	["dummie"] = true,
-
-	["kirby"] = true,
-	["metaknight"] = true
+	"frank", "dummie",
+	"kirby", "metaknight",
 }
+
+for _, v in ipairs(blackListedSkins) do
+	blackListedSkins[v] = true
+end
 
 --//
 
@@ -261,5 +258,11 @@ local function deathToggles(mo, _, _, dmgtype)
 	return true
 end
 addHook("MobjDeath", deathToggles, MT_PLAYER)
+
+--//
+
+addHook("NetVars", function(net)
+	blackListedSkins = net($)
+end)
 
 --//
