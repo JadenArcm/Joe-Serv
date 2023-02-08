@@ -1,5 +1,14 @@
 --//
 
+local function useNext(...)
+	for i = 1, select('#', ...) do
+		local v = select(i, ...)
+		if (v ~= nil) then return v end
+	end
+end
+
+--//
+
 function joeFuncs.addHUD(func)
 	table.insert(joeVars.displayList, func)
 end
@@ -62,47 +71,55 @@ function joeFuncs.drawFill(v, x, y, width, height, col)
 	v.drawCropped(x, y, width, height, v.cachePatch(patch), flags, nil, 0, 0, FU, FU)
 end
 
-function joeFuncs.drawNum(v, x, y, num, flags, params)
+function joeFuncs.drawNum(v, x, y, num, flags, data)
 	local rx, ax = x, 0
 
-	local font  	= (params) and params.font  or "STTNUM"
-	local spacing	= (params) and params.space or 0
-	local pad   	= (params) and params.pad   or 0
-	local scale		= (params) and params.scale or FU
-	local alignment = (params) and params.align or "left"
-
 	num = tostring($)
-	if (pad and tonumber(pad)) then
-		num = string.format("%0" .. pad .. "d", $)
+	if (data == nil) then
+		error("Seems like \"\x82data\x80\" is nil. Please double-check.", 2)
+	end
+
+	data.padding = useNext($, 0)
+	data.spacing = useNext($, 0)
+
+	data.font = useNext($, "STTNUM")
+	data.align = useNext($, "left")
+
+	data.scale = useNext($, FU)
+	data.colormap = useNext($, nil)
+
+	if (data.padding > 0) and tonumber(data.padding) then
+		num = string.format("%0" .. data.padding .. "d", $)
 	end
 
 	-- Number width for alignments
 	for w = 1, string.len(num) do
 		local bit = string.sub(num, w, w)
-		local patch = v.cachePatch(font .. bit)
-		local width = spacing or patch.width
+		local patch = v.cachePatch(data.font .. bit)
+		local width = data.spacing or patch.width
 
 		if joeFuncs.isValid(patch) then
-			ax = $ + FixedMul(width * FU, scale)
+			ax = $ + FixedMul(width * FU, data.scale)
 		end
 	end
 
-	if (alignment == "right") then
+	-- Apply that alignment
+	if (data.align == "right") then
 		rx = x - ax
-	elseif (alignment == "center") then
+	elseif (data.align == "center") then
 		rx = x - (ax / 2)
 	end
 
 	-- Draw numbers
 	for i = 1, string.len(num) do
 		local bit = string.sub(num, i, i)
-		local patch = v.cachePatch(font .. bit)
-		local width = spacing or patch.width
+		local patch = v.cachePatch(data.font .. bit)
+		local width = data.spacing or patch.width
 
-		v.drawScaled(rx, y, scale, patch, flags, nil)
+		v.drawScaled(rx, y, data.scale, patch, flags, data.colormap)
 
 		if joeFuncs.isValid(patch) then
-			rx = $ + FixedMul(width * FU, scale)
+			rx = $ + FixedMul(width * FU, data.scale)
 		end
 	end
 end

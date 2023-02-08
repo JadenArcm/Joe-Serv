@@ -25,7 +25,7 @@ local function drawScore(v, player)
 
 	if (alpha ~= false) then
 		v.drawScaled(anim, y, FU, v.cachePatch(patch), flags | alpha, v.getColormap(TC_DEFAULT, color))
-		joeFuncs.drawNum(v, anim + (22 * FU), y + (3 * FU), player.score, flags | alpha, {font = "JOE_BNUM", space = 7})
+		joeFuncs.drawNum(v, anim + (22 * FU), y + (3 * FU), player.score, flags | alpha, {font = "JOE_BNUM", spacing = 7})
 	end
 end
 
@@ -41,7 +41,7 @@ local function drawRings(v, player)
 
 	if (alpha ~= false) then
 		v.drawScaled(anim, y, FU, v.cachePatch(patch), flags | alpha, color)
-		joeFuncs.drawNum(v, anim - (8 * FU), y + (3 * FU), player.rings, flags | alpha, {font = "JOE_BNUM", space = 7, align = "right"})
+		joeFuncs.drawNum(v, anim - (8 * FU), y + (3 * FU), player.rings, flags | alpha, {font = "JOE_BNUM", spacing = 7, align = "right"})
 	end
 end
 
@@ -87,17 +87,17 @@ local function drawTime(v, player)
 		v.drawScaled(anim, y - (3 * FU), FU, v.cachePatch(patch), flags | alpha, v.getColormap(TC_DEFAULT, color))
 
 		if (style.value < 3) then
-			joeFuncs.drawNum(v, anim - ((51 + xoffs) * FU), y, G_TicsToMinutes(time.tics, true), flags | alpha, {font = "JOE_BNUM", space = 7, align = "right"})
+			joeFuncs.drawNum(v, anim - ((51 + xoffs) * FU), y, G_TicsToMinutes(time.tics, true), flags | alpha, {font = "JOE_BNUM", spacing = 7, align = "right"})
 
 			v.drawScaled(anim - ((52 + xoffs) * FU), y, FU, v.cachePatch("JOE_COLON"), flags | alpha, nil)
-			joeFuncs.drawNum(v, anim - ((30 + xoffs) * FU), y, G_TicsToSeconds(time.tics), flags | alpha, {font = "JOE_BNUM", space = 7, pad = 2, align = "right"})
+			joeFuncs.drawNum(v, anim - ((30 + xoffs) * FU), y, G_TicsToSeconds(time.tics), flags | alpha, {font = "JOE_BNUM", spacing = 7, padding = 2, align = "right"})
 
 			if (style.value > 0) then
 				v.drawScaled(anim - (30  * FU), y, FU, v.cachePatch("JOE_PERIO"), flags | alpha, nil)
-				joeFuncs.drawNum(v, anim - (8 * FU), y, G_TicsToCentiseconds(time.tics), flags | alpha, {font = "JOE_BNUM", space = 7, pad = 2, align = "right"})
+				joeFuncs.drawNum(v, anim - (8 * FU), y, G_TicsToCentiseconds(time.tics), flags | alpha, {font = "JOE_BNUM", spacing = 7, padding = 2, align = "right"})
 			end
 		else
-			joeFuncs.drawNum(v, anim - (8 * FU), y, time.tics, flags | alpha, {font = "JOE_BNUM", space = 7, align = "right"})
+			joeFuncs.drawNum(v, anim - (8 * FU), y, time.tics, flags | alpha, {font = "JOE_BNUM", spacing = 7, align = "right"})
 		end
 	end
 end
