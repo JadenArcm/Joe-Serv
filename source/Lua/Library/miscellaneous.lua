@@ -21,7 +21,7 @@ end
 
 function joeFuncs.getEase(type, tics, minimum, maximum)
 	local timer = (FU / TICRATE) * max(0, min(tics, TICRATE))
-	return ease[type](timer, l, m)
+	return ease[type](timer, minimum, maximum)
 end
 
 function joeFuncs.getTime(time)
