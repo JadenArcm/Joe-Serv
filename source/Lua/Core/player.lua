@@ -14,7 +14,7 @@ local hud_types = {
 	"display",
 	"specinfo",
 	"ringslinger",
-	"emblems",
+	"selfview",
 }
 
 --//

@@ -14,8 +14,8 @@ local function initVariables(t, no_reset)
 
 			["radar"] = CV_RegisterVar({"joe_emblemradar", "Off", 0, CV_OnOff}),
 
-			["display"] = CV_RegisterVar({"joe_maindisplay", "On", 0, CV_OnOff}),
-			["scores"] = CV_RegisterVar({"joe_rankdisplay", "On", 0, CV_OnOff}),
+			["display"] = CV_RegisterVar({"joe_chmain", "On", 0, CV_OnOff}),
+			["scores"] = CV_RegisterVar({"joe_chrank", "On", 0, CV_OnOff}),
 		}
 
 		-- Display List
@@ -45,7 +45,6 @@ local function initVariables(t, no_reset)
 
 	-- Time limit / Autoexit
 	t.exitCountdown = t.cvars["autoexit"].value * (60 * TICRATE)
-	t.exitTics = 0
 	t.exitDelay = 0
 
 	-- CSay?

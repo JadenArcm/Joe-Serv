@@ -18,6 +18,8 @@ local function handleTickers(player)
 
 		player.hudstuff["ringslinger"] = (G_RingSlingerGametype() and not (player.spectator)) and min($ + 1, TICRATE) or max(0, $ - 1)
 		player.hudstuff["specinfo"] = (player.spectator) and min($ + 1, TICRATE) or max(0, $ - 1)
+
+		player.hudstuff["selfview"] = (G_IsSpecialStage() or G_RingSlingerGametype()) and min($ + 1, TICRATE) or max(0, $ - 1)
 	end
 end
 addHook("PlayerThink", handleTickers)

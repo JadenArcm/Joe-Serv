@@ -11,11 +11,11 @@ local function drawSelectedStarpost(v, player, x, y, flags)
 		v.drawString(x, y + (8 * FU), "#" .. player.starwarp.cursor, flags | params[2], "small-fixed-center")
 
 		if (player.starwarp.cursor > 1) then
-			v.drawString((x - (19 * FU)) - (offs * FU), y - (3 * FU), "\x1C", flags | V_YELLOWMAP, "thin-fixed")
+			v.drawString((x - (19 * FU)) - (offs * FU), y - (3 * FU), "<", flags | V_YELLOWMAP, "thin-fixed")
 		end
 
 		if (player.starwarp.cursor < #joeVars.starWarps) then
-			v.drawString((x + (12 * FU)) + (offs * FU), y - (3 * FU), "\x1D", flags | V_YELLOWMAP, "thin-fixed")
+			v.drawString((x + (15 * FU)) + (offs * FU), y - (3 * FU), ">", flags | V_YELLOWMAP, "thin-fixed")
 		end
 	end
 end
@@ -29,7 +29,6 @@ joeFuncs.addHUD(function(v, player)
 	local flags = V_SNAPTOBOTTOM | V_PERPLAYER
 
 	local anim = joeFuncs.getEase("inoutquad", player.starwarp.tics, 255 * FU, y)
-	local hover_text = "Press \x82[TOSSFLAG]\x80 to toggle the \x87StarWarp\x80 menu."
 
 	local warp_alpha = joeFuncs.getAlpha(v, 17 - (player.starwarp.tics / 2))
 	local hover_alpha = joeFuncs.getAlpha(v, 17 - (player.starwarp.hover_tics / 2))
@@ -39,7 +38,7 @@ joeFuncs.addHUD(function(v, player)
 	end
 
 	if (hover_alpha ~= false) then
-		v.drawString(160 * FU, y + (3 * FU), hover_text, V_ALLOWLOWERCASE | hover_alpha | flags, "small-fixed-center")
+		v.drawString(160 * FU, 189 * FU, "Press \x82[TOSSFLAG]\x80 to toggle the \x87StarWarp\x80 menu.", V_ALLOWLOWERCASE | hover_alpha | flags, "small-fixed-center")
 	end
 end)
 

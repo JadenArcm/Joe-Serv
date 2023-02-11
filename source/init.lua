@@ -42,7 +42,7 @@ local file_init = {
 	},
 	{
 		"Core/Visual/HUD/Gameplay",
-		{"coop.lua", "match.lua", "nametags.lua", "bosstags.lua", "radar.lua", "starwarps.lua"},
+		{"coop.lua", "match.lua", "nametags.lua", "radar.lua", "starwarps.lua"},
 	},
 	{
 		"Core/Visual/HUD/Miscellaneous",
