@@ -33,6 +33,7 @@ local function initPlayer(player)
 	player.force = {}
 	player.force.god = false
 	player.force.noclip = false
+	player.force.notarget = false
 	player.force.colorize = false
 
 	-- Starposts

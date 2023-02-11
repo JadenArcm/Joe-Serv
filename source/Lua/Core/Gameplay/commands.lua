@@ -145,6 +145,18 @@ local command_info = {
 	},
 
 	{
+		name = "notarget",
+		admin = true,
+
+		func = function(player)
+			if not inLevel(player) then return end
+
+			player.force.notarget = not $
+			CONS_Printf(player, "No-Targetting \x82" .. ((player.force.notarget) and "enabled" or "disabled") .. "\x80.")
+		end
+	},
+
+	{
 		name = "getammo",
 		admin = true,
 

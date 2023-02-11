@@ -1,15 +1,29 @@
 --//
 
 local scoreColors = {
-	SKINCOLOR_SEAFOAM, SKINCOLOR_CYAN, SKINCOLOR_WAVE, SKINCOLOR_SAPPHIRE, SKINCOLOR_VAPOR, SKINCOLOR_BUBBLEGUM,
-	SKINCOLOR_VIOLET, SKINCOLOR_RUBY, SKINCOLOR_FLAME, SKINCOLOR_SUNSET, SKINCOLOR_SANDY, SKINCOLOR_LIME
+	SKINCOLOR_EMERALD, SKINCOLOR_AQUA, SKINCOLOR_SKY, SKINCOLOR_BLUE, SKINCOLOR_PURPLE, SKINCOLOR_MAGENTA,
+	SKINCOLOR_ROSY, SKINCOLOR_RED, SKINCOLOR_ORANGE, SKINCOLOR_GOLD, SKINCOLOR_YELLOW, SKINCOLOR_PERIDOT
 }
+
+--//
 
 local function getParams(v, xs, xn, tics)
 	local alpha = joeFuncs.getAlpha(v, 17 - (tics / 2))
 	local easing = joeFuncs.getEase("inoutexpo", tics, xs, xn)
 
 	return alpha, easing
+end
+
+local function handleBlending(player)
+	if (player.realmo.frame & FF_BLENDMASK) then
+		return (((player.realmo.frame & FF_BLENDMASK) >> FF_BLENDSHIFT) << V_BLENDSHIFT)
+	end
+
+	if (player.realmo.blendmode) then
+		return ({[AST_ADD] = V_ADD, [AST_SUBTRACT] = V_SUBSTRACT, [AST_REVERSESUBTRACT] = V_REVERSESUBSTRACT, [AST_MODULATE] = V_MODULATE})[player.realmo.blendmode] or 0
+	end
+
+	return 0
 end
 
 --//
@@ -115,7 +129,8 @@ local function drawSelfDisplay(v, player)
 	local x, y = (29 * FU), (167 * FU)
 	local flags = V_SNAPTOLEFT | V_SNAPTOBOTTOM | V_PERPLAYER
 
-	local alpha, blend = (((player.realmo.frame & FF_TRANSMASK) >> FF_TRANSSHIFT) << V_ALPHASHIFT), (((player.realmo.frame & FF_BLENDMASK) >> FF_BLENDSHIFT) << V_BLENDSHIFT)
+	local alpha = ((player.realmo.frame & FF_TRANSMASK) >> FF_TRANSSHIFT) << V_ALPHASHIFT
+	local blend = handleBlending(player)
 
 	local anim_x = joeFuncs.getEase("inoutexpo", player.hudstuff["selfview.x"], -(50 * FU), x)
 	local anim_y = joeFuncs.getEase("inoutquart", player.hudstuff["selfview.y"], y, y + (18 * FU))
@@ -124,10 +139,9 @@ local function drawSelfDisplay(v, player)
 	local scale_x, scale_y = FixedMul(player.realmo.spritexscale, scale), FixedMul(player.realmo.spriteyscale, scale)
 
 	local patch, flip = v.getSprite2Patch(player.skin, player.realmo.sprite2, (player.powers[pw_super] > 0), player.realmo.frame, 8, player.realmo.rollangle)
-	local colormap = joeFuncs.getSkincolor(v, player, true)
 
 	local shadow_patch = v.cachePatch("DSHADOW")
-	local shadow_scale_x = (player.realmo.radius / shadow_patch.width) + (FU / 24)
+	local shadow_scale_x = (player.realmo.radius / shadow_patch.width) + (FU / 26)
 
 	if (player.realmo.sprite ~= SPR_PLAY) then
 		patch, flip = v.getSpritePatch(player.realmo.sprite, player.realmo.frame, 8, player.realmo.rollangle)
@@ -139,10 +153,10 @@ local function drawSelfDisplay(v, player)
 
 	if not (((player.powers[pw_flashing] > 1) and (player.powers[pw_flashing] < flashingtics)) and (leveltime & 1)) then
 		if (CV_FindVar("shadow").value) then
-			v.drawStretched(anim_x - ((shadow_patch.width / 2) * shadow_scale_x), anim_y - FU, shadow_scale_x, FU / 16, shadow_patch, V_30TRANS | flags, nil)
+			v.drawStretched(anim_x - ((shadow_patch.width / 2) * shadow_scale_x), anim_y - FU, shadow_scale_x, FU / 16, shadow_patch, V_20TRANS | flags, nil)
 		end
 
-		v.drawStretched(anim_x, anim_y, scale_x, scale_y, patch, flags | alpha | blend | (flip and V_FLIP or 0), colormap)
+		v.drawStretched(anim_x, anim_y, scale_x, scale_y, patch, flags | alpha | blend | (flip and V_FLIP or 0), joeFuncs.getSkincolor(v, player, true))
 	end
 end
 
