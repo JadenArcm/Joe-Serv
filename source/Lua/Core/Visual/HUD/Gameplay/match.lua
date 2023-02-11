@@ -133,7 +133,7 @@ local function drawWeapons(v, player)
 	local flags = V_SNAPTOBOTTOM | V_PERPLAYER
 
 	local _, anim = getParams(v, (210 * FU), y, player.hudstuff["ringslinger"])
-	local numweapons = 6
+	local numweapons = NUM_WEAPONS - 1
 
 	for type = 0, numweapons do
 		local offs = (type * 20) - (numweapons * 10)
