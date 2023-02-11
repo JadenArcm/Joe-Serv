@@ -11,6 +11,6 @@ joeFuncs.addHUD(function(v)
 	if (alpha ~= false) then
 		v.drawString(x, y, joeVars.sayText, V_ALLOWLOWERCASE | alpha, "fixed-center")
 	end
-end)
+end, true)
 
 --//

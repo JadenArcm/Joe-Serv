@@ -62,6 +62,6 @@ joeFuncs.addHUD(function(v)
 	else
 		v.drawString(x, anim, joeVars.tipText, V_ALLOWLOWERCASE | flags, "small-fixed-center")
 	end
-end)
+end, true)
 
 --//

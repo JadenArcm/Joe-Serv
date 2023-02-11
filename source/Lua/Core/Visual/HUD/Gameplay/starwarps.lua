@@ -40,6 +40,6 @@ joeFuncs.addHUD(function(v, player)
 	if (hover_alpha ~= false) then
 		v.drawString(160 * FU, 189 * FU, "Press \x82[TOSSFLAG]\x80 to toggle the \x87StarWarp\x80 menu.", V_ALLOWLOWERCASE | hover_alpha | flags, "small-fixed-center")
 	end
-end)
+end, true)
 
 --//

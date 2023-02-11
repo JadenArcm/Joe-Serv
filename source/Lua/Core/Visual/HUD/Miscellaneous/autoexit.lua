@@ -16,6 +16,6 @@ joeFuncs.addHUD(function(v, _)
 
 	v.drawScaled(anim - (8 * FU), y, FU, v.cachePatch("SLIDTIME"), 0, nil)
 	v.drawScaled((320 * FU) - anim, y, FU, v.cachePatch("SLIDOVER"), 0, nil)
-end)
+end, true)
 
 --//

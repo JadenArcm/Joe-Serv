@@ -40,6 +40,13 @@ local function handleDrawing(v, player)
 		for _, entry in ipairs(item_list) do
 			if not hud.enabled(entry) then hud.enable(entry) end
 		end
+
+		for _, item in ipairs(joeVars.displayList) do
+			if (item.keep) then
+				item.draw(v, player)
+			end
+		end
+
 		return
 	end
 
@@ -47,8 +54,8 @@ local function handleDrawing(v, player)
 		hud.disable(entry)
 	end
 
-	for _, draw in ipairs(joeVars.displayList) do
-		draw(v, player)
+	for _, item in ipairs(joeVars.displayList) do
+		item.draw(v, player)
 	end
 end
 addHook("HUD", handleDrawing, "game")

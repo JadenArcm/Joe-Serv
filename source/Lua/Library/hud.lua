@@ -9,8 +9,9 @@ end
 
 --//
 
-function joeFuncs.addHUD(func)
-	table.insert(joeVars.displayList, func)
+function joeFuncs.addHUD(func, keep)
+	keep = $ or false
+	table.insert(joeVars.displayList, {draw = func, keep = keep})
 end
 
 function joeFuncs.getWave(interval, diff, speed, range)
