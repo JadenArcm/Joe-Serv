@@ -65,7 +65,7 @@ local function drawBosses(v, player)
 		local screen = joeFuncs.worldToScreen(v, player, {mo.x, mo.y, mo.z + zoffs})
 
 		local total_health = FixedMul(FixedDiv(mo.health * FU, mo.info.spawnhealth * FU), bar_width - bar_offs)
-		local health_color = ((mo.flags2 & MF2_FRET) and (leveltime % 2)) and 1 or 36
+		local health_color = ((mo.flags2 & MF2_FRET) and (leveltime & 1)) and 1 or 36
 
 		if (screen.visible) then
 			joeFuncs.drawFill(v, screen.x - (bar_width / 2), screen.y, bar_width, 16 * FU, 31 | alpha)

@@ -116,7 +116,9 @@ local function drawSelfDisplay(v, player)
 	local flags = V_SNAPTOLEFT | V_SNAPTOBOTTOM | V_PERPLAYER
 
 	local alpha, blend = (((player.realmo.frame & FF_TRANSMASK) >> FF_TRANSSHIFT) << V_ALPHASHIFT), (((player.realmo.frame & FF_BLENDMASK) >> FF_BLENDSHIFT) << V_BLENDSHIFT)
-	local anim = joeFuncs.getEase("inoutquart", player.hudstuff["selfview"], y, y + (18 * FU))
+
+	local anim_x = joeFuncs.getEase("inoutexpo", player.hudstuff["selfview.x"], -(50 * FU), x)
+	local anim_y = joeFuncs.getEase("inoutquart", player.hudstuff["selfview.y"], y, y + (18 * FU))
 
 	local scale = (skins[player.skin].highresscale / 2)
 	local scale_x, scale_y = FixedMul(player.realmo.spritexscale, scale), FixedMul(player.realmo.spriteyscale, scale)
@@ -137,10 +139,10 @@ local function drawSelfDisplay(v, player)
 
 	if not (((player.powers[pw_flashing] > 1) and (player.powers[pw_flashing] < flashingtics)) and (leveltime & 1)) then
 		if (CV_FindVar("shadow").value) then
-			v.drawStretched(x - ((shadow_patch.width / 2) * shadow_scale_x), anim - FU, shadow_scale_x, FU / 16, shadow_patch, V_30TRANS | flags, nil)
+			v.drawStretched(anim_x - ((shadow_patch.width / 2) * shadow_scale_x), anim_y - FU, shadow_scale_x, FU / 16, shadow_patch, V_30TRANS | flags, nil)
 		end
 
-		v.drawStretched(x, anim, scale_x, scale_y, patch, flags | alpha | blend | (flip and V_FLIP or 0), colormap)
+		v.drawStretched(anim_x, anim_y, scale_x, scale_y, patch, flags | alpha | blend | (flip and V_FLIP or 0), colormap)
 	end
 end
 

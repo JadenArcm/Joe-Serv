@@ -52,7 +52,7 @@ local function handleMenu()
 				S_StartSound(nil, sfx_menu1, player)
 			end
 
-			player.powers[pw_nocontrol] = 5
+			player.powers[pw_nocontrol] = 10
 			player.realmo.momx, player.realmo.momy = 0, 0
 		end
 
@@ -80,27 +80,25 @@ local function handleWarp(player)
 		end
 
 		if P_PressedButton(player, BT_JUMP) then
-			if not (warp.enabled) then
+			if not (warp.enabled) or not joeFuncs.isValid(warp) then
 				S_StartSound(nil, sfx_adderr, player)
 				return
 			end
 
-			if joeFuncs.isValid(warp) then
-				P_TeleportMove(mo, warp.x + (42 * cos(warp.angle - ANGLE_90)), warp.y + (42 * sin(warp.angle - ANGLE_90)), warp.z)
-				P_ResetPlayer(player)
+			P_TeleportMove(mo, warp.x + (42 * cos(warp.angle - ANGLE_90)), warp.y + (42 * sin(warp.angle - ANGLE_90)), warp.z)
+			P_ResetPlayer(player)
 
-				S_StartSound(nil, sfx_mixup, player)
-				P_FlashPal(player, PAL_WHITE, 7)
+			S_StartSound(nil, sfx_mixup, player)
+			P_FlashPal(player, PAL_WHITE, 7)
 
-				mo.angle = warp.angle
-				mo.scale = warp.scale
-				player.drawangle = mo.angle
+			mo.angle = warp.angle
+			mo.scale = warp.scale
+			player.drawangle = mo.angle
 
-				mo.state = S_PLAY_FALL
-				mo.flags2 = $ | (warp.flags2 & MF2_TWOD)
+			player.powers[pw_flashing] = TICRATE
+			mo.flags2 = $ | (warp.flags2 & MF2_TWOD)
 
-				player.starwarp.enabled = false
-			end
+			player.starwarp.enabled = false
 		end
 	end
 end
