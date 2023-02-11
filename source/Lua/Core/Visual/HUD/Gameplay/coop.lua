@@ -137,7 +137,7 @@ local function drawSelfDisplay(v, player)
 
 	if not (((player.powers[pw_flashing] > 1) and (player.powers[pw_flashing] < flashingtics)) and (leveltime & 1)) then
 		if (CV_FindVar("shadow").value) then
-			v.drawStretched(x - ((shadow_patch.width / 2) * shadow_scale_x), y - FU, shadow_scale_x, FU / 16, shadow_patch, V_30TRANS | flags, nil)
+			v.drawStretched(x - ((shadow_patch.width / 2) * shadow_scale_x), anim - FU, shadow_scale_x, FU / 16, shadow_patch, V_30TRANS | flags, nil)
 		end
 
 		v.drawStretched(x, anim, scale_x, scale_y, patch, flags | alpha | blend | (flip and V_FLIP or 0), colormap)

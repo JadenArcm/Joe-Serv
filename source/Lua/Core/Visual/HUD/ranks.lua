@@ -82,6 +82,12 @@ local function drawSpecificInformation(v)
 			v.draw(emr_x + (10 * i), y, v.cachePatch("TEMER" .. (i + 1)), alpha | V_SNAPTORIGHT, nil)
 		end
 
+		if (gametyperules & GTR_EMERALDTOKENS) and not All7Emeralds(emeralds) then
+			local params = (token > 0) and {0, "\x82x\x80" .. token, 3} or {V_60TRANS, "...", 2}
+			v.drawScaled(148 * FU, y * FU, FU / 3, v.cachePatch("TOKNICON"), params[1], nil)
+			v.drawString(160, y + params[3], params[2], params[1] | V_ALLOWLOWERCASE, "small")
+		end
+
 		if (#joeVars.emblemInfo > 0) then
 			for i, emblem in ipairs(joeVars.emblemInfo) do
 				local patch = v.cachePatch("GOTIT" .. R_Frame2Char(emblem.frame & FF_FRAMEMASK))
