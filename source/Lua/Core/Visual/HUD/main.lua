@@ -10,9 +10,8 @@ local function handleTickers(player)
 	if (leveltime > TICRATE) then
 		if (player.exiting < 1) and not (G_RingSlingerGametype() or player.spectator) then
 			player.hudstuff["display"] = min($ + 1, TICRATE)
-		end
 
-		if ((player.exiting > 1) and (player.exiting <= 50)) or (G_RingSlingerGametype() or player.spectator) then
+		elseif ((player.exiting > 1) and (player.exiting <= 50)) or (G_RingSlingerGametype() or player.spectator) then
 			player.hudstuff["display"] = max(0, $ - 1)
 		end
 
