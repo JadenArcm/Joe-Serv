@@ -25,13 +25,13 @@ local function realEffects()
 		if (player.spectator) then continue end
 		if not joeFuncs.isValid(player.mo) then continue end
 
-		player.mo.frame = addFlag($, player.force.noclip, FF_TRANS60)
-		player.mo.frame = addFlag($, player.force.god, FF_ADD)
+		player.mo.frame = addFlag($, player.force.noclip, FF_TRANS70)
+		player.mo.frame = addFlag($, player.force.god, (FF_ADD | FF_FULLBRIGHT))
 		player.mo.frame = addFlag($, player.force.notarget, FF_MODULATE)
 
 		if joeFuncs.isValid(player.followmobj) then
-			player.followmobj.frame = addFlag($, player.force.noclip, FF_TRANS60)
-			player.followmobj.frame = addFlag($, player.force.god, FF_ADD)
+			player.followmobj.frame = addFlag($, player.force.noclip, FF_TRANS70)
+			player.followmobj.frame = addFlag($, player.force.god, (FF_ADD | FF_FULLBRIGHT))
 			player.followmobj.frame = addFlag($, player.force.notarget, FF_MODULATE)
 		end
 	end
