@@ -8,6 +8,11 @@ rawset(_G, "joeVars", {})
 
 --//
 
+local jVersion = "v1.0a"
+local jCredits = "Mini|Talis, and Furry"
+
+--//
+
 local file_init = {
 	-- Initialize things
 	{
@@ -55,5 +60,14 @@ for _, entry in ipairs(file_init) do
 		dofile(entry[1] .. "/" .. file)
 	end
 end
+
+--//
+
+print("\n",
+	"\x83Joe's\x87 Workshop\x80 (\x84" .. jVersion .. "\x80)",
+	" > Made by \x86Jaden\x80... ",
+	" > With help of \x82" .. jCredits .. "\x80. ",
+	"\n"
+)
 
 --//
