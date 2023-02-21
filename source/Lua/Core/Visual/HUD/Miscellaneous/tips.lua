@@ -8,6 +8,7 @@ local tipTexts = {
 	"No rings? Get some with " .. CMD_COLOR .. "setrings" .. "\x80!",
 	{"Wanna be super for some reason? Use " .. CMD_COLOR .. "togglesuper" .. "\x80!", "(You also need some \x83" .. "emeralds" .. "\x80...)"},
 	{"You died? Got 1 life? No problem! " .. CMD_COLOR .. "setlives" .. "\x80 is your solution.", "(You won't be reborn if you \x85" .. "Game Over" .. "\x80'd.)"},
+	{"Are you lost? Got a Starpost right ahead of you? Don't worry!", "Just get close to it, press \x82[TOSSFLAG]\x80, and select the one you want to teleport to!"},
 
 	{"Be respectful to others, please.", "If doing otherwise, you will be either \x85" .. "muted" .. "\x80, \x85" .. "kicked" .. "\x80 or \x85" .. "banned" .. "\x80."},
 

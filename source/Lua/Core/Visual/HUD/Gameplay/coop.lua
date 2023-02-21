@@ -141,7 +141,7 @@ local function drawSelfDisplay(v, player)
 	local patch, flip = v.getSprite2Patch(player.skin, player.realmo.sprite2, (player.powers[pw_super] > 0), player.realmo.frame, 8, player.realmo.rollangle)
 
 	local shadow_patch = v.cachePatch("DSHADOW")
-	local shadow_scale_x = (player.realmo.radius / shadow_patch.width) + (FU / 26)
+	local shadow_scale_x = (skins[player.skin].radius / shadow_patch.width) + (FU / 26)
 
 	if (player.realmo.sprite ~= SPR_PLAY) then
 		patch, flip = v.getSpritePatch(player.realmo.sprite, player.realmo.frame, 8, player.realmo.rollangle)

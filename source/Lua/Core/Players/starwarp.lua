@@ -14,19 +14,6 @@ local function P_WasMoving(player, dir)
 	return directions[dir]
 end
 
-local function P_CheckDist(ref, player)
-	if (joeFuncs.getDistance(ref, player.realmo) >= ref.radius) then return end
-
-	if not (player.starwarp.enabled) then
-		player.starwarp.hover_tics = min($ + 2, TICRATE)
-
-		if P_PressedButton(player, BT_TOSSFLAG) then
-			player.starwarp.enabled = true
-			S_StartSound(nil, sfx_strpst, player)
-		end
-	end
-end
-
 --//
 
 local function handleMenu()
@@ -52,7 +39,7 @@ local function handleMenu()
 				S_StartSound(nil, sfx_menu1, player)
 			end
 
-			player.powers[pw_nocontrol] = 10
+			player.powers[pw_nocontrol] = 5
 			player.realmo.momx, player.realmo.momy = 0, 0
 		end
 
@@ -93,12 +80,12 @@ local function handleWarp(player)
 
 			mo.angle = warp.angle
 			mo.scale = warp.scale
-			player.drawangle = mo.angle
-
-			player.powers[pw_flashing] = TICRATE
 			mo.flags2 = $ | (warp.flags2 & MF2_TWOD)
 
+			player.drawangle = mo.angle
 			player.starwarp.enabled = false
+
+			player.powers[pw_flashing] = 17
 		end
 	end
 end
@@ -123,10 +110,19 @@ addHook("MapLoad", insertInfo)
 
 local function handleDist(mo)
 	for player in players.iterate do
-		P_CheckDist(mo, player)
+		if (joeFuncs.getDistance(mo, player.realmo) >= mo.radius) then continue end
+
+		if not (player.starwarp.enabled) then
+			player.starwarp.hover_tics = min($ + 2, TICRATE)
+
+			if P_PressedButton(player, BT_TOSSFLAG) then
+				player.starwarp.enabled = true
+				S_StartSound(nil, sfx_strpst, player)
+			end
+		end
 	end
 
-	mo.enabled = (mo.state == S_STARPOST_SPIN) or (mo.state == S_STARPOST_FLASH)
+	mo.enabled = $ or ((mo.state == S_STARPOST_SPIN) or (mo.state == S_STARPOST_FLASH))
 end
 addHook("MobjThinker", handleDist, MT_STARPOST)
 

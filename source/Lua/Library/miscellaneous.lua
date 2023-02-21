@@ -70,28 +70,25 @@ end
 --//
 
 function joeFuncs.float2Fixed(float)
-	if not (float and string.len(float)) then
+	if (float == nil) then
 		return nil
 	end
 
-	local decPos = string.find(float, "%.")
-	if (decPos == nil) then
-		return (tonumber(float) * FU)
+	local decimalPos = float:find("%.")
+	if (decimalPos == nil) then
+		return tonumber(float) and (tonumber(float) * FU) or nil
 	end
 
-	local num = tonumber(string.sub(float, 0, decPos - 1)) * FU
-	local frac, i = 0, 1
+	local intVal = tonumber(float:sub(0, decimalPos - 1)) * FU
 
-	for c in string.gmatch(string.sub(float, decPos + 1, string.len(float)), "%d+") do
-		frac = $ + (tonumber(c) * FU) / (10 ^ i)
-		i = $ + 1
+	local fracStr = float:sub(decimalPos + 1, float:len())
+	local fracVal = tonumber(fracStr) * FU
 
-		if (i == 7) then
-			break
-		end
+	for _ = 1, fracStr:len() do
+		fracVal = FixedDiv($, 10 * FU)
 	end
 
-	return (num + frac)
+	return float:find("^-") and (intVal - fracVal) or (intVal + fracVal)
 end
 
 --//

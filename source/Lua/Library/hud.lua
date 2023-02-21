@@ -63,7 +63,7 @@ end
 --//
 
 function joeFuncs.drawFill(v, x, y, width, height, col)
-	local patch = string.format("~%03d", max(0, min((col & 255), 255)))
+	local patch = string.format("~%03d", max(0, (col & 255)))
 	local flags = col
 
 	if (width < 0) then width = 0 end

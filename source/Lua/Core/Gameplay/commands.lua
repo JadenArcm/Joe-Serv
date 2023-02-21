@@ -195,15 +195,14 @@ local command_info = {
 				return
 			end
 
-			local object_valid, object_tospawn = pcall(do return _G["MT_" .. string.upper(object)] end, object)
+			local object_valid, object_tospawn = pcall(function() return _G["MT_" .. string.upper(object)] end, object)
 
 			if not (object_valid) then
 				printError(player, "That object doesn't exist. Please double-check.")
 				return
 			end
 
-			local mo = P_SpawnMobjFromMobj(player.realmo, 0, 0, 0, object_tospawn)
-			mo.angle = player.realmo.angle
+			P_SpawnMobjFromMobj(player.realmo, 0, 0, 0, object_tospawn).angle = player.realmo.angle
 		end
 	},
 
@@ -232,7 +231,7 @@ local command_info = {
 				return
 			end
 
-			print("The gravity has been changed to \x82" .. string.format("%.1f", grav) .. "\x80.")
+			print("The gravity has been\x82 changed\x80! Watch out!")
 			gravity = grav
 		end
 	},
@@ -278,7 +277,7 @@ local command_info = {
 			if not inLevel(player) then return end
 
 			if not (node) then
-				printHelp(player, "bring <name/node>", "Teleports the selected player to your location.")
+				printHelp(player, "bring <name/node>", "Teleports the selected player to your location. Use \"\x82-rally\x80\" to bring everyone!")
 				return
 			end
 
@@ -287,7 +286,7 @@ local command_info = {
 				return
 			end
 
-			if (node == "all") then
+			if (node == "-rally") then
 				for targets in players.iterate do
 					if not joeFuncs.isValid(targets.mo) then continue end
 
@@ -363,7 +362,6 @@ local command_info = {
 					P_KillMobj(mobj, player.mo, player.mo)
 				end
 
-				print(joeFuncs.getPlayerName(player, 1) .. "\x80 killed every enemy. Awesome!")
 				return
 			end
 
@@ -405,49 +403,6 @@ local command_info = {
 	//
 
 	{
-		name = "setmusic",
-		admin = true,
-
-		func = function(player, tune)
-			if not (tune) then
-				printHelp(player, "setmusic <tune>", "Changes the music, but for everyone. Works just like \x82tunes\x80 does.")
-				return
-			end
-
-			if (tune == "-default") then
-				for targets in players.iterate do
-					COM_BufInsertText(targets, "tunes -default")
-				end
-
-				chatprint("\x82* " .. joeFuncs.getPlayerName(player, 0) .. "\x82 has changed the music to the level default.", true)
-				return
-			end
-
-			if (tune == "-none") then
-				for targets in players.iterate do
-					COM_BufInsertText(targets, "tunes -none")
-				end
-
-				chatprint("\x82* " .. joeFuncs.getPlayerName(player, 0) .. "\x82 has stopped the music player. So cool.", true)
-				return
-			end
-
-			local music_name = string.upper(tune)
-
-			if not S_MusicExists(music_name) then
-				printError(player, "That tune doesn't exist. Make sure it has less than 6 characters. Otherwise, double-check.")
-				return
-			end
-
-			for targets in players.iterate do
-				COM_BufInsertText(targets, "tunes " .. music_name)
-			end
-
-			chatprint("\x82* " .. joeFuncs.getPlayerName(player, 0) .. "\x82 has changed the music to \x86" .. music_name .. "\x82.", true)
-		end
-	},
-
-	{
 		name = "toggleemeralds",
 		admin = false,
 
@@ -484,13 +439,8 @@ local command_info = {
 		func = function(player)
 			if not inLevel(player) then return end
 
-			if (gametyperules & GTR_RINGSLINGER) and (player.rings < 120) then
-				printError(player, "You need more than \x82" .. "120 rings" .. "\x80 to use this.")
-				return
-			end
-
-			if (gametyperules & GTR_FRIENDLY) and not All7Emeralds(emeralds) then
-				printError(player, "You need all of the \x83" .. "Chaos Emeralds" .. "\x80 to use this.")
+			if not All7Emeralds(emeralds) then
+				printError(player, "You need all of the \x83" .. "Chaos Emeralds" .. "\x80 to use this. (Yes, even in match.)")
 				return
 			end
 
@@ -563,7 +513,6 @@ local command_info = {
 				return
 			end
 
-			CONS_Printf(player, "Your scale is now \x82" .. string.format("%.1f", scale) .. "\x80.")
 			player.mo.destscale = scale
 		end
 	},
