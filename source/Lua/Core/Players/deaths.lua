@@ -19,7 +19,7 @@ end
 local function resetVars(player)
 	if not joeFuncs.isValid(player) then return end
 
-	for _, types in ipairs({"normal", "fire", "spikes", "electric", "drowned", "crushed", "deathpit"}) do
+	for types, _ in pairs(player.deaths) do
 		player.deaths[types] = false
 	end
 end
@@ -31,7 +31,7 @@ local function deathLogic(player)
 	if not joeFuncs.isValid(player.mo) then return end
 
 	if (player.playerstate ~= PST_DEAD) then return end
-	if (blackListedSkins[player.skin] == true) then return end
+	if (blackListedSkins[player.mo.skin] == true) then return end
 
 	local mo = player.mo
 
@@ -57,7 +57,7 @@ local function deathLogic(player)
 			S_StartSound(mo, sfx_s1c8, nil)
 		end
 
-		if (leveltime % 25) then
+		if not (leveltime % 25) then
 			local fire = P_SpawnMobjFromMobj(mo, P_RandomRange(-40, 40) * FU, P_RandomRange(-40, 40) * FU, P_RandomRange(-40, 40) * FU, MT_THOK)
 			fire.fuse = 20
 			fire.flags = $ | (MF_NOGRAVITY)
