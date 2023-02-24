@@ -141,9 +141,11 @@ local function drawGenericPeople(v, people)
 		end
 
 		v.drawScaled(x * FU, y * FU, FU / 3, v.getSprite2Patch(player.skin, SPR2_XTRA, (player.powers[pw_super] > 0), A), alpha, joeFuncs.getSkincolor(v, player, true))
-		v.drawString(x + 13, y + 2, name, V_ALLOWLOWERCASE | alpha, "thin")
-
 		v.draw(x - 19, y - 1, joeFuncs.getPingPatch(v, player), 0, nil)
+
+		if not (player.quittime) or ((leveltime / 17) & 1) then
+			v.drawString(x + 13, y + 2, name, V_ALLOWLOWERCASE | alpha, "thin")
+		end
 
 		if (player.spectator) then
 			icon_patch = v.cachePatch("ICON_SPEC")
@@ -204,7 +206,7 @@ local function drawSpectators(v)
 	length = $ + screen_adjust
 
 	for player in players.iterate do
-		if not (player.spectator) then return end
+		if not (player.spectator) then continue end
 
 		local len = v.stringWidth(player.name, flags, "small") + 8
 		if (length >= -len) then

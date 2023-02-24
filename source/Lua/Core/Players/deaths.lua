@@ -94,7 +94,6 @@ local function deathLogic(player)
 		if (mo.fuse == 1) then
 			mo.spritexoffset, mo.spriteyoffset = 0, 0
 
-			mo.state = S_PLAY_PAIN
 			mo.color = SKINCOLOR_CARBON
 			mo.fuse = -1
 
@@ -106,6 +105,10 @@ local function deathLogic(player)
 			end
 
 			S_StartSound(mo, sfx_s3k51, nil)
+		end
+
+		if (mo.fuse < 5) then
+			mo.state = S_PLAY_PAIN
 		end
 	end
 
