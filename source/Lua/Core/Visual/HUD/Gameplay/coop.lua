@@ -107,17 +107,22 @@ local function drawLives(v, player)
 	local lives = "\x82x\x80" .. max(0, min(player.lives, 99))
 
 	local inf_bool = G_GametypeUsesLives() and not ((netgame and (CV_FindVar("cooplives").value == 0)) or (player.lives == INFLIVES))
+	local name_offs = (joeVars.cvars["health"].value) and 11 or (inf_bool and 11 or 7)
 
-	if (name:len() > 14) then
+	if (name:len() > 15) then
 		local col = (joeFuncs.getColor(player.skincolor) == "\x80") and "\x86" or "\x80"
-		name = name:sub(0, 14) .. col .. "..."
+		name = name:sub(0, 15) .. col .. "..."
+	end
+
+	if (joeVars.cvars["health"].value) and (inf_bool) then
+		name = name .. "\x80 | " .. lives
 	end
 
 	if (alpha ~= false) then
 		v.drawScaled(anim, y, skins[player.skin].highresscale, patch, flags | alpha, colormap)
-		v.drawString(anim + (11 * FU), y - ((inf_bool and 11 or 7) * FU), name, flags | alpha | V_ALLOWLOWERCASE, "thin-fixed")
+		v.drawString(anim + (11 * FU), y - (name_offs * FU), name, flags | alpha | V_ALLOWLOWERCASE, "thin-fixed")
 
-		if (inf_bool) then
+		if (inf_bool) and not (joeVars.cvars["health"].value) then
 			v.drawString(anim + (11 * FU), y - (3 * FU), lives, flags | alpha | V_ALLOWLOWERCASE, "thin-fixed")
 		end
 	end

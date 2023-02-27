@@ -31,7 +31,7 @@ local file_init = {
 	},
 	{
 		"Core/Players",
-		{"starwarp.lua", "deaths.lua", "effects.lua"},
+		{"starwarp.lua", "deaths.lua", "health.lua", "effects.lua"},
 	},
 
 	-- Miscellaneous stuff
@@ -47,7 +47,7 @@ local file_init = {
 	},
 	{
 		"Core/Visual/HUD/Gameplay",
-		{"nametags.lua", "coop.lua", "match.lua", "radar.lua", "starwarps.lua"},
+		{"nametags.lua", "coop.lua", "match.lua", "health.lua", "radar.lua", "starwarps.lua"},
 	},
 	{
 		"Core/Visual/HUD/Miscellaneous",

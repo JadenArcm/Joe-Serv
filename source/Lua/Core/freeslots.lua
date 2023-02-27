@@ -4,10 +4,11 @@ freeslot("S_COOPEMBLEM", "MT_COOPEMBLEM")
 freeslot("S_STOCKEXPLOSION", "SPR_JEXP")
 
 freeslot("sfx_jjoin", "sfx_jleave", "sfx_jkick", "sfx_jfail")
-freeslot("sfx_jtip")
 
 freeslot("sfx_emjgot", "sfx_emjall", "sfx_emjexp")
 freeslot("sfx_jexpl", "sfx_jslip", "sfx_jsplat", "sfx_jfall")
+
+freeslot("sfx_hjhit", "sfx_jtip")
 
 --//
 
@@ -47,6 +48,7 @@ sfxinfo[sfx_jfall].caption = "AAAAAAA"
 
 --//
 
+sfxinfo[sfx_hjhit].caption = "Hit"
 sfxinfo[sfx_jtip].caption = "Tip"
 
 --//

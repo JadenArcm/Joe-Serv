@@ -43,6 +43,12 @@ local function initPlayer(player)
 	player.starwarp.cursor = 1
 	player.starwarp.enabled = false
 
+	-- Health
+	player.survival = {}
+	player.survival.delay = 0
+	player.survival.health = 0
+	player.survival.total_health = 100 * FU
+
 	-- Deaths
 	player.deaths = {}
 	for _, types in ipairs(death_types) do

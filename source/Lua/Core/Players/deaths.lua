@@ -258,6 +258,7 @@ local function deathToggles(mo, _, _, dmgtype)
 		player.starwarp.enabled = false
 	end
 
+	player.survival.health = 0
 	return true
 end
 addHook("MobjDeath", deathToggles, MT_PLAYER)

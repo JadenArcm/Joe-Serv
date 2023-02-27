@@ -6,13 +6,19 @@ local function initVariables(t, no_reset)
 		-- Console variables
 		t.cvars = {
 			["autoexit"] = CV_RegisterVar({"joe_exittimer", "10", CV_NETVAR, {MIN = 5, MAX = 120}}),
-			["showperms"] = CV_RegisterVar({"joe_showperms", "On", CV_NETVAR, CV_OnOff}),
+			["health"] = CV_RegisterVar({"joe_survival", "Off", CV_NETVAR | CV_CALL | CV_NOINIT, CV_OnOff, function(var)
+				joeVars.sayText = "The health system has been" .. ((var.value == 1) and "\x83 enabled" or "\x86 disabled") .. "\x80."
+				joeVars.sayTimer = 5 * TICRATE
+
+				S_StartSound(nil, sfx_hidden, nil)
+			end}),
 
 			["nametags"] = CV_RegisterVar({"joe_nametags", "On", 0, CV_OnOff}),
 			["maxtags"] = CV_RegisterVar({"joe_maxtags", "5", 0, {MIN = 1, MAX = 20}}),
 			["bosstags"] = CV_RegisterVar({"joe_bosstags", "On", 0, CV_OnOff}),
 
 			["radar"] = CV_RegisterVar({"joe_emblemradar", "Off", 0, CV_OnOff}),
+			["showperms"] = CV_RegisterVar({"joe_showperms", "On", CV_NETVAR, CV_OnOff}),
 
 			["display"] = CV_RegisterVar({"joe_chmain", "On", 0, CV_OnOff}),
 			["scores"] = CV_RegisterVar({"joe_chrank", "On", 0, CV_OnOff}),

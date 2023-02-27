@@ -38,7 +38,7 @@ local function drawPlayerTags(v, player)
 			joeFuncs.drawFill(v, (screen.x - (2 * FU)) - ((v.stringWidth(player_name, 0, "small") / 2) * FU), screen.y - (2 * FU), (v.stringWidth(player_name, 0, "small") + 4) * FU, 8 * FU, 31 | V_30TRANS)
 			v.drawString(screen.x, screen.y, player_name, alpha | V_ALLOWLOWERCASE, "small-fixed-center")
 
-			numtags = $ + 1
+			numtags = numtags + 1
 		end
 	end
 end
@@ -65,7 +65,7 @@ local function drawBosses(v, player)
 		local screen = joeFuncs.worldToScreen(v, player, {mo.x, mo.y, mo.z + zoffs})
 
 		local total_health = FixedMul(FixedDiv(mo.health * FU, mo.info.spawnhealth * FU), bar_width - bar_offs)
-		local health_color = ((mo.flags2 & MF2_FRET) and (leveltime & 1)) and 1 or 36
+		local health_color = ((mo.flags2 & MF2_FRET) and (leveltime & 1)) and 1 or 35
 
 		if (screen.visible) then
 			joeFuncs.drawFill(v, screen.x - (bar_width / 2), screen.y, bar_width, 16 * FU, 31 | alpha)
