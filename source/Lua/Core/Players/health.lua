@@ -102,7 +102,7 @@ local function handleDamage(mo, inf, src, dmg, dmgtype)
 	end
 
 	if ((gametyperules & (GTR_TAG | GTR_HIDEFROZEN)) == GTR_TAG) and not (player.pflags & PF_GAMETYPEOVER) and not (player.pflags & PF_TAGIT) then
-		player.score = ($ >= 50) and ($ - 1) or 0
+		player.score = ($ >= 50) and ($ - 50) or 0
 	end
 
 	if (player.timeshit ~= UINT8_MAX) then player.timeshit = $ + 1 end
@@ -117,8 +117,6 @@ addHook("MobjDamage", handleDamage, MT_PLAYER)
 local function resetHealth(player)
 	player.survival.health = player.survival.total_health
 	player.survival.delay = 0
-
-	player.survival.warning = false
 end
 addHook("PlayerSpawn", resetHealth)
 
